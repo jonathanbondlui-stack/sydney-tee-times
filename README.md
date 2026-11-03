@@ -8,7 +8,7 @@ backend/build_feed.py    builds site/tee-times.json from clubs' public booking p
 
 ## How it fits together
 The site loads `courses.json` and `tee-times.json`. If the times file is missing it shows clearly labelled demo data.
-The builder runs every 15 to 30 minutes and rewrites `tee-times.json`. Visitors always book on the club's own page.
+The builder runs about every 20 minutes and rewrites `tee-times.json`, which covers the next 7 days. Every 6 hours it also rewrites `tee-times-far.json`, which covers up to 28 days ahead and which the site only loads when someone picks a later date. Visitors always book on the club's own page.
 
 ## To go live
 1. **Set your contact email** in `TEE_UA` so clubs can reach you. The builder won't fetch anything without it. Keep it out of the code, because the repo is public:

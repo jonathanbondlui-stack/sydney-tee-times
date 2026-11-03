@@ -19,6 +19,10 @@ UA = os.environ.get("TEE_UA") or "TeeSheetBot/0.1 (+mailto:YOUR_EMAIL_HERE)"
 DAYS = int(os.environ.get("TEE_DAYS", "7"))
 MIN_GAP = 1.0  # seconds between requests to the same host
 WORKERS = 8  # clubs read at the same time
+CAL_STEP = 6  # days shown on one MiClub calendar page
+FAR_FEED = "tee-times-far.json"
+FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
+FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
 
 _robots, _last = {}, {}
 
@@ -164,20 +168,61 @@ def parse_miclub_timesheet(html, course, date, group=None):
                      "fees": fees})
     return rows
 
-def collect_miclub(c, today):
-    rows = []
-    cal = parse_miclub_calendar(fetch(miclub_calendar_url(c, today.isoformat())))
-    for g in cal:
-        for d, price in g["prices"].items():
-            if not (today.isoformat() <= d <= (today + dt.timedelta(days=DAYS)).isoformat()):
-                continue
-            url = miclub_timesheet_url(c, d, g["fee_group_id"])
-            for r in parse_miclub_timesheet(fetch(url), c, d, g):
-                r.setdefault("url", url)
-                rows.append(r)
+def collect_miclub(c, today, first=0, last=DAYS):
+    """Collect tee times from first to last days ahead. A calendar page only shows about CAL_STEP days, so walk several."""
+    rows, seen = [], set()
+    start, end = (today + dt.timedelta(days=first)).isoformat(), (today + dt.timedelta(days=last)).isoformat()
+    for ahead in range(first, last + 1, CAL_STEP):
+        page = (today + dt.timedelta(days=ahead)).isoformat()
+        for g in parse_miclub_calendar(fetch(miclub_calendar_url(c, page))):
+            for d in g["prices"]:
+                if not start <= d <= end or (g["fee_group_id"], d) in seen:
+                    continue
+                seen.add((g["fee_group_id"], d))
+                url = miclub_timesheet_url(c, d, g["fee_group_id"])
+                for r in parse_miclub_timesheet(fetch(url), c, d, g):
+                    r.setdefault("url", url)
+                    rows.append(r)
     return rows
 
 COLLECTORS = {"miclub": collect_miclub}
+
+def build(courses, today, first, last):
+    """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
+    out, failures, tried = [], [], 0
+    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
+    # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
+    assert len({c["host"] for c in live}) == len(live), "two courses share a host"
+    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+        jobs = [(c, pool.submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
+    for c, job in jobs:
+        tried += 1
+        try:
+            out.extend(job.result())
+        except CaptchaRequired as e:
+            print(f"SKIP {c['id']}: {e}", file=sys.stderr); tried -= 1
+        except Exception as e:
+            failures.append(f"{c['id']}: {e}")
+    for f in failures[:20]:
+        print("FAIL", f, file=sys.stderr)
+    return out, failures, tried
+
+def write_feed(name, rows):
+    path = os.path.join(ROOT, "site", name)
+    feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "times": rows}
+    tmp = path + ".tmp"
+    with open(tmp, "w") as fh:
+        json.dump(feed, fh)
+    os.replace(tmp, path)
+
+def far_due():
+    """True when the far feed is missing or older than FAR_HOURS."""
+    try:
+        with open(os.path.join(ROOT, "site", FAR_FEED)) as fh:
+            made = dt.datetime.fromisoformat(json.load(fh)["generated_at"])
+    except (OSError, ValueError, KeyError):
+        return True
+    return (dt.datetime.now(dt.timezone.utc) - made).total_seconds() >= FAR_HOURS * 3600
 
 def main():
     ap = argparse.ArgumentParser()
@@ -205,31 +250,20 @@ def main():
         g = {"fee_group_id": "", "label": "", "holes": None, "prices": {}}
         print(json.dumps(parse_miclub_timesheet(open(a.timesheet, encoding="utf-8").read(), by[a.course], a.date, g), indent=1)); return
 
-    out, failures, tried = [], [], 0
     today = dt.date.today()
-    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
-    # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
-    assert len({c["host"] for c in live}) == len(live), "two courses share a host"
-    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        jobs = [(c, pool.submit(COLLECTORS[c["platform"]], c, today)) for c in live]
-    for c, job in jobs:
-        tried += 1
-        try:
-            out.extend(job.result())
-        except CaptchaRequired as e:
-            print(f"SKIP {c['id']}: {e}", file=sys.stderr); tried -= 1
-        except Exception as e:
-            failures.append(f"{c['id']}: {e}")
-    for f in failures[:20]:
-        print("FAIL", f, file=sys.stderr)
+    out, failures, tried = build(courses, today, 0, DAYS)
     if not out or len(failures) > tried * 0.5:
         print("Too little data or too many failures. Keeping the previous feed.", file=sys.stderr)
         sys.exit(1)
-    feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "times": out}
-    path = os.path.join(ROOT, "site", "tee-times.json")
-    tmp = path + ".tmp"
-    json.dump(feed, open(tmp, "w")); os.replace(tmp, path)
+    write_feed("tee-times.json", out)
     print(f"Wrote {len(out)} tee times from {tried - len(failures)} clubs.")
+    if far_due():
+        out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS)
+        if not out or len(failures) > tried * 0.5:
+            print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
+            return
+        write_feed(FAR_FEED, out)
+        print(f"Wrote {len(out)} later tee times from {tried - len(failures)} clubs.")
 
 if __name__ == "__main__":
     main()

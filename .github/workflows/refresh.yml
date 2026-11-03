@@ -22,7 +22,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 19  # a build takes about 13 minutes from GitHub's servers
+    timeout-minutes: 30  # longer when the builder also rebuilds the far feed, every 6 hours
     env:
       TEE_UA: ${{ secrets.TEE_UA }}
       TZ: Australia/Sydney  # build_feed.py uses the local date for "today"
@@ -35,10 +35,13 @@ jobs:
           python-version: "3.12"
       - id: pages
         uses: actions/configure-pages@v5
-      # The feed isn't stored in git, so fetch the live one. The builder leaves it in
-      # place if a run fails, which keeps the last good feed online.
-      - name: Fetch the last published feed
-        run: curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times.json" -o site/tee-times.json || rm -f site/tee-times.json
+      # The feeds aren't stored in git, so fetch the live ones. The builder leaves them in
+      # place if a run fails, which keeps the last good feeds online. The far feed's age
+      # also tells the builder when to rebuild it.
+      - name: Fetch the last published feeds
+        run: |
+          curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times.json" -o site/tee-times.json || rm -f site/tee-times.json
+          curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times-far.json" -o site/tee-times-far.json || rm -f site/tee-times-far.json
       - name: Build the feed
         id: feed
         continue-on-error: true
