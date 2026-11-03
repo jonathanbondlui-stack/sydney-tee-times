@@ -25,7 +25,7 @@ The builder runs every 15 to 30 minutes and rewrites `tee-times.json`. Visitors 
 
 ## Rules built into the builder
 - Checks robots.txt on every host and skips anything disallowed. Quick18 is switched off for this reason.
-- Maximum one request per second per host, with an honest user agent.
+- Maximum one request per second per host, with an honest user agent. Up to 8 clubs are read at the same time, one worker per club.
 - Courses with `"enabled": false` are never fetched.
 - If most fetches fail or nothing is parsed, it keeps the last good feed.
 

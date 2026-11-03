@@ -11,12 +11,14 @@ Usage:
 """
 import argparse, json, os, sys, time, datetime as dt
 import urllib.request, urllib.robotparser, urllib.error
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlencode, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = os.environ.get("TEE_UA") or "TeeSheetBot/0.1 (+mailto:YOUR_EMAIL_HERE)"
 DAYS = int(os.environ.get("TEE_DAYS", "7"))
 MIN_GAP = 1.0  # seconds between requests to the same host
+WORKERS = 8  # clubs read at the same time
 
 _robots, _last = {}, {}
 
@@ -205,12 +207,15 @@ def main():
 
     out, failures, tried = [], [], 0
     today = dt.date.today()
-    for c in courses:
-        if not c.get("enabled") or c["platform"] not in COLLECTORS:
-            continue
+    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
+    # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
+    assert len({c["host"] for c in live}) == len(live), "two courses share a host"
+    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+        jobs = [(c, pool.submit(COLLECTORS[c["platform"]], c, today)) for c in live]
+    for c, job in jobs:
         tried += 1
         try:
-            out.extend(COLLECTORS[c["platform"]](c, today))
+            out.extend(job.result())
         except CaptchaRequired as e:
             print(f"SKIP {c['id']}: {e}", file=sys.stderr); tried -= 1
         except Exception as e:
