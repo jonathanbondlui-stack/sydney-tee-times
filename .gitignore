@@ -1,8 +1,10 @@
 __pycache__/
+.claude/
 # Built and published by .github/workflows/refresh.yml, not stored in git
 site/tee-times.json
 site/tee-times.json.tmp
 # Local backups and saved debug pages
 data/courses.backup.json
 data/courses.before-patch.json
+data/courses.before-details.json
 fixtures/debug-*.html
