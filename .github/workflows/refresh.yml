@@ -1,0 +1,67 @@
+# Rebuilds the tee time feed and publishes site/ to GitHub Pages.
+# Needs the repository secret TEE_UA, for example: TeeSheetBot/0.1 (+mailto:you@example.com)
+name: Refresh tee times
+
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Runs wait for each other, so two builds never hit a club at the same time.
+concurrency:
+  group: tee-times
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TEE_UA: ${{ secrets.TEE_UA }}
+      TZ: Australia/Sydney  # build_feed.py uses the local date for "today"
+    outputs:
+      feed: ${{ steps.feed.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: pages
+        uses: actions/configure-pages@v5
+      # The feed isn't stored in git, so fetch the live one. The builder leaves it in
+      # place if a run fails, which keeps the last good feed online.
+      - name: Fetch the last published feed
+        run: curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times.json" -o site/tee-times.json || rm -f site/tee-times.json
+      - name: Build the feed
+        id: feed
+        continue-on-error: true
+        run: python backend/build_feed.py
+      # Without a feed the site falls back to made-up demo data, so never publish that.
+      - name: Check there is a feed to publish
+        run: test -s site/tee-times.json
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+      # Publish first, then fail the run so a failed refresh still shows up and emails you.
+      - name: Report a failed refresh
+        if: needs.build.outputs.feed != 'success'
+        run: |
+          echo "::error::The feed did not refresh. The last good feed is still online."
+          exit 1

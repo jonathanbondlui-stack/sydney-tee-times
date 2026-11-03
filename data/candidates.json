@@ -1,0 +1,751 @@
+[
+ {
+  "id": "st-michaels",
+  "name": "St Michael's Golf Club",
+  "suburb": "Little Bay",
+  "lat": -33.978,
+  "lon": 151.243,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "stmichaels.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "stonecutters-ridge",
+  "name": "Stonecutters Ridge Golf Club",
+  "suburb": "Colebee",
+  "lat": -33.735,
+  "lon": 150.865,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "stonecuttersridge.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "mona-vale",
+  "name": "Mona Vale Golf Club",
+  "suburb": "Mona Vale",
+  "lat": -33.676,
+  "lon": 151.303,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "monavale.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "bardwell-valley",
+  "name": "Bardwell Valley Golf Club",
+  "suburb": "Bardwell Park",
+  "lat": -33.935,
+  "lon": 151.13,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "bardwellvalley.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "woolooware",
+  "name": "Woolooware Golf Club",
+  "suburb": "Woolooware",
+  "lat": -34.049,
+  "lon": 151.139,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "woolooware.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "cabramatta",
+  "name": "Cabramatta Golf Club",
+  "suburb": "Cabramatta",
+  "lat": -33.894,
+  "lon": 150.94,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "cabramatta.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "bankstown",
+  "name": "Bankstown Golf Club",
+  "suburb": "Milperra",
+  "lat": -33.935,
+  "lon": 150.985,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "bankstowngolf.miclub.com.au",
+   "bankstown.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "palm-beach",
+  "name": "Palm Beach Golf Club",
+  "suburb": "Palm Beach",
+  "lat": -33.6,
+  "lon": 151.32,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "palmbeach.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "asquith",
+  "name": "Asquith Golf Club",
+  "suburb": "Asquith",
+  "lat": -33.69,
+  "lon": 151.11,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "asquith.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "dunheved",
+  "name": "Dunheved Golf Club",
+  "suburb": "St Marys",
+  "lat": -33.755,
+  "lon": 150.79,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "dunheved.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "woollahra",
+  "name": "Woollahra Golf Club",
+  "suburb": "Rose Bay",
+  "lat": -33.872,
+  "lon": 151.268,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "woollahra.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "oak-point",
+  "name": "Oak Point Golf Club",
+  "suburb": "Lansvale",
+  "lat": -33.913,
+  "lon": 150.953,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "oakpoint.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "lakeside-camden",
+  "name": "Lakeside Golf Club Camden",
+  "suburb": "Gledswood Hills",
+  "lat": -33.99,
+  "lon": 150.76,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "lakeside.miclub.com.au",
+   "lakesidecamden.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "macquarie-links",
+  "name": "Macquarie Links International Golf Club",
+  "suburb": "Macquarie Links",
+  "lat": -33.998,
+  "lon": 150.865,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "macquarielinks.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "campbelltown",
+  "name": "Campbelltown Golf Club",
+  "suburb": "Glen Alpine",
+  "lat": -34.1,
+  "lon": 150.79,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "campbelltown.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "marrickville",
+  "name": "Marrickville Golf Club",
+  "suburb": "Earlwood",
+  "lat": -33.917,
+  "lon": 151.13,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "marrickville.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "beverley-park",
+  "name": "Beverley Park Golf Club",
+  "suburb": "Beverley Park",
+  "lat": -33.975,
+  "lon": 151.118,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "beverleypark.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "cumberland",
+  "name": "Cumberland Country Golf Club",
+  "suburb": "Greystanes",
+  "lat": -33.82,
+  "lon": 150.95,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "cumberland.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "richmond",
+  "name": "Richmond Golf Club",
+  "suburb": "Richmond",
+  "lat": -33.6,
+  "lon": 150.75,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "richmond.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "canterbury",
+  "name": "Canterbury Public Golf Course",
+  "suburb": "Beverly Hills",
+  "lat": -33.94,
+  "lon": 151.075,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "canterbury.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "antill-park",
+  "name": "Antill Park Country Golf Club",
+  "suburb": "Picton",
+  "lat": -34.18,
+  "lon": 150.6,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "antillpark.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "avalon",
+  "name": "Avalon Golf Course",
+  "suburb": "Avalon Beach",
+  "lat": -33.636,
+  "lon": 151.33,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "avalon.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "colonial",
+  "name": "Colonial Golf and Footgolf Course",
+  "suburb": "Werrington",
+  "lat": -33.75,
+  "lon": 150.75,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "colonial.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "windsor",
+  "name": "Windsor Golf Club",
+  "suburb": "South Windsor",
+  "lat": -33.6,
+  "lon": 150.8,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "windsor.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "pittwater-golf-centre",
+  "name": "Pittwater Golf Centre",
+  "suburb": "Warriewood",
+  "lat": -33.69,
+  "lon": 151.3,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "barnwell-park",
+  "name": "Barnwell Park Golf Club",
+  "suburb": "Canada Bay",
+  "lat": -33.865,
+  "lon": 151.125,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "barnwellpark.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "glenmore-heritage-valley",
+  "name": "Glenmore Heritage Valley Golf Club",
+  "suburb": "Mulgoa",
+  "lat": -33.82,
+  "lon": 150.66,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "glenmoreheritagevalley.miclub.com.au",
+   "glenmore.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "bondi-golf",
+  "name": "Bondi Golf & Diggers Club",
+  "suburb": "North Bondi",
+  "lat": -33.886,
+  "lon": 151.282,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "bondi.miclub.com.au",
+   "bondigolf.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "muirfield",
+  "name": "Muirfield Golf Club",
+  "suburb": "North Rocks",
+  "lat": -33.775,
+  "lon": 151.03,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "muirfield.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "leonay",
+  "name": "Leonay Golf Course",
+  "suburb": "Leonay",
+  "lat": -33.76,
+  "lon": 150.65,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "leonay.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "fox-hills",
+  "name": "Fox Hills Golf Club",
+  "suburb": "Girraween",
+  "lat": -33.8,
+  "lon": 150.94,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "foxhills.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "randwick",
+  "name": "Randwick Golf Course",
+  "suburb": "Malabar",
+  "lat": -33.968,
+  "lon": 151.248,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "randwick.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "camden",
+  "name": "Camden Golf Club",
+  "suburb": "Narellan",
+  "lat": -34.04,
+  "lon": 150.73,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "camden.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "hawkesbury-waters",
+  "name": "Hawkesbury Waters Golf Course",
+  "suburb": "Ebenezer",
+  "lat": -33.55,
+  "lon": 150.87,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "hawkesburywaters.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "lynwood",
+  "name": "Lynwood Golf & Country Club",
+  "suburb": "Pitt Town",
+  "lat": -33.59,
+  "lon": 150.88,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "lynwood.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "brighton-lakes",
+  "name": "Brighton Lakes Recreation & Golf Club",
+  "suburb": "Moorebank",
+  "lat": -33.94,
+  "lon": 150.93,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "brightonlakes.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "grose-river",
+  "name": "Grose River Golf Club",
+  "suburb": "Grose Wold",
+  "lat": -33.58,
+  "lon": 150.65,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "groseriver.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "parramatta",
+  "name": "Parramatta Golf Club",
+  "suburb": "Parramatta",
+  "lat": -33.8,
+  "lon": 151.01,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "parramatta.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "botany",
+  "name": "Botany Golf Course",
+  "suburb": "Banksmeadow",
+  "lat": -33.95,
+  "lon": 151.2,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "botany.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "auburn",
+  "name": "Auburn Golf Course",
+  "suburb": "Auburn",
+  "lat": -33.855,
+  "lon": 151.03,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "auburn.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "woodville",
+  "name": "Woodville Public Golf Course",
+  "suburb": "Guildford",
+  "lat": -33.85,
+  "lon": 150.99,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "woodville.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "penrith",
+  "name": "Penrith Golf Club",
+  "suburb": "Glenmore Park",
+  "lat": -33.78,
+  "lon": 150.67,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "penrith.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "castle-cove",
+  "name": "Castle Cove Golf Club",
+  "suburb": "Castle Cove",
+  "lat": -33.78,
+  "lon": 151.2,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "castlecove.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "macarthur-grange",
+  "name": "Macarthur Grange Country Club",
+  "suburb": "Gledswood Hills",
+  "lat": -33.99,
+  "lon": 150.765,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "macarthurgrange.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "georges-river",
+  "name": "Georges River Golf Course",
+  "suburb": "Bankstown Aerodrome",
+  "lat": -33.92,
+  "lon": 150.99,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "georgesriver.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "sylvania-par3",
+  "name": "Sylvania Par 3 Golf and Soccer",
+  "suburb": "Miranda",
+  "lat": -34.03,
+  "lon": 151.1,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "wallacia",
+  "name": "Wallacia Country Club",
+  "suburb": "Wallacia",
+  "lat": -33.87,
+  "lon": 150.64,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "wallacia.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "hurstville",
+  "name": "Hurstville Golf Course",
+  "suburb": "Mortdale",
+  "lat": -33.97,
+  "lon": 151.08,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "hurstville.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "fairfield-city",
+  "name": "Fairfield City Golf Course",
+  "suburb": "Prairiewood",
+  "lat": -33.87,
+  "lon": 150.94,
+  "status": "contact",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [
+   "fairfield.miclub.com.au",
+   "fairfieldcity.miclub.com.au"
+  ],
+  "note": "Booking method not confirmed yet. Check the club's own website or phone them."
+ },
+ {
+  "id": "strathfield",
+  "name": "Strathfield Golf Club",
+  "suburb": "Strathfield",
+  "lat": -33.874,
+  "lon": 151.095,
+  "status": "private",
+  "platform": "none",
+  "enabled": false,
+  "coords_approx": true,
+  "probe_hosts": [],
+  "note": "Listed as a private club. Members and guests only."
+ }
+]

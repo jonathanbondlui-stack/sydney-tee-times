@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sydney tee times</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3E8;--surface:#fff;--ink:#16291D;--mute:#5B6B5F;--line:#D5DFCC;--accent:#1F6B3A;--accent-ink:#fff;--sun:#F4B400;--warn:#FFF4CC;--warn-ink:#5A4300;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A13;--surface:#16261C;--ink:#E7F0E4;--mute:#9DB1A2;--line:#264232;--accent:#5CC27E;--accent-ink:#0E1A13;--warn:#3A2F08;--warn-ink:#F6DC8A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1A13;--surface:#16261C;--ink:#E7F0E4;--mute:#9DB1A2;--line:#264232;--accent:#5CC27E;--accent-ink:#0E1A13;--warn:#3A2F08;--warn-ink:#F6DC8A;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Hanken Grotesk",system-ui,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:20px 16px 64px}
+.note{background:var(--warn);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:28px}
+h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 8px;max-width:14em}
+.sub{color:var(--mute);margin:0 0 24px}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px}
+.day{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 14px;font:inherit;text-align:center;cursor:pointer;min-width:64px}
+.day b{display:block;font:700 20px/1.1 "Bricolage Grotesque",sans-serif}.day span{font-size:12px;color:var(--mute)}
+.day[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.day[aria-pressed=true] span{color:inherit}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:20px}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:500}
+select,input[type=range]{font:inherit;color:var(--ink)}
+select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap}.count{font-weight:600}
+.row{display:grid;grid-template-columns:104px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.time{font:700 30px/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em}.time small{font-size:14px;font-weight:500;color:var(--mute);margin-left:2px}
+.course{font-weight:600}.meta{font-size:14px;color:var(--mute)}.right{text-align:right}
+.price{font:700 22px/1.1 "Bricolage Grotesque",sans-serif}.spots{font-size:13px;color:var(--mute)}.spots.low{color:#B45309;font-weight:600}
+a.go{display:inline-block;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:9px 14px;font:600 14px "Hanken Grotesk",sans-serif;margin-top:6px;text-decoration:none}
+a.go.off{opacity:.45;pointer-events:none}
+button.more{display:block;margin:16px auto 0;background:none;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 18px;font:600 14px "Hanken Grotesk",sans-serif;cursor:pointer}
+.cg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.cg header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.cg .course{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif}.gs{text-align:right;font-size:14px;color:var(--mute);white-space:nowrap}.gs b{display:block;color:var(--ink)}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+a.chip{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;text-decoration:none}
+a.chip:hover{border-color:var(--accent)}a.chip b{font:700 18px/1.1 "Bricolage Grotesque",sans-serif}a.chip b small{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
+a.chip span{font-size:12px;color:var(--mute)}a.chip.low span{color:#B45309;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
+.cg details{margin-top:10px}.cg summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);margin-bottom:8px}
+.empty{text-align:center;padding:40px 16px;color:var(--mute);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
+#dir{margin-top:44px}#dir h2{font:700 24px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 6px}
+.dc{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.badge{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--warn);color:var(--warn-ink);margin-left:8px}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+@media(max-width:560px){.row{grid-template-columns:1fr auto}.time{grid-column:1/-1;font-size:26px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="note" id="note" hidden></div>
+  <h1>Every Sydney tee time, in one search</h1>
+  <p class="sub">Pick a day, set your window, and see what’s open across the city. Courses without online booking are listed below so you never wonder if you missed one.</p>
+  <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+  <section class="filters" aria-label="Filters">
+    <label>Players<select id="players"><option>1</option><option>2</option><option selected>3</option><option>4</option></select></label>
+    <label>Round<select id="holes"><option value="0">Any length</option><option value="18">18 holes</option><option value="9">9 holes or fewer</option></select></label>
+    <label>Earliest<select id="from"></select></label>
+    <label>Latest<select id="to"></select></label>
+    <label>Starting from<select id="where"></select></label>
+    <label>Within<select id="dist"><option value="10">10 km</option><option value="20">20 km</option><option value="35">35 km</option><option value="999" selected>Any distance</option></select></label>
+    <label>Max price: <span id="pv"></span><input type="range" id="price" min="20" max="200" step="5" value="200"></label>
+  </section>
+  <div class="bar"><span class="count" id="count" aria-live="polite"></span>
+    <label style="flex-direction:row;align-items:center;gap:8px">Sort by<select id="sort" style="width:auto"><option value="t">Earliest</option><option value="p">Cheapest</option><option value="d">Nearest</option></select></label></div>
+  <div id="list"></div>
+  <button class="more" id="more" hidden>Show more</button>
+  <section id="dir" aria-label="Courses without online tee times"><h2>Other Sydney courses</h2>
+    <p class="sub">These courses don’t share live tee times with us. Use the links or phone numbers to book directly.</p><div id="dirlist"></div></section>
+</main>
+<script>
+const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "Moore Park", "lat": -33.8955, "lon": 151.2245, "status": "online", "platform": "miclub", "host": "moorepark.miclub.com.au", "resource_id": 3050007, "enabled": true, "phone": "(02) 9663 1064", "note": "Course is being reduced to 12 holes."}, {"id": "cammeray", "name": "Cammeray Golf Club", "suburb": "Cammeray", "lat": -33.816, "lon": 151.216, "status": "online", "platform": "miclub", "host": "cammeray.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "northbridge", "name": "Northbridge Golf Club", "suburb": "Northbridge", "lat": -33.804, "lon": 151.223, "status": "online", "platform": "miclub", "host": "northbridge.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "eastlake", "name": "Eastlake Golf Club", "suburb": "Eastlakes", "lat": -33.925, "lon": 151.219, "status": "online", "platform": "miclub", "host": "www.eastlakegolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "chatswood", "name": "Newgreens Chatswood Golf Club", "suburb": "Chatswood", "lat": -33.799, "lon": 151.15, "status": "online", "platform": "miclub", "host": "chatswood.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "massey-park", "name": "Massey Park Golf Club", "suburb": "Concord", "lat": -33.8545, "lon": 151.098, "status": "online", "platform": "miclub", "host": "masseypark.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "balgowlah", "name": "Balgowlah Golf Club", "suburb": "Balgowlah", "lat": -33.799, "lon": 151.264, "status": "online", "platform": "miclub", "host": "www.balgowlahgolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "wakehurst", "name": "Wakehurst Golf Club", "suburb": "Seaforth", "lat": -33.77, "lon": 151.25, "status": "online", "platform": "miclub", "host": "www.wakehurstgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-ryde", "name": "North Ryde Golf Club", "suburb": "North Ryde", "lat": -33.801, "lon": 151.125, "status": "online", "platform": "miclub", "host": "northryde.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "warringah", "name": "Warringah Golf Club", "suburb": "Allambie Heights", "lat": -33.765, "lon": 151.24, "status": "online", "platform": "miclub", "host": "warringah.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "gordon", "name": "Gordon Golf Club", "suburb": "Gordon", "lat": -33.755, "lon": 151.152, "status": "online", "platform": "miclub", "host": "www.gordongolfcourse.com.au", "resource_id": 187, "enabled": true}, {"id": "bexley", "name": "Bexley Golf Club", "suburb": "Bexley", "lat": -33.94, "lon": 151.122, "status": "online", "platform": "miclub", "host": "www.bexleygolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "the-coast", "name": "The Coast Golf Club", "suburb": "Little Bay", "lat": -33.975, "lon": 151.245, "status": "online", "platform": "miclub", "host": "www.coastgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "carnarvon", "name": "Carnarvon Golf Club", "suburb": "Auburn", "lat": -33.853, "lon": 151.036, "status": "online", "platform": "miclub", "host": "carnarvon.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "long-reef", "name": "Long Reef Golf Club", "suburb": "Collaroy", "lat": -33.735, "lon": 151.301, "status": "online", "platform": "miclub", "host": "longreef.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "sefton", "name": "Sefton Golf Club", "suburb": "Sefton", "lat": -33.892, "lon": 151.017, "status": "online", "platform": "miclub", "host": "sefton.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-turramurra", "name": "North Turramurra Public Golf Club", "suburb": "North Turramurra", "lat": -33.724, "lon": 151.163, "status": "online", "platform": "miclub", "host": "northturramurra.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "kareela", "name": "Kareela Golf Club", "suburb": "Kareela", "lat": -34.015, "lon": 151.085, "status": "online", "platform": "miclub", "host": "kareela.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "lane-cove", "name": "Lane Cove Golf", "suburb": "Lane Cove", "lat": -33.812, "lon": 151.14, "status": "online", "platform": "quick18", "host": "lanecove.quick18.com", "enabled": false, "note": "Books online through Quick18. Times aren't shown here yet, so this opens their tee sheet for the day you've selected.", "cta": "Book online at Lane Cove", "book_url": "https://lanecove.quick18.com/teetimes/searchmatrix?teedate={date}"}, {"id": "bonnie-doon", "name": "Bonnie Doon", "suburb": "Pagewood", "lat": -33.935, "lon": 151.225, "status": "private", "platform": "none", "enabled": false, "phone": "(02) 9349 2101", "note": "Completely private. Members and their guests only."}, {"id": "the-lakes", "name": "The Lakes", "suburb": "Eastlakes", "lat": -33.9235, "lon": 151.213, "status": "enquiry", "platform": "none", "enabled": false, "phone": "(02) 9669 1311", "note": "Visitors by enquiry only (online form or phone). Visitor times: Mon from 9am, Tue from 12:30pm, Thu, Fri from 1:30pm. Cart $70, clubs $75.", "cta": "Request a tee time", "book_url": "https://thelakesgolfclub.com.au/cms/golf-booking-enquiry/"}];
+const FROMS=[{n:"Sydney CBD",la:-33.8688,lo:151.2093},{n:"Parramatta",la:-33.815,lo:151.0},{n:"Chatswood",la:-33.797,lo:151.181},{n:"Manly",la:-33.797,lo:151.288},{n:"Cronulla",la:-34.058,lo:151.152},{n:"Penrith",la:-33.751,lo:150.694}];
+const $=id=>document.getElementById(id);
+let COURSES=EMBED_COURSES,TIMES=[],demo=false,day=0,shown=12,rows=[];
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return d});
+const mins=t=>{const[a,b]=t.split(":");return +a*60+ +b};
+const km=(a,b,c,d)=>{const r=Math.PI/180,x=(d-b)*r*Math.cos((a+c)/2*r),y=(c-a)*r;return Math.sqrt(x*x+y*y)*6371};
+const fmt=m=>{const h=Math.floor(m/60),mm=m%60;return `${h%12||12}:${String(mm).padStart(2,"0")}<small>${h>=12?"pm":"am"}</small>`};
+const hl=h=>`${h%12||12}:00 ${h>=12?"pm":"am"}`;
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function demoFeed(){const out=[];days.forEach(d=>{const seed=d.getFullYear()*1000+d.getMonth()*50+d.getDate();
+  COURSES.filter(c=>c.status==="online").forEach((c,ci)=>{const r=rng(seed*31+ci*7);let t=360+Math.floor(r()*4)*2;
+    while(t<1020){if(r()<.45)out.push({course:c.id,date:iso(d),time:`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`.replace(/^(\d):/,"0$1:"),holes:r()<.3?9:18,price:Math.round(30+r()*50),spots:1+Math.floor(r()*4),url:""});t+=8+(r()<.5?0:2)}})});return out}
+async function load(){
+  try{const r=await fetch("courses.json",{cache:"no-store"});if(r.ok)COURSES=await r.json()}catch(e){}
+  try{const r=await fetch("tee-times.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();TIMES=j.times||[];
+    const n=$("note");n.hidden=false;n.textContent="Times updated "+new Date(j.generated_at).toLocaleString("en-AU",{dateStyle:"medium",timeStyle:"short"})+". Check the course’s own page before you travel."}
+  catch(e){demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}
+  setup()}
+function setup(){
+  $("days").innerHTML=days.map((d,i)=>`<button class="day" aria-pressed="${i==0}" data-i="${i}"><span>${i==0?"Today":d.toLocaleDateString("en-AU",{weekday:"short"})}</span><b>${d.getDate()}</b><span>${d.toLocaleDateString("en-AU",{month:"short"})}</span></button>`).join("");
+  $("days").onclick=e=>{const b=e.target.closest(".day");if(!b)return;day=+b.dataset.i;document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",x===b));shown=12;render()};
+  const hrs=[...Array(14)].map((_,i)=>i+5);
+  $("from").innerHTML=hrs.map(h=>`<option value="${h}">${hl(h)}</option>`).join("");
+  $("to").innerHTML=hrs.map(h=>`<option value="${h+1}" ${h==18?"selected":""}>${hl(h+1)}</option>`).join("");
+  $("where").innerHTML=FROMS.map((f,i)=>`<option value="${i}">${f.n}</option>`).join("");
+  ["players","holes","from","to","where","dist","price","sort"].forEach(id=>$(id).oninput=()=>{shown=12;render()});
+  $("more").onclick=()=>{shown+=12;render()};render()}
+function render(){
+  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=FROMS[+$("where").value],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(days[day]);
+  $("pv").textContent="$"+mx+(mx==200?"+":"");
+  let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>({...x,c:by[x.course],m:mins(x.time)})).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
+   .filter(x=>x.spots>=pl&&x.m>=f&&x.m<to&&(mx>=200||x.price==null||x.price<=mx)&&x.d<=dm&&(hf==0||(hf==18?x.holes>=18:x.holes&&x.holes<=9)));
+  const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.price??999)-(b.price??999)||a.m-b.m:s=="d"?a.d-b.d||a.m-b.m:a.m-b.m||a.d-b.d);
+  $("count").textContent=r.length?`${r.length} tee times at ${new Set(r.map(x=>x.course)).size} courses`:"";
+  const pf=p=>p==null?"":"$"+(Number.isInteger(p)?p:p.toFixed(2));
+  const G=new Map();r.forEach(x=>{if(!G.has(x.course))G.set(x.course,[]);G.get(x.course).push(x)});
+  const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m));
+  const chip=x=>{const sub=[pf(x.price),x.spots+(x.spots==1?" spot":" left")].filter(Boolean).join(" · ");
+    return `<a class="chip ${x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${(x.label||"").replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b><span>${sub}</span></a>`};
+  $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const c=a[0].c,ps=a.map(x=>x.price).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
+    pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=8,hl=[...new Set(a.map(x=>x.holes).filter(Boolean))].sort((p,q)=>p-q).join("/");
+    return `<article class="cg"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${a.length} ${a.length==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show ${a.length-N} more times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong><br>Try a wider time window, a higher max price, or fewer players.</div>`;
+  $("more").textContent="Show more courses";$("more").hidden=groups.length<=shown;rows=r;
+  const lab={contact:"Contact the club",members:"Members and guests only",private:"Private club",enquiry:"Enquire to book",phone:"Call to book",online:"Book online"};
+  const list=COURSES.filter(c=>c.status!=="online"||c.enabled===false&&!TIMES.some(t=>t.course===c.id));
+  const ymd=iso(days[day]).replace(/-/g,"");
+  $("dirlist").innerHTML=list.map(c=>`<div class="dc"><span class="course">${c.name}</span><span class="badge">${lab[c.status]||"Contact the club"}</span><div class="meta">${c.suburb}${c.note?" · "+c.note:""}${c.phone?" · "+c.phone:""}</div>${c.book_url?`<a class="go" style="margin-top:10px;display:inline-block" href="${c.book_url.replace("{date}",ymd)}" target="_blank" rel="noopener">${c.cta||"Visit booking page"}</a>`:""}</div>`).join("")}
+load();
+</script>
+</body>
+</html>

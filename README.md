@@ -1,0 +1,34 @@
+# Sydney tee times
+
+```
+data/courses.json        the course directory (status, platform, location). Edit this to add courses.
+site/                    the website: static files, host anywhere (Cloudflare Pages, Netlify, GitHub Pages)
+backend/build_feed.py    builds site/tee-times.json from clubs' public booking pages
+```
+
+## How it fits together
+The site loads `courses.json` and `tee-times.json`. If the times file is missing it shows clearly labelled demo data.
+The builder runs every 15 to 30 minutes and rewrites `tee-times.json`. Visitors always book on the club's own page.
+
+## To go live
+1. **Set your contact email** in `TEE_UA` so clubs can reach you. The builder won't fetch anything without it. Keep it out of the code, because the repo is public:
+   locally run `setx TEE_UA "TeeSheetBot/0.1 (+mailto:you@example.com)"` once and open a new terminal, and on GitHub add it as the repository secret `TEE_UA`.
+2. **Check the MiClub parsers on a second club.** Both MiClub parsers (calendar and timesheet) are written and pass `python backend/test_parsers.py`,
+   but they were built against Moore Park's pages only. Clubs can customise their pages, so save a second club's calendar and timesheet
+   pages into `fixtures/` and run `--calendar` and `--timesheet` on them before trusting the feed. Clubs that switch on the public captcha
+   can't be read automatically; the builder skips them. Never run it without your contact email set (step 1).
+3. **Run the builder locally if you want to test:** `python backend/build_feed.py`.
+4. **Hosting and schedule.** `.github/workflows/refresh.yml` runs the builder about every 20 minutes and publishes `site/` to GitHub Pages. The feed isn't stored in git:
+   each run starts from the live feed, so a failed run leaves the last good one online and shows as a failed run on GitHub. The repo must stay public for free Actions minutes at this schedule.
+5. **Before you launch publicly:** read each platform's terms and contact MiClub. Keep the link-out model, honour any club's request to be removed,
+   and add a privacy policy if you collect emails. Then remove the `noindex` tag from `site/index.html` so search engines can list the site.
+
+## Rules built into the builder
+- Checks robots.txt on every host and skips anything disallowed. Quick18 is switched off for this reason.
+- Maximum one request per second per host, with an honest user agent.
+- Courses with `"enabled": false` are never fetched.
+- If most fetches fail or nothing is parsed, it keeps the last good feed.
+
+## Making money (once the data works)
+Booking commission is out: TeeNet and teeFinder both take none. The realistic paths are tee time alerts as a paid feature,
+featured listings for clubs, and partnerships with clubs or MiClub.
