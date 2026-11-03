@@ -38,10 +38,10 @@ button.more{display:block;margin:16px auto 0;background:none;border:1px solid va
 .cg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
 .cg header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
 .cg .course{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif}.gs{text-align:right;font-size:14px;color:var(--mute);white-space:nowrap}.gs b{display:block;color:var(--ink)}
-.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
 a.chip{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;text-decoration:none}
 a.chip:hover{border-color:var(--accent)}a.chip b{font:700 18px/1.1 "Bricolage Grotesque",sans-serif}a.chip b small{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
-a.chip span{font-size:12px;color:var(--mute)}a.chip.low span{color:#B45309;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
+a.chip span{font-size:12px;color:var(--mute)}a.chip .hs{color:var(--ink);font-weight:600}a.chip.low .sp{color:#B45309;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
 .cg details{margin-top:10px}.cg summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);margin-bottom:8px}
 .empty{text-align:center;padding:40px 16px;color:var(--mute);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
 #dir{margin-top:44px}#dir h2{font:700 24px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 6px}
@@ -182,12 +182,12 @@ function render(){
   const nc=new Set(r.map(x=>x.course)).size;$("count").textContent=r.length?`${distinct(r)} tee times at ${nc} ${nc==1?"course":"courses"}`:"";
   const pf=p=>p==null?"":"$"+(Number.isInteger(p)?p:p.toFixed(2));
   const G=new Map();r.forEach(x=>{if(!G.has(x.course))G.set(x.course,[]);G.get(x.course).push(x)});
-  const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m));
-  const chip=x=>{const sub=[pf(x.price),x.spots+(x.spots==1?" spot":" left")].filter(Boolean).join(" · ");
-    return `<a class="chip ${x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${(x.label||"").replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b><span>${sub}</span></a>`};
+  const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m||(holesOf(q)||0)-(holesOf(p)||0)));
+  const chip=x=>{const h=holesOf(x),sub=[h?h+" holes":"",pf(x.price)].filter(Boolean).join(" · ");
+    return `<a class="chip ${x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${(x.label||"").replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}<span class="sp">${x.spots+(x.spots==1?" spot":" left")}</span></a>`};
   $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const c=a[0].c,ps=a.map(x=>x.price).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
-    pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=8,hl=[...new Set(a.map(x=>x.holes).filter(Boolean))].sort((p,q)=>p-q).join("/");
-    return `<article class="cg"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show ${a.length-N} more times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
+    pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=8,hl=[...new Set(a.map(holesOf).filter(Boolean))].sort((p,q)=>p-q).join("/");
+    return `<article class="cg"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show all ${distinct(a)} times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
   if($("widen"))$("widen").onclick=()=>{$("dist").value=dm==10?"20":dm==20?"35":"999";shown=12;save();render()};
   $("more").textContent="Show more courses";$("more").hidden=groups.length<=shown||view=="map";rows=r;
   const lab={online:"Book online",set_times:"Visitors at set times",phone:"Call to book",walkup:"No booking needed",enquiry:"Limited visitor access",contact:"Details still being confirmed",check:"Check it’s open",members:"Members and guests only",private:"Private club"};
