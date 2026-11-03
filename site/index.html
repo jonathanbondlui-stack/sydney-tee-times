@@ -71,7 +71,7 @@ a.chip span{font-size:12px;color:var(--mute)}a.chip.low span{color:#B45309;font-
   <label class="pick">Or pick a later date, up to 4 weeks ahead<input type="date" id="pick"></label>
   <section class="filters" aria-label="Filters">
     <label>Players<select id="players"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
-    <label>Round<select id="holes"><option value="18" selected>Full round</option><option value="9">9 holes or fewer</option><option value="0">Any length, including twilight</option></select></label>
+    <label>Round<select id="holes"><option value="18" selected>Full round</option><option value="9">9 holes or fewer</option><option value="0">Any length</option></select></label>
     <label>Earliest<select id="from"></select></label>
     <label>Latest<select id="to"></select></label>
     <label>Starting from<select id="where"></select></label>
@@ -85,7 +85,7 @@ a.chip span{font-size:12px;color:var(--mute)}a.chip.low span{color:#B45309;font-
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">Showing full rounds by default, which leaves out twilight rates. Your filter choices are remembered on this device.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other Sydney courses</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one, nearest first from your starting point.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
@@ -108,9 +108,15 @@ async function pickDate(){const v=$("pick").value;shown=12;
 const SAVED=["players","holes","from","to","where","dist","price","sort"],KEY="tee-filters";
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(Object.fromEntries(SAVED.map(id=>[id,$(id).value]))))}catch(e){}};
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
-const HOLES=/(\d+)\s*-?\s*holes?/i,SHORT=/twi|sundown|sunset|late|afternoon/i;
-const holesOf=x=>{const m=HOLES.exec(x.label||"");return m?+m[1]:x.holes};
-const fullRound=x=>!SHORT.test(x.label||"")&&(holesOf(x)==null||holesOf(x)>=18);
+const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
+const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));return m?+m[1]:x.holes};
+const fullRound=(x,latest)=>!NO_FINISH.test(x.label||"")&&x.m<=latest&&(holesOf(x)==null||holesOf(x)>=18);
+// Sydney sunset in minutes after midnight, Sydney time (NOAA's approximation).
+const sunset=ds=>{const d=new Date(ds+"T00:00:00Z"),g=2*Math.PI*((d-Date.UTC(d.getUTCFullYear(),0,0))/864e5-1)/365,r=Math.PI/180,la=-33.87*r,
+  eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g)),
+  dec=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g),
+  ha=Math.acos(Math.cos(90.833*r)/(Math.cos(la)*Math.cos(dec))-Math.tan(la)*Math.tan(dec))/r,utc=720-4*(151.21-ha)-eq;
+  return mins(new Date(d.getTime()+utc*6e4).toLocaleTimeString("en-GB",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit"}))};
 const distinct=a=>new Set(a.map(x=>x.course+x.time+(x.tee||""))).size;
 const loadMap=()=>window.L?Promise.resolve():new Promise((ok,no)=>{const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=ok;s.onerror=no;document.head.append(s)});
 function setView(v){view=v;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").hidden=v=="map";
@@ -161,10 +167,10 @@ function setup(){
   $("vList").onclick=()=>setView("list");$("vMap").onclick=()=>setView("map");
   $("more").onclick=()=>{shown+=12;render()};render()}
 function render(){
-  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=($("where").value=="me"&&ME)||FROMS[+$("where").value]||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur());
+  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=($("where").value=="me"&&ME)||FROMS[+$("where").value]||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur()),latest=sunset(dt)-ROUND_MINS;
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>({...x,c:by[x.course],m:mins(x.time)})).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
-   .filter(x=>x.spots>=pl&&x.m>=f&&x.m<to&&(mx>=200||x.price==null||x.price<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x):holesOf(x)&&holesOf(x)<=9)));
+   .filter(x=>x.spots>=pl&&x.m>=f&&x.m<to&&(mx>=200||x.price==null||x.price<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,latest):holesOf(x)&&holesOf(x)<=9)));
   const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.price??999)-(b.price??999)||a.m-b.m:s=="d"?a.d-b.d||a.m-b.m:a.m-b.m||a.d-b.d);
   const last={};TIMES.forEach(t=>{if(!last[t.course]||t.date>last[t.course])last[t.course]=t.date});
   const notYet=COURSES.filter(c=>c.enabled&&(!last[c.id]||last[c.id]<dt)&&km(w.lat??w.la,w.lo,c.lat,c.lon)<=dm).map(c=>c.name.replace(/ (Public )?Golf( Club| Course)?$/,""));
