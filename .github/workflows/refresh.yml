@@ -22,7 +22,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 19  # a build takes about 13 minutes from GitHub's servers
     env:
       TEE_UA: ${{ secrets.TEE_UA }}
       TZ: Australia/Sydney  # build_feed.py uses the local date for "today"
