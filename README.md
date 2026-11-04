@@ -18,8 +18,12 @@ The builder runs about every 20 minutes and rewrites `tee-times.json`, which cov
    pages into `fixtures/` and run `--calendar` and `--timesheet` on them before trusting the feed. Clubs that switch on the public captcha
    can't be read automatically; the builder skips them. Never run it without your contact email set (step 1).
 3. **Run the builder locally if you want to test:** `python backend/build_feed.py`.
-4. **Hosting and schedule.** `.github/workflows/refresh.yml` runs the builder about every 20 minutes and publishes `site/` to GitHub Pages. The feed isn't stored in git:
+4. **Hosting and schedule.** `.github/workflows/refresh.yml` runs the builder and publishes `site/` to GitHub Pages. The feed isn't stored in git:
    each run starts from the live feed, so a failed run leaves the last good one online and shows as a failed run on GitHub. The repo must stay public for free Actions minutes at this schedule.
+   Regular refreshes come from a cron-job.org job, because GitHub's own schedule runs late and skips runs, so it's only a backup every 3 hours. The job sends a `POST` to
+   `https://api.github.com/repos/jonathanbondlui-stack/sydney-tee-times/actions/workflows/refresh.yml/dispatches` with the body `{"ref":"main"}` and the headers `Authorization: Bearer <token>`,
+   `Accept: application/vnd.github+json`, `X-GitHub-Api-Version: 2022-11-28` and `Content-Type: application/json`. The token is a fine-grained GitHub token for this repo only, with Actions set to read and write.
+   If the times go stale, check that the token hasn't expired and that cron-job.org hasn't switched the job off. That API version stops working on 10 March 2028.
 5. **Before you launch publicly:** read each platform's terms and contact MiClub. Keep the link-out model, honour any club's request to be removed,
    and add a privacy policy if you collect emails. Then remove the `noindex` tag from `site/index.html` so search engines can list the site.
 

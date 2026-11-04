@@ -3,8 +3,10 @@
 name: Refresh tee times
 
 on:
+  # cron-job.org starts the regular refreshes through workflow_dispatch, because GitHub's
+  # schedule runs late and skips runs. This schedule is only a backup in case that stops.
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "17 */3 * * *"
   push:
     branches: [main]
   workflow_dispatch:
