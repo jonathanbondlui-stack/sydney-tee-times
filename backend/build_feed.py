@@ -127,6 +127,44 @@ def parse_miclub_calendar(html):
 
 _TROW = re.compile(r'<div id="row-(\d+)" class="row row-time[^"]*"[^>]*>(.*?)(?=<div id="row-\d+" class="row row-time|<div id="no-rows"|\Z)', re.S)
 _FEE = re.compile(r'<span class="price">\s*\$([\d.,]+)\s*</span>\s*([^<]*?)\s*</li>', re.S)
+_FEE_POPOVER = re.compile(r'class="fee-applied[^>]*?data-content="([^"]*)"', re.S)
+_POPOVER_LI = re.compile(r'<li>\s*([^<]*?)\s*\$([\d.,]+)\s*</li>', re.S)
+
+def miclub_fees(body):
+    """A row's fees. MiClub lists a few on the row, but tucks longer lists into a "Fees" popover."""
+    found = [(p, l) for p, l in _FEE.findall(body)]
+    if not found:
+        pop = _FEE_POPOVER.search(body)
+        if pop:
+            found = [(p, l) for l, p in _POPOVER_LI.findall(unescape(pop.group(1)))]
+    return [{"price": float(p.replace(",", "")), "label": unescape(l).strip()} for p, l in found]
+
+_DISC = re.compile(r"\bdisc golf\b", re.I)
+_LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b", re.I),
+            "Seniors": re.compile(r"\bseniors?\b|\bpension", re.I),
+            "Students": re.compile(r"\bstudents?\b", re.I),
+            "Concession": re.compile(r"\bconcession", re.I)}
+
+def limited_to(label):
+    """Who a rate is limited to, by its name. Empty means anyone can book it."""
+    return {who for who, pat in _LIMITED.items() if pat.search(label)}
+
+def headline_fee(fees):
+    """The price to show for a tee time, and who it is limited to when nobody else has a rate.
+
+    MiClub lists rates in the club's own order, which sometimes starts with juniors or seniors.
+    Returns (fee or None, "" or a label like "Juniors only").
+    """
+    if not fees:
+        return None, ""
+    golf = [f for f in fees if not _DISC.search(f["label"])]
+    if not golf:
+        return fees[0], "Disc golf only"
+    for f in golf:
+        if not limited_to(f["label"]):
+            return f, ""
+    who = set().union(*(limited_to(f["label"]) for f in golf))
+    return golf[0], f"{who.pop()} only" if len(who) == 1 else "Concession only"
 
 def parse_miclub_timesheet(html, course, date, group=None):
     """Parse a MiClub public timesheet page into tee times.
@@ -158,13 +196,14 @@ def parse_miclub_timesheet(html, course, date, group=None):
             continue
         time24 = dt.datetime.strptime(t.group(1).strip(), "%I:%M %p").strftime("%H:%M")
         tee = re.search(r"<h4>\s*([^<]*?)\s*</h4>", body)
-        fees = [{"price": float(p.replace(",", "")), "label": l.strip()} for p, l in _FEE.findall(body)]
+        fees = miclub_fees(body)
         spots = body.count("cell-available")
         if spots == 0:
             continue
-        first = fees[0] if fees else {"price": None, "label": ""}
+        first, only = headline_fee(fees)
+        first = first or {"price": None, "label": ""}
         rows.append({"course": course["id"], "date": date, "time": time24, "holes": holes,
-                     "price": first["price"], "spots": spots, "label": first["label"],
+                     "price": first["price"], "spots": spots, "label": first["label"], "only": only,
                      "group": (group or {}).get("label", ""),  # often the only place a group size or limit is named
                      "tee": tee.group(1) if tee else "", "min_players": int(limits.get(row_id, 1)),
                      "fees": fees})

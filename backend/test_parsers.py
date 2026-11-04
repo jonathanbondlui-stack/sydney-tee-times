@@ -1,7 +1,7 @@
 """Run: python backend/test_parsers.py   (checks both MiClub parsers against saved pages)"""
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from build_feed import parse_miclub_calendar, parse_miclub_timesheet, parse_quick18
+from build_feed import headline_fee, limited_to, parse_miclub_calendar, parse_miclub_timesheet, parse_quick18
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 rd = lambda n: open(os.path.join(ROOT, "fixtures", n), encoding="utf-8").read()
@@ -24,6 +24,33 @@ except ValueError:
 named = parse_miclub_timesheet(rd("moore-park-timesheet.html"), course, "2026-11-03", {"label": "4 Players + 2 Carts", "holes": None})
 assert named and all(r["group"] == "4 Players + 2 Carts" for r in named)
 assert all(r["group"] == "" for r in rows)
+
+popover = '''<div id="row-1" class="row row-time"><h3>12:41 pm </h3><h4>1st Tee Social Play</h4>
+<a tabindex="0" class="fee-applied popover-right" role="button" title="Fees" data-html="true" data-content="<ul><li>Adult $44.50</li><li>Pensioner (Mid-week) $30.20</li></ul>" data-placement="right"><span>Fees</span></a>
+<div class="cell cell-taken"></div><div class="cell cell-available"></div></div>'''
+tucked = parse_miclub_timesheet(popover, course, "2026-11-05")
+assert [(r["price"], r["label"], r["spots"]) for r in tucked] == [(44.5, "Adult", 1)], tucked
+assert tucked[0]["fees"] == [{"price": 44.5, "label": "Adult"}, {"price": 30.2, "label": "Pensioner (Mid-week)"}], tucked
+escaped = popover.replace("<ul>", "&lt;ul&gt;").replace("<li>", "&lt;li&gt;").replace("</li>", "&lt;/li&gt;").replace("</ul>", "&lt;/ul&gt;")
+assert parse_miclub_timesheet(escaped, course, "2026-11-05")[0]["price"] == 44.5
+
+fee = lambda *names: [{"price": 10.0 + i, "label": n} for i, n in enumerate(names)]
+pick = lambda *names: (lambda f, only: (f["label"], only))(*headline_fee(fee(*names)))
+assert pick("Adult", "Junior") == ("Adult", "")
+assert pick("Juniors Midweek (under 18)", "Twilight Midweek") == ("Twilight Midweek", "")
+assert pick("Concession & Juniors (Weekend)", "Twilight", "Disc Golf") == ("Twilight", "")
+assert pick("Midweek Under 18") == ("Midweek Under 18", "Juniors only")
+assert pick("Green Fee Jnr M-F") == ("Green Fee Jnr M-F", "Juniors only")
+assert pick("Senior 9 hole") == ("Senior 9 hole", "Seniors only")
+assert pick("Pensioner", "Senior") == ("Pensioner", "Seniors only")
+assert pick("Student (Mon-Fri)", "Disc Golf") == ("Student (Mon-Fri)", "Students only")
+assert pick("Junior 18 Holes", "Pensioner") == ("Junior 18 Holes", "Concession only")
+assert pick("18 Holes Student & Pensioner (Mon - Fri)") == ("18 Holes Student & Pensioner (Mon - Fri)", "Concession only")
+assert pick("Disc Golf") == ("Disc Golf", "Disc golf only")
+assert headline_fee([]) == (None, "")
+for name in ("Adult Visitor Midweek", "18 Holes International Green Fee", "Social Weekday - Online", "Gangurru 18 holes", "Twilight $15",
+             "1 Player  (Twilight)", "Foreplay Friday", "Afternoon Special Mon-Fri", "12 HOLES OFF PEAK", "Green Fee M-F", "9 Holes Adult"):
+    assert not limited_to(name), name
 
 lane = {"id": "lane-cove", "host": "lanecove.quick18.com"}
 day = parse_quick18(rd("lane-cove-weekday.html"), lane, "2026-11-05")

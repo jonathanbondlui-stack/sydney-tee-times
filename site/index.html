@@ -44,7 +44,7 @@ button.more.seeall{width:100%;margin:10px 0 0;background:var(--accent);border-co
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
 .chip{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;text-decoration:none}
 a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Grotesque",sans-serif}.chip b small{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
-.chip span{font-size:12px;color:var(--mute)}.chip .hs{color:var(--ink);font-weight:600}.chip.low .sp{color:#B45309;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
+.chip span{font-size:12px;color:var(--mute)}.chip .hs{color:var(--ink);font-weight:600}.chip.low .sp{color:#B45309;font-weight:600}.chip .only{align-self:flex-start;background:var(--warn);color:var(--warn-ink);border-radius:4px;padding:0 5px;margin:1px 0;font-size:11px;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
 .rates{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0 1px}.chip a.rate,.chip span.rate{border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap}.chip a.rate:hover{border-color:var(--accent);color:var(--accent)}.chip span.rate{opacity:.55}
 .cg details{margin-top:10px}.cg summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);margin-bottom:8px}
 .empty{text-align:center;padding:40px 16px;color:var(--mute);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
@@ -125,9 +125,9 @@ const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)r
 // One box per tee time. A time's rates stay separate only when their holes, price or group size differ.
 const slotsOf=a=>{const m=new Map();a.forEach(x=>{const k=x.time+"|"+(x.tee||"");if(!m.has(k))m.set(k,[]);m.get(k).push(x)});
   const perTime={};[...m.values()].forEach(s=>{perTime[s[0].time]=(perTime[s[0].time]||0)+1});
-  return[...m.values()].map(s=>{const seen=new Set(),out=s.filter(x=>{const k=[holesOf(x),x.each,x.party].join("|");if(seen.has(k))return false;seen.add(k);return true});out.tee=perTime[s[0].time]>1?teeTag(s[0].tee):"";return out})};
+  return[...m.values()].map(s=>{const seen=new Set(),out=s.filter(x=>{const k=[holesOf(x),x.shown,x.party,x.only].join("|");if(seen.has(k))return false;seen.add(k);return true});out.tee=perTime[s[0].time]>1?teeTag(s[0].tee):"";return out})};
 const teeTag=t=>{t=t||"";const n=/(\d+)(?:st|nd|rd|th)\s*tee/i.exec(t);if(n)return n[1]+({1:"st",2:"nd",3:"rd"}[n[1]]||"th")+" tee";const b=/(front|back)\s*9/i.exec(t);return b?b[1][0].toUpperCase()+b[1].slice(1).toLowerCase()+" 9":t.slice(0,14)};
-const tipOf=x=>(x.group||x.label||"")+(x.party>1&&x.price!=null?` (${"$"+x.price} total for ${x.party} players)`:"");
+const tipOf=x=>x.only?(x.fees||[]).map(f=>f.label+" $"+f.price).join(", "):(x.group||x.label||"")+(x.party>1&&x.price!=null?` (${"$"+x.price} total for ${x.party} players)`:"");
 // Fill whole rows before "Show all": at least 8 times, and always at least two rows.
 const colsNow=()=>{const w=$("list").clientWidth;return w?Math.max(1,Math.floor((w-34+8)/136)):6};
 const firstCount=c=>c*Math.max(2,Math.ceil(8/c));
@@ -199,7 +199,7 @@ function setup(){
 function render(){
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=($("where").value=="me"&&ME)||FROMS[+$("where").value]||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur()),latest=sunset(dt)-ROUND_MINS;
   $("pv").textContent="$"+mx+(mx==200?"+":"");
-  let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>{const party=partyOf(x);return{...x,c:by[x.course],m:mins(x.time),party,each:x.price==null?null:x.price/party}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
+  let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party;return{...x,c:by[x.course],m:mins(x.time),party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
    .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,latest):holesOf(x)&&holesOf(x)<=9)));
   const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.m-b.m:s=="d"?a.d-b.d||a.m-b.m:a.m-b.m||a.d-b.d);
   const last={};TIMES.forEach(t=>{if(!last[t.course]||t.date>last[t.course])last[t.course]=t.date});
@@ -215,10 +215,10 @@ function render(){
   const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m||(holesOf(q)||0)-(holesOf(p)||0)));
   const esc=s=>s.replace(/"/g,"&quot;"),spotText=x=>x.party>1?"for "+x.party:x.spots+(x.spots==1?" spot":" left");
   const chip=s=>{const x=s[0];
-    if(s.length==1){const h=holesOf(x),sub=[h?h+" holes":"",x.party>1&&x.each!=null?pf(x.each)+" each":pf(x.each)].filter(Boolean).join(" · ");
-      return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${esc(tipOf(x))}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}<span class="sp">${spotText(x)}${s.tee?" · "+s.tee:""}</span></a>`}
+    if(s.length==1){const h=holesOf(x),sub=[h?h+" holes":"",x.party>1&&x.shown!=null?pf(x.shown)+" each":pf(x.shown)].filter(Boolean).join(" · ");
+      return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${esc(tipOf(x))}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}${x.only?`<span class="only">${x.only}</span>`:""}<span class="sp">${spotText(x)}${s.tee?" · "+s.tee:""}</span></a>`}
     const solo=s.filter(r=>r.party==1),top=solo.length?solo.reduce((p,q)=>q.spots>p.spots?q:p):x;
-    const rates=[...s].sort((p,q)=>(holesOf(q)||0)-(holesOf(p)||0)||(p.each??0)-(q.each??0)).map(r=>{const h=holesOf(r),txt=[h?h+"h":/twilight/i.test(rateName(r))?"Twilight":"",pf(r.each)+(r.party>1?" each":"")].filter(Boolean).join(" ")||"Book";
+    const rates=[...s].sort((p,q)=>(holesOf(q)||0)-(holesOf(p)||0)||(!!p.only-!!q.only)||(p.shown??0)-(q.shown??0)).map(r=>{const h=holesOf(r),txt=[h?h+"h":/twilight/i.test(rateName(r))?"Twilight":"",pf(r.shown)+(r.party>1?" each":""),r.only?r.only.replace(" only",""):""].filter(Boolean).join(" ")||"Book";
       return r.url?`<a class="rate" href="${r.url}" target="_blank" rel="noopener" title="${esc(tipOf(r))}">${txt}</a>`:`<span class="rate" title="${esc(tipOf(r))}">${txt}</span>`}).join("");
     return `<div class="chip ${top.party==1&&top.spots<=2?"low":""}"><b>${fmt(x.m)}</b><div class="rates">${rates}</div><span class="sp">${spotText(top)}${s.tee?" · "+s.tee:""}</span></div>`};
   $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const slots=slotsOf(a),c=a[0].c,ps=a.map(x=>x.each).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
