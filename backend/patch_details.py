@@ -64,7 +64,8 @@ UPDATES = {
  "grose-river": dict(status="phone", phone="(02) 4572 1182", address="Nutmans Rd, Grose Wold", holes=9, source="directory", note="Nine-hole public course."),
  "woodville": dict(status="phone", phone="(02) 9632 3582", address="118 Rawson Rd, Guildford", source="club", cta="Council course page", book_url="https://www.cumberland.nsw.gov.au/woodville-public-golf-course", note="Council-run. Call the pro shop for bookings."),
  "fairfield-city": dict(status="phone", phone="(02) 9604 4007", address="Cnr Smithfield Rd and Beavors St, Prairiewood", source="directory", note="Council-run public course."),
- "hurstville": dict(status="phone", suburb="Peakhurst", phone="(02) 9534 5024", address="Lorraine St, Peakhurst", source="club", note="Council-run. See the course website to book."),
+ "hurstville": dict(status="online", suburb="Peakhurst", phone="(02) 9534 5024", address="Lorraine St, Peakhurst", source="club", cta="Book a tee time", book_url="https://hurstvillegolf.com.au/book/", website="https://hurstvillegolf.com.au/",
+     email="hurstvillegolf@bluefit.com.au", holes=18, note="Books online on the course's own site, up to about 10 days ahead. Times aren't shown here yet. Adults: 18 holes $43 weekdays, $49 weekends; 9 holes $30 weekdays, $37.50 weekends. Council-owned."),
  # No booking needed
  "bondi-golf": dict(status="walkup", phone="(02) 9130 3170", address="5 Military Rd, North Bondi", holes=9, source="directory", note="Nine holes. The club has said tee times aren't required, so turn up and wait your turn. Call first, as one guide says visitor play can be restricted."),
  "botany": dict(status="walkup", source="club"),
