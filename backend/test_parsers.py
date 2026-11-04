@@ -52,6 +52,32 @@ for name in ("Adult Visitor Midweek", "18 Holes International Green Fee", "Socia
              "1 Player  (Twilight)", "Foreplay Friday", "Afternoon Special Mon-Fri", "12 HOLES OFF PEAK", "Green Fee M-F", "9 Holes Adult"):
     assert not limited_to(name), name
 
+import datetime as dt, json
+from build_feed import parse_teeitup, sydney_time
+utc = lambda *a: dt.datetime(*a, tzinfo=dt.timezone.utc)
+assert sydney_time(utc(2026, 11, 5, 20, 0)) == dt.datetime(2026, 11, 6, 7, 0)  # summer, +11
+assert sydney_time(utc(2026, 7, 1, 0, 0)) == dt.datetime(2026, 7, 1, 10, 0)    # winter, +10
+assert sydney_time(utc(2026, 4, 4, 15, 59)) == dt.datetime(2026, 4, 5, 2, 59)  # just before clocks go back
+assert sydney_time(utc(2026, 4, 4, 16, 0)) == dt.datetime(2026, 4, 5, 2, 0)
+assert sydney_time(utc(2026, 10, 3, 15, 59)) == dt.datetime(2026, 10, 4, 1, 59)  # just before clocks go forward
+assert sydney_time(utc(2026, 10, 3, 16, 0)) == dt.datetime(2026, 10, 4, 3, 0)
+
+gr = {"id": "georges-river", "host": "georges-river-golf-course.book.teeitup.com", "facility_id": 16001}
+sat = parse_teeitup(rd("georges-river-teeitup.json"), gr, "2026-11-07")
+assert len(sat) == 35 and sat[0]["time"] == "10:21" and sat[-1]["time"] == "15:56", (len(sat), sat[0]["time"], sat[-1]["time"])
+assert {(r["holes"], r["price"]) for r in sat} == {(18, 45.0), (9, 32.0)}
+assert sat[0]["url"] == "https://georges-river-golf-course.book.teeitup.com/?course=16001&date=2026-11-07", sat[0]["url"]
+assert parse_teeitup(rd("georges-river-teeitup.json"), gr, "2026-11-08") == []  # response is for another date
+one = {"teetime": "2026-11-05T20:00:00.000Z", "maxPlayers": 2, "minPlayers": 1, "backNine": False, "rates": [
+    {"name": "2 Player Promotion", "allowedPlayers": [2, 4], "holes": 18, "greenFeeCart": 5200},
+    {"name": "18 Holes", "allowedPlayers": [1, 2], "holes": 18, "greenFeeWalking": 3200},
+    {"name": "Member Rate", "allowedPlayers": [1], "holes": 18, "greenFeeWalking": 1000}]}
+got = parse_teeitup(json.dumps([{"teetimes": [one]}]), gr, "2026-11-06")
+assert [(r["time"], r["label"], r["price"], r["spots"]) for r in got] == [
+    ("07:00", "2 Player Promotion with cart", 104.0, 2), ("07:00", "18 Holes", 32.0, 2)], got
+one["maxPlayers"] = 1  # a two-player rate can't fit in one remaining spot
+assert [r["label"] for r in parse_teeitup(json.dumps([{"teetimes": [one]}]), gr, "2026-11-06")] == ["18 Holes"]
+
 lane = {"id": "lane-cove", "host": "lanecove.quick18.com"}
 day = parse_quick18(rd("lane-cove-weekday.html"), lane, "2026-11-05")
 assert len(day) == 54, len(day)  # 5 of the 59 times only have a member rate

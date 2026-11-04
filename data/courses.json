@@ -951,16 +951,16 @@
   "lat": -33.92248,
   "lon": 150.97867,
   "status": "online",
-  "platform": "miclub",
+  "platform": "teeitup",
   "enabled": true,
-  "host": "georgesriver.miclub.com.au",
-  "resource_id": 3000000,
+  "host": "georges-river-golf-course.book.teeitup.com",
+  "facility_id": 16001,
   "phone": "(02) 9724 1615",
   "address": "255 Henry Lawson Dr, Georges Hall",
   "website": "https://georgesrivergolf.com.au/",
   "source": "club",
-  "note": "The club's own Book button uses TeeItUp, and its listed fees differ slightly from the MiClub page these times come from.",
-  "checked": "2026-11-03"
+  "note": "From 2pm, tee times are unlimited holes, and you need to be off the course before the gates close.",
+  "checked": "2026-11-04"
  },
  {
   "id": "sylvania-par3",

@@ -9,7 +9,7 @@ Usage:
   python backend/build_feed.py --calendar page.html     # test the calendar parser on a saved page
   python backend/build_feed.py --timesheet page.html --course moore-park --date 2026-11-07
 """
-import argparse, json, os, sys, time, datetime as dt
+import argparse, json, os, sys, threading, time, datetime as dt
 import urllib.request, urllib.robotparser, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from html import unescape
@@ -58,7 +58,7 @@ def allowed(url):
         return True, reason
     return False, "robots.txt disallows this path for our user agent"
 
-def fetch(url):
+def fetch(url, headers=None):
     if "@" not in UA or "YOUR_EMAIL_HERE" in UA:
         raise PermissionError("TEE_UA has no contact email, so not fetching")
     ok, reason = allowed(url)
@@ -68,7 +68,7 @@ def fetch(url):
     wait = MIN_GAP - (time.time() - _last.get(host, 0))
     if wait > 0:
         time.sleep(wait)
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers={**(headers or {}), "User-Agent": UA})
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             return r.read().decode("utf-8", "replace")
@@ -280,7 +280,64 @@ def collect_quick18(c, today, first=0, last=DAYS):
         rows.extend(parse_quick18(fetch(quick18_url(c, d)), c, d))
     return rows
 
-COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18}
+TEEITUP_API = "https://phx-api-be-east-1b.kenna.io"
+_teeitup_lock = threading.Lock()  # every TeeItUp club shares one host, so they take turns
+
+def sydney_time(utc):
+    """Sydney local time for a UTC datetime. Daylight saving runs from the first Sunday of October to the first Sunday of April."""
+    def change(month):  # both changes happen at 16:00 UTC on the Saturday before
+        first = dt.date(utc.year, month, 1)
+        sunday = first + dt.timedelta(days=(6 - first.weekday()) % 7)
+        return dt.datetime(sunday.year, sunday.month, sunday.day, tzinfo=dt.timezone.utc) - dt.timedelta(hours=8)
+    standard = change(4) <= utc < change(10)
+    return (utc + dt.timedelta(hours=10 if standard else 11)).replace(tzinfo=None)
+
+def parse_teeitup(text, course, date):
+    """Parse a TeeItUp tee time response. Each rate at a time becomes one row, as with Quick18.
+
+    TeeItUp prices are per player. A rate for a set group, such as "2 Player Promotion",
+    is stored as the group's total, because that's how the site reads package rates.
+    """
+    alias = course["host"].split(".")[0]
+    url = f"https://{course['host']}/?" + urlencode({"course": course["facility_id"], "date": date})
+    rows = []
+    for day in json.loads(text):
+        for t in day.get("teetimes", []):
+            when = sydney_time(dt.datetime.fromisoformat(t["teetime"].replace("Z", "+00:00")))
+            if when.date().isoformat() != date or not t.get("maxPlayers"):
+                continue
+            fees = []
+            for r in t.get("rates", []):
+                each = r.get("greenFeeWalking", r.get("greenFeeCart"))
+                if each is None or re.search(r"member", r["name"], re.I):
+                    continue
+                party = min(r.get("allowedPlayers") or [1])
+                if party > t["maxPlayers"]:
+                    continue
+                label = r["name"] + (" with cart" if "greenFeeWalking" not in r else "")
+                if party > 1 and not re.search(rf"{party}\s*players?", label, re.I):
+                    label += f" ({party} players)"
+                fees.append({"price": each / 100 * party, "label": label, "holes": r.get("holes")})
+            rate_list = [{"price": f["price"], "label": f["label"]} for f in fees]
+            for f in fees:
+                rows.append({"course": course["id"], "date": date, "time": when.strftime("%H:%M"), "holes": f["holes"],
+                             "price": f["price"], "spots": t["maxPlayers"], "label": f["label"], "only": "", "group": "",
+                             "tee": "Back 9" if t.get("backNine") else "", "min_players": t.get("minPlayers", 1),
+                             "url": url, "fees": rate_list})
+    return rows
+
+def collect_teeitup(c, today, first=0, last=DAYS):
+    """Collect tee times from first to last days ahead. Each date is one request."""
+    rows = []
+    for ahead in range(first, last + 1):
+        d = (today + dt.timedelta(days=ahead)).isoformat()
+        q = urlencode({"date": d, "facilityIds": c["facility_id"]})
+        with _teeitup_lock:
+            text = fetch(f"{TEEITUP_API}/v2/tee-times?{q}", {"x-be-alias": c["host"].split(".")[0]})
+        rows.extend(parse_teeitup(text, c, d))
+    return rows
+
+COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup}
 
 def build(courses, today, first, last):
     """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
