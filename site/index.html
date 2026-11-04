@@ -35,7 +35,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 a.go{display:inline-block;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:9px 14px;font:600 14px "Hanken Grotesk",sans-serif;margin-top:6px;text-decoration:none}
 a.go.off{opacity:.45;pointer-events:none}
 button.more{display:block;margin:16px auto 0;background:none;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 18px;font:600 14px "Hanken Grotesk",sans-serif;cursor:pointer}
-.cg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+button.more.seeall{width:100%;margin:10px 0 0;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px;scroll-margin-top:12px}
+.cg.flash{animation:flash 1.8s ease-out}@keyframes flash{0%,50%{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}100%{box-shadow:0 0 0 2px transparent}}
+@media(prefers-reduced-motion:reduce){.cg.flash{animation:none;border-color:var(--accent)}}
 .cg header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
 .cg .course{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif}.gs{text-align:right;font-size:14px;color:var(--mute);white-space:nowrap}.gs b{display:block;color:var(--ink)}
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
@@ -130,6 +133,14 @@ const distinct=a=>new Set(a.map(x=>x.course+x.time+(x.tee||""))).size;
 const loadMap=()=>window.L?Promise.resolve():new Promise((ok,no)=>{const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=ok;s.onerror=no;document.head.append(s)});
 function setView(v){view=v;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").hidden=v=="map";
   if(v=="map")loadMap().then(render).catch(()=>{$("map").innerHTML='<div class="empty">The map couldn’t load. Check your connection and try again.</div>'});else render()}
+// From a map popup: open the List with that club's times expanded and in view.
+function showCourse(id){setView("list");
+  const find=()=>document.querySelector(`#list [data-course="${id}"]`);
+  while(!find()&&!$("more").hidden){shown+=12;render()}
+  const el=find();if(!el)return;
+  const more=el.querySelector("details");if(more)more.open=true;
+  el.scrollIntoView({block:"start"});
+  el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
 function drawMap(groups,chip,card,pf,w,dm){
   if(!window.L||view!="map")return;
   if(!M){M=L.map("map",{zoomSnap:.25});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);LY=L.layerGroup().addTo(M)}
@@ -138,7 +149,7 @@ function drawMap(groups,chip,card,pf,w,dm){
   COURSES.filter(c=>!live.has(c.id)).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
   groups.forEach(a=>{const c=a[0].c,n=distinct(a),ps=a.map(x=>x.each).filter(p=>p!=null);pts.push([c.lat,c.lon]);
     L.circleMarker([c.lat,c.lon],{radius:12,color:"#fff",fillColor:"#1F6B3A",fillOpacity:1,weight:2}).bindTooltip(String(n),{permanent:true,direction:"center",className:"mc"})
-     .bindPopup(`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away · ${n} ${n==1?"time":"times"}${ps.length?" from "+pf(Math.min(...ps)):""}</div><div class="chips">${a.slice(0,6).map(chip).join("")}</div>${a.length>6?`<div class="meta" style="margin-top:6px">Switch to List to see every time.</div>`:""}`).addTo(LY)});
+     .bindPopup(`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away · ${n} ${n==1?"time":"times"}${ps.length?" from "+pf(Math.min(...ps)):""}</div><div class="chips">${a.slice(0,6).map(chip).join("")}</div>${a.length>6?`<button class="more seeall" onclick="showCourse('${c.id}')">See all ${n} times</button>`:""}`).addTo(LY)});
   L.circleMarker(pts[0],{radius:6,color:"#fff",fillColor:"#2563EB",fillOpacity:1,weight:2}).bindTooltip("Starting point").addTo(LY);
   if(dm<999)L.circle(pts[0],{radius:dm*1000,color:"#2563EB",weight:1,fill:false,dashArray:"4 6"}).addTo(LY);
   const k=pts[0].join()+dm;if(k!=fitKey){fitKey=k;M.fitBounds(dm<999?L.latLng(pts[0]).toBounds(dm*2000):L.latLngBounds(pts),{padding:[20,20]})}}
@@ -194,7 +205,7 @@ function render(){
     return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${tip.replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}<span class="sp">${x.party>1?"for "+x.party:x.spots+(x.spots==1?" spot":" left")}</span></a>`};
   $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const c=a[0].c,ps=a.map(x=>x.each).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
     pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=8,hl=[...new Set(a.map(holesOf).filter(Boolean))].sort((p,q)=>p-q).join("/");
-    return `<article class="cg"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show all ${distinct(a)} times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
+    return `<article class="cg" data-course="${c.id}"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show all ${distinct(a)} times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
   if($("widen"))$("widen").onclick=()=>{$("dist").value=dm==10?"20":dm==20?"35":"999";shown=12;save();render()};
   $("more").textContent="Show more courses";$("more").hidden=groups.length<=shown||view=="map";rows=r;
   const lab={online:"Book online",set_times:"Visitors at set times",phone:"Call to book",walkup:"No booking needed",enquiry:"Limited visitor access",contact:"Details still being confirmed",check:"Check it’s open",members:"Members and guests only",private:"Private club"};
