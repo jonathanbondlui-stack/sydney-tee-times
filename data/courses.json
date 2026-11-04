@@ -538,15 +538,19 @@
   "suburb": "Richmond",
   "lat": -33.60489,
   "lon": 150.76295,
-  "status": "phone",
-  "platform": "none",
-  "enabled": false,
-  "note": "Directories say visitors are welcome every day.",
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
+  "note": "Books online through the club's own site.",
   "phone": "(02) 4578 1739",
   "address": "34 Bourke St, Richmond",
   "website": "https://www.richmondgolfclub.com.au/",
-  "source": "directory",
-  "checked": "2026-11-03"
+  "source": "club",
+  "checked": "2026-11-04",
+  "host": "www.richmondgolfclub.com.au",
+  "resource_id": 3000000,
+  "cta": "Book a tee time",
+  "book_url": "https://www.richmondgolfclub.com.au/cms/public-bookings/"
  },
  {
   "id": "canterbury",
@@ -557,14 +561,14 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Nine-hole council course. Open 7 days and visitors are welcome.",
+  "note": "Nine-hole council course, open 7 days. The council's page shows no online booking.",
   "phone": "(02) 9759 5444",
   "address": "Moorefields Rd, Beverly Hills",
   "holes": 9,
   "source": "club",
   "cta": "Council course page",
   "book_url": "https://www.cbcity.nsw.gov.au/canterbury-golf-course",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04"
  },
  {
   "id": "antill-park",
@@ -593,7 +597,8 @@
   "holes": 9,
   "website": "https://www.northernbeaches.nsw.gov.au/things-to-do/recreation-area/avalon-golf-course",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "email": "info@avalongolfcourse.com.au"
  },
  {
   "id": "colonial",
@@ -661,14 +666,15 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Social golfers are welcome. Call the pro shop (option 1) or email to book.",
+  "note": "The club takes bookings by phone through the pro shop, or by email if you can't get through.",
   "phone": "(02) 4733 1230",
   "address": "690 Mulgoa Rd, Mulgoa",
   "email": "golf@glenmoregolf.com.au",
   "source": "club",
   "cta": "Visitor booking information",
-  "book_url": "https://glenmoregolf.com.au/glenmoregolf/php/golf/bookings.php",
-  "checked": "2026-11-03"
+  "book_url": "https://glenmoregolf.com.au/bookings/",
+  "checked": "2026-11-04",
+  "website": "https://glenmoregolf.com.au/"
  },
  {
   "id": "bondi-golf",
@@ -730,7 +736,8 @@
   "address": "55 Fox Hills Cres, Prospect",
   "holes": 18,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "website": "https://foxhillsgolfclub.com.au/"
  },
  {
   "id": "randwick",
@@ -741,10 +748,11 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Directories say visitor times run 7 days. They disagree on the phone number, so check the club's website.",
+  "note": "Call to check social play availability. The club also has online booking if you register as a public member, but its times aren't public.",
   "website": "https://randwickgolfclub.com.au/",
-  "source": "directory",
-  "checked": "2026-11-03"
+  "source": "club",
+  "checked": "2026-11-04",
+  "phone": "(02) 8347 3733"
  },
  {
   "id": "camden",
@@ -755,13 +763,13 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Visitors are welcome. Contact the club to arrange a time.",
+  "note": "Visitors can call the club. Its site has a Book button, but it showed no public times when we checked on 4 Nov 2026.",
   "phone": "(02) 4646 1203",
   "address": "50 Lodges Rd, Narellan",
   "email": "camden@camdengolfclub.com.au",
   "website": "https://camdengolfclub.com.au/",
-  "source": "directory",
-  "checked": "2026-11-03"
+  "source": "club",
+  "checked": "2026-11-04"
  },
  {
   "id": "hawkesbury-waters",
@@ -782,15 +790,19 @@
   "suburb": "Pitt Town",
   "lat": -33.59813,
   "lon": 150.85596,
-  "status": "phone",
-  "platform": "none",
-  "enabled": false,
-  "note": "Public bookings are available.",
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
+  "note": "Bookings are essential and can be made online.",
   "phone": "(02) 4580 2800",
   "address": "4 Pitt Town Bottoms Rd, Pitt Town",
-  "website": "https://lynwoodcc.com.au/",
-  "source": "directory",
-  "checked": "2026-11-03"
+  "website": "http://www.lynwood.com.au/",
+  "source": "club",
+  "checked": "2026-11-04",
+  "host": "lynwoodcc.miclub.com.au",
+  "resource_id": 3000000,
+  "cta": "Book a tee time",
+  "book_url": "https://lynwoodcc.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000"
  },
  {
   "id": "brighton-lakes",
@@ -858,15 +870,17 @@
   "suburb": "Auburn",
   "lat": -33.86709,
   "lon": 151.01551,
-  "status": "contact",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Council-run, also called Rosnay. See the council page for bookings.",
+  "note": "Council-run, also called Rosnay. The council gives this number for bookings, and (02) 9749 1550 for the pro shop.",
   "cta": "Council course page",
   "book_url": "https://www.cumberland.nsw.gov.au/auburn-golf-course-rosnay",
   "address": "Weymouth Ave, Auburn",
   "source": "club",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "phone": "(02) 9649 8429",
+  "website": "https://rosnaygolfclub.com.au/"
  },
  {
   "id": "woodville",
@@ -877,13 +891,13 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Council-run. Call the pro shop for bookings.",
+  "note": "Council-run. The council says to call the pro shop for bookings. Open 6am to 7pm in daylight saving, otherwise 7am to 5:30pm.",
   "cta": "Council course page",
   "book_url": "https://www.cumberland.nsw.gov.au/woodville-public-golf-course",
   "phone": "(02) 9632 3582",
   "address": "118 Rawson Rd, Guildford",
   "source": "club",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04"
  },
  {
   "id": "penrith",
@@ -961,10 +975,10 @@
   "phone": "(02) 9540 1669",
   "address": "223B Belgrave Esp, Sylvania Waters",
   "holes": 9,
-  "website": "https://sylvaniapar3golf.com.au/",
+  "website": "https://sylvaniapar3.com.au/cms/",
   "email": "enquiries@sylvaniapar3golf.com.au",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04"
  },
  {
   "id": "wallacia",
@@ -1080,9 +1094,10 @@
   "address": "1156 Victoria Rd, West Ryde",
   "email": "golf@rydeparramatta.com.au",
   "website": "https://rydeparramatta.com.au/",
-  "source": "directory",
-  "note": "Directories say visitors are welcome and booking is essential. They disagree on the phone number.",
-  "checked": "2026-11-03"
+  "source": "club",
+  "note": "The club's website calls it a private club and shows no public booking. Directories say visitors are welcome, so call first.",
+  "checked": "2026-11-04",
+  "phone": "02 9874 1204"
  },
  {
   "id": "liverpool",
@@ -1126,9 +1141,10 @@
   "enabled": false,
   "phone": "(02) 9634 2573",
   "address": "Spurway Dr, Baulkham Hills",
-  "source": "directory",
-  "note": "One directory says visitors are welcome every day.",
-  "checked": "2026-11-03"
+  "source": "club",
+  "note": "The club's website shows no public booking, and its social bookings need a member login. One directory says visitors are welcome every day, so call first.",
+  "checked": "2026-11-04",
+  "website": "https://www.castlehillcountryclub.com.au/cms/"
  },
  {
   "id": "concord",
@@ -1337,10 +1353,10 @@
   "status": "contact",
   "platform": "none",
   "enabled": false,
-  "website": "https://pymblegolf.com.au/",
-  "source": "directory",
-  "note": "We couldn't confirm its visitor policy or phone number. See the club's website.",
-  "checked": "2026-11-03"
+  "website": "https://www.pymblegolf.com.au/cms/",
+  "source": "club",
+  "note": "The club's website shows no public booking. We couldn't confirm its visitor policy or phone number.",
+  "checked": "2026-11-04"
  },
  {
   "id": "pennant-hills",
@@ -1348,13 +1364,16 @@
   "suburb": "Pennant Hills",
   "lat": -33.75549,
   "lon": 151.05286,
-  "status": "contact",
+  "status": "enquiry",
   "platform": "none",
   "enabled": false,
   "website": "https://www.pennanthillsgolfclub.com.au/",
   "source": "club",
-  "note": "The club's website has a visitor information section. We couldn't confirm its phone number.",
-  "checked": "2026-11-03"
+  "note": "Private club. International visitors can enquire about visitor tee times.",
+  "checked": "2026-11-04",
+  "phone": "(02) 8860 5860",
+  "email": "proshop@pennanthillsgolfclub.com.au",
+  "book_url": "https://www.pennanthillsgolfclub.com.au/cms/visitors/information-and-entry-forms/"
  },
  {
   "id": "oatlands",
@@ -1365,10 +1384,12 @@
   "status": "contact",
   "platform": "none",
   "enabled": false,
-  "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course.",
-  "website": "https://www.oatlandsgolf.com.au/"
+  "source": "club",
+  "checked": "2026-11-04",
+  "note": "The club's website shows no public booking or visitor information. Call to ask whether visitors can play.",
+  "website": "https://www.oatlandsgolf.com.au/cms/",
+  "phone": "(02) 9630 4444",
+  "address": "94 Bettington Road, Oatlands"
  },
  {
   "id": "the-ridge",
@@ -1376,13 +1397,15 @@
   "suburb": "Menai",
   "lat": -34.03025,
   "lon": 151.00012,
-  "status": "contact",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
-  "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course.",
-  "website": "https://theridgegolf.com.au/"
+  "source": "club",
+  "checked": "2026-11-04",
+  "note": "Call the pro shop to book, up to 7 days ahead. The club doesn't take bookings by email.",
+  "website": "https://theridgegolf.com.au/",
+  "phone": "(02) 9541 4960",
+  "address": "Recreation Drive, off New Illawarra Road, Barden Ridge"
  },
  {
   "id": "twin-creeks",
@@ -1390,13 +1413,17 @@
   "suburb": "Luddenham",
   "lat": -33.83933,
   "lon": 150.7583,
-  "status": "contact",
-  "platform": "none",
-  "enabled": false,
-  "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course.",
-  "website": "https://www.twincreeksgolf.com.au/"
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
+  "source": "club",
+  "checked": "2026-11-04",
+  "note": "You need to register free as a public member on the club's site before booking.",
+  "website": "https://www.twincreeksgolf.com.au/",
+  "host": "www.twincreeksgolf.com.au",
+  "resource_id": 3000000,
+  "cta": "Book a tee time",
+  "book_url": "https://www.twincreeksgolf.com.au/cms/public-bookings/"
  },
  {
   "id": "kurrajong-hills",
@@ -1430,12 +1457,13 @@
   "suburb": "Terrey Hills",
   "lat": -33.69943,
   "lon": 151.20864,
-  "status": "contact",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
-  "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course.",
-  "website": "https://shorteesgolf.com/"
+  "source": "club",
+  "checked": "2026-11-04",
+  "note": "18-hole par 3 at Terrey Hills. Groups of up to 10 adults can walk in. Open 7 days, 8am to 10pm, last tee off 8pm.",
+  "website": "https://shorteesgolf.com/",
+  "holes": 18
  }
 ]
