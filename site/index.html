@@ -116,7 +116,7 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(Object.fromEntries(S
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
 const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));return m?+m[1]:x.holes};
-// Package rates such as "4 Player + 2 Carts" are a total price for that exact group.
+// Package rates such as "4 Player + 2 Carts" are a total price for that exact group, and MiClub counts each package as one spot.
 const rateName=x=>(x.label||"")+" "+(x.group||"");
 const partyOf=x=>{const m=/(\d)\s*(?:players?|persons?)\b/i.exec(rateName(x));return m&&+m[1]>1?+m[1]:1};
 const fullRound=(x,latest)=>!NO_FINISH.test(rateName(x))&&x.m<=latest&&(holesOf(x)==null||holesOf(x)>=18);
@@ -177,7 +177,7 @@ function render(){
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=($("where").value=="me"&&ME)||FROMS[+$("where").value]||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur()),latest=sunset(dt)-ROUND_MINS;
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>{const party=partyOf(x);return{...x,c:by[x.course],m:mins(x.time),party,each:x.price==null?null:x.price/party}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
-   .filter(x=>x.spots>=pl&&(x.party==1||x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,latest):holesOf(x)&&holesOf(x)<=9)));
+   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,latest):holesOf(x)&&holesOf(x)<=9)));
   const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.m-b.m:s=="d"?a.d-b.d||a.m-b.m:a.m-b.m||a.d-b.d);
   const last={};TIMES.forEach(t=>{if(!last[t.course]||t.date>last[t.course])last[t.course]=t.date});
   const notYet=COURSES.filter(c=>c.enabled&&(!last[c.id]||last[c.id]<dt)&&km(w.lat??w.la,w.lo,c.lat,c.lon)<=dm).map(c=>c.name.replace(/ (Public )?Golf( Club| Course)?$/,""));
@@ -191,7 +191,7 @@ function render(){
   const G=new Map();r.forEach(x=>{if(!G.has(x.course))G.set(x.course,[]);G.get(x.course).push(x)});
   const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m||(holesOf(q)||0)-(holesOf(p)||0)));
   const chip=x=>{const h=holesOf(x),sub=[h?h+" holes":"",x.party>1&&x.each!=null?pf(x.each)+" each":pf(x.each)].filter(Boolean).join(" · "),tip=(x.group||x.label||"")+(x.party>1&&x.price!=null?` (${pf(x.price)} total for ${x.party} players)`:"");
-    return `<a class="chip ${x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${tip.replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}<span class="sp">${x.spots+(x.spots==1?" spot":" left")}</span></a>`};
+    return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener"`:""} title="${tip.replace(/"/g,"&quot;")}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}<span class="sp">${x.party>1?"for "+x.party:x.spots+(x.spots==1?" spot":" left")}</span></a>`};
   $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const c=a[0].c,ps=a.map(x=>x.each).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
     pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=8,hl=[...new Set(a.map(holesOf).filter(Boolean))].sort((p,q)=>p-q).join("/");
     return `<article class="cg"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${a.slice(0,N).map(chip).join("")}</div>${a.length>N?`<details><summary>Show all ${distinct(a)} times</summary><div class="chips">${a.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
