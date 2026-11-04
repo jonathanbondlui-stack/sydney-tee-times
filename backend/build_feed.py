@@ -12,6 +12,7 @@ Usage:
 import argparse, json, os, sys, time, datetime as dt
 import urllib.request, urllib.robotparser, urllib.error
 from concurrent.futures import ThreadPoolExecutor
+from html import unescape
 from urllib.parse import urlencode, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -185,7 +186,61 @@ def collect_miclub(c, today, first=0, last=DAYS):
                     rows.append(r)
     return rows
 
-COLLECTORS = {"miclub": collect_miclub}
+def quick18_url(c, date):
+    return f"https://{c['host']}/teetimes/searchmatrix?teedate={date.replace('-', '')}"
+
+_Q_ROW = re.compile(r"<tr>(.*?)</tr>", re.S)
+_Q_CELL = re.compile(r'<td class="matrixsched[^"]*">(.*?)</td>', re.S)
+
+def parse_quick18(html, course, date):
+    """Parse a Quick18 tee sheet page into tee times, with one row per public rate at each time.
+
+    Verified against Lane Cove's pages. Member rates are left out, and concession rates are only
+    listed in fees. Returns [] when the page has no tee sheet or shows a different date.
+    """
+    table = re.search(r'<table class="matrixTable".*?</table>', html, re.S)
+    if not table:
+        return []
+    shown = re.search(r'class="matrixToday">.*?teedate=(\d{8})', html, re.S)
+    if not shown:
+        raise ValueError("Quick18 page doesn't show which date is selected")
+    if shown.group(1) != date.replace("-", ""):
+        return []
+    rates = [r.strip() for r in re.findall(r'<th class="matrixHdrSched">(.*?)</th>', table.group(0), re.S)]
+    rows = []
+    for body in _Q_ROW.findall(table.group(0)[table.group(0).find("<tbody>"):]):
+        t = re.search(r'class="mtrxTeeTimes">\s*(\d{1,2}:\d{2})\s*<div[^>]*>\s*(AM|PM)', body)
+        players = re.search(r'class="matrixPlayers">(.*?)</td>', body, re.S)
+        if not t or not players:
+            continue
+        time24 = dt.datetime.strptime(f"{t.group(1)} {t.group(2)}", "%I:%M %p").strftime("%H:%M")
+        counts = [int(n) for n in re.findall(r"\d+", players.group(1))]
+        fees = []
+        for rate, cell in zip(rates, _Q_CELL.findall(body)):
+            price = re.search(r'class="mtrxPrice">\$([\d.,]+)', cell)
+            link = re.search(r'<a class="[^"]*teebutton[^"]*" href="([^"]+)"', cell)
+            if price and link and not re.search(r"member", rate, re.I):
+                fees.append({"price": float(price.group(1).replace(",", "")), "label": rate,
+                             "url": f"https://{course['host']}{unescape(link.group(1))}"})
+        for fee in fees:
+            if re.search(r"concession", fee["label"], re.I):
+                continue
+            hm = re.search(r"(\d+)\s*-?\s*holes?", fee["label"], re.I)
+            rows.append({"course": course["id"], "date": date, "time": time24, "holes": int(hm.group(1)) if hm else None,
+                         "price": fee["price"], "spots": max(counts), "label": fee["label"], "tee": "",
+                         "min_players": min(counts), "url": fee["url"],
+                         "fees": [{"price": f["price"], "label": f["label"]} for f in fees]})
+    return rows
+
+def collect_quick18(c, today, first=0, last=DAYS):
+    """Collect tee times from first to last days ahead. Each date is its own page."""
+    rows = []
+    for ahead in range(first, last + 1):
+        d = (today + dt.timedelta(days=ahead)).isoformat()
+        rows.extend(parse_quick18(fetch(quick18_url(c, d)), c, d))
+    return rows
+
+COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18}
 
 def build(courses, today, first, last):
     """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""

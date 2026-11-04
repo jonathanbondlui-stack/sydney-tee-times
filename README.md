@@ -28,7 +28,7 @@ The builder runs about every 20 minutes and rewrites `tee-times.json`, which cov
    and add a privacy policy if you collect emails. Then remove the `noindex` tag from `site/index.html` so search engines can list the site.
 
 ## Rules built into the builder
-- Checks robots.txt on every host and skips anything disallowed. Quick18 is switched off for this reason.
+- Checks robots.txt on every host and skips anything disallowed. Quick18's robots.txt blocks AI crawlers by name but allows this builder, so a person saves its pages for testing rather than an AI assistant fetching them.
 - Maximum one request per second per host, with an honest user agent. Up to 8 clubs are read at the same time, one worker per club.
 - Courses with `"enabled": false` are never fetched.
 - If most fetches fail or nothing is parsed, it keeps the last good feed.
