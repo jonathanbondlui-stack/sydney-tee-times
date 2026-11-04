@@ -916,15 +916,14 @@
   "suburb": "Glenmore Park",
   "lat": -33.79009,
   "lon": 150.69593,
-  "status": "online",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Listed on GolfNow, which may not always show times. Prices can differ from the club's, so check when you book. We couldn't confirm the club's phone number.",
-  "cta": "Book on GolfNow",
-  "book_url": "https://www.golfnow.com/courses/-5069-penrith-golf-club-details",
+  "note": "Open to the public: Mon from 10am, Tue all day, Wed from 1pm, Thu and Fri all day, Sat and Sun from 3pm. Bookings are essential, so call the pro shop to request a time. No walk-ups.",
+  "phone": "(02) 4736 1613",
   "address": "1939 The Northern Rd, Penrith",
-  "source": "directory",
-  "checked": "2026-11-03"
+  "source": "club",
+  "checked": "2026-11-04"
  },
  {
   "id": "castle-cove",
