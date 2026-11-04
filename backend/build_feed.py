@@ -165,6 +165,7 @@ def parse_miclub_timesheet(html, course, date, group=None):
         first = fees[0] if fees else {"price": None, "label": ""}
         rows.append({"course": course["id"], "date": date, "time": time24, "holes": holes,
                      "price": first["price"], "spots": spots, "label": first["label"],
+                     "group": (group or {}).get("label", ""),  # often the only place a group size or limit is named
                      "tee": tee.group(1) if tee else "", "min_players": int(limits.get(row_id, 1)),
                      "fees": fees})
     return rows

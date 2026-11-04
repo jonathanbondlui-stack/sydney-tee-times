@@ -21,6 +21,10 @@ try:
 except ValueError:
     pass
 
+named = parse_miclub_timesheet(rd("moore-park-timesheet.html"), course, "2026-11-03", {"label": "4 Players + 2 Carts", "holes": None})
+assert named and all(r["group"] == "4 Players + 2 Carts" for r in named)
+assert all(r["group"] == "" for r in rows)
+
 lane = {"id": "lane-cove", "host": "lanecove.quick18.com"}
 day = parse_quick18(rd("lane-cove-weekday.html"), lane, "2026-11-05")
 assert len(day) == 54, len(day)  # 5 of the 59 times only have a member rate
