@@ -58,7 +58,7 @@ def allowed(url):
         return True, reason
     return False, "robots.txt disallows this path for our user agent"
 
-def fetch(url, headers=None):
+def fetch(url, headers=None, data=None):
     if "@" not in UA or "YOUR_EMAIL_HERE" in UA:
         raise PermissionError("TEE_UA has no contact email, so not fetching")
     ok, reason = allowed(url)
@@ -68,7 +68,7 @@ def fetch(url, headers=None):
     wait = MIN_GAP - (time.time() - _last.get(host, 0))
     if wait > 0:
         time.sleep(wait)
-    req = urllib.request.Request(url, headers={**(headers or {}), "User-Agent": UA})
+    req = urllib.request.Request(url, data=data, headers={**(headers or {}), "User-Agent": UA})
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             return r.read().decode("utf-8", "replace")
@@ -337,14 +337,78 @@ def collect_teeitup(c, today, first=0, last=DAYS):
         rows.extend(parse_teeitup(text, c, d))
     return rows
 
-COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup}
+GOLFNOW_SEARCH = "https://www.golfnow.com.au/api/tee-times/tee-time-search-results"
+_golfnow_lock = threading.Lock()  # every GolfNow club shares one host, so they take turns
+_PLAYER_WORDS = {"One": 1, "Two": 2, "Three": 3, "Four": 4}
+
+def golfnow_players(rule):
+    """Group sizes a GolfNow player rule allows, such as OneTwo -> [1, 2] or TwoFour -> [2, 4]."""
+    if rule == "Any":
+        return [1, 2, 3, 4]
+    sizes = [_PLAYER_WORDS[w] for w in re.findall(r"[A-Z][a-z]+", rule or "") if w in _PLAYER_WORDS]
+    if not sizes:
+        raise ValueError(f"unrecognised GolfNow player rule: {rule!r}")
+    return sizes
+
+def parse_golfnow(text, course, date):
+    """Parse a GolfNow search response. Each rate at a time becomes one row.
+
+    Prices are per player and leave out any booking fee. A rate for a set group is
+    stored as the group's total, because that's how the site reads package rates.
+    """
+    results = json.loads(text).get("ttResults")
+    if results is None:
+        raise ValueError("GolfNow response has no results section")
+    rows = []
+    for t in results.get("teeTimes") or []:
+        when = t["time"]["date"]  # already local time, despite the +00:00
+        if when[:10] != date:
+            continue
+        for r in t.get("teeTimeRates") or []:
+            name = r.get("rateName") or ""
+            each = r["singlePlayerPrice"]["greensFees"]["value"]
+            if not each or r.get("isHotDealHidden") or re.search(r"member", name, re.I):
+                continue
+            sizes = golfnow_players(r.get("playerRule") or t.get("playerRule"))
+            party = min(sizes)
+            label = name + (" with cart" if r.get("isCartIncluded") else "")
+            if party > 1 and not re.search(rf"{party}\s*players?", label, re.I):
+                label += f" ({party} players)"
+            _, only = headline_fee([{"price": each, "label": label}])
+            rows.append({"course": course["id"], "date": date, "time": when[11:16], "holes": r.get("holeCount"),
+                         "price": each * party, "spots": max(sizes), "label": label, "only": only, "group": "", "tee": "",
+                         "min_players": party, "url": "https://www.golfnow.com.au" + r["detailUrl"],
+                         "fees": [{"price": each, "label": label}]})
+    return rows
+
+def collect_golfnow(c, today, first=0, last=DAYS):
+    """Collect tee times from first to last days ahead. A search only returns one length of round, so each date takes two."""
+    rows, seen = [], set()
+    for ahead in range(first, last + 1):
+        day = today + dt.timedelta(days=ahead)
+        for holes in ("Eighteen", "Nine"):
+            body = {"pageSize": 30, "teeTimeCount": 10, "pageNumber": 0, "date": day.strftime("%b %d %Y"), "sortBy": "Date",
+                    "sortByRollup": "Date.MinDate", "sortDirection": 0, "priceMin": 0, "priceMax": 10000, "players": 0, "timePeriod": "Any",
+                    "timeMin": 10, "timeMax": 42, "holes": holes, "facilityType": "GolfCourse", "radius": 100,
+                    "facilityId": c["facility_id"], "facilityIds": [], "searchType": "Facility", "view": "Grouping", "rateType": "all"}
+            with _golfnow_lock:
+                text = fetch(GOLFNOW_SEARCH, {"Content-Type": "application/json", "Accept": "application/json"}, json.dumps(body).encode())
+            for r in parse_golfnow(text, c, day.isoformat()):
+                key = (r["date"], r["time"], r["holes"], r["price"], r["label"])
+                if key not in seen:
+                    seen.add(key)
+                    rows.append(r)
+    return rows
+
+COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup, "golfnow": collect_golfnow}
 
 def build(courses, today, first, last):
     """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
     live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
-    assert len({c["host"] for c in live}) == len(live), "two courses share a host"
+    # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
+    assert len({(c["host"], c.get("facility_id")) for c in live}) == len(live), "two courses share a host"
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
         jobs = [(c, pool.submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
     for c, job in jobs:

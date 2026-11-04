@@ -281,22 +281,22 @@
   "email": "golfbookings@stmichaelsgolf.com.au",
   "visitor_hours": {
    "Summer": [
-    "6am\u20137pm",
-    "10am\u20137pm",
-    "7am\u20137pm",
-    "3pm\u20137pm",
-    "7am\u20137pm",
-    "3pm\u20137pm",
-    "12pm\u20137pm"
+    "6am–7pm",
+    "10am–7pm",
+    "7am–7pm",
+    "3pm–7pm",
+    "7am–7pm",
+    "3pm–7pm",
+    "12pm–7pm"
    ],
    "Winter": [
-    "9am\u20136pm",
-    "10am\u20136pm",
-    "7am\u20136pm",
-    "3pm\u20136pm",
-    "7am\u20136pm",
-    "3pm\u20136pm",
-    "12pm\u20136pm"
+    "9am–6pm",
+    "10am–6pm",
+    "7am–6pm",
+    "3pm–6pm",
+    "7am–6pm",
+    "3pm–6pm",
+    "12pm–6pm"
    ]
   },
   "checked": "2026-11-03"
@@ -334,16 +334,18 @@
   "lat": -33.93746,
   "lon": 151.12724,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Public course. This opens GolfNow for the day you've selected. Times aren't shown here yet.",
+  "platform": "golfnow",
+  "enabled": true,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16578-bardwell-valley-golf-club/search#date={gn_date}",
   "phone": "(02) 9567 7600",
   "address": "2A Hillcrest Ave, Bardwell Valley",
   "holes": 18,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16578
  },
  {
   "id": "woolooware",
@@ -388,16 +390,18 @@
   "lat": -33.58994,
   "lon": 151.32261,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Nine-hole public course. Listed on GolfNow, which may not always show times. Prices can differ from the club's, so check when you book.",
+  "platform": "golfnow",
+  "enabled": true,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/courses/-6025-palm-beach-golf-club-dev-details",
   "phone": "(02) 9974 4079",
   "address": "2 Beach Rd, Palm Beach",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "www.golfnow.com.au",
+  "facility_id": 17230
  },
  {
   "id": "asquith",
@@ -418,16 +422,18 @@
   "lat": -33.74435,
   "lon": 150.75815,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Listed on GolfNow, which may not always show times. Prices can differ from the club's, so check when you book.",
+  "platform": "golfnow",
+  "enabled": true,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/courses/-4752-dunheved-golf-club-details",
   "phone": "(02) 9623 0239",
   "address": "176 Links Rd, St Marys",
   "holes": 18,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "www.golfnow.com.au",
+  "facility_id": 15305
  },
  {
   "id": "woollahra",
@@ -460,13 +466,15 @@
   "lat": -34.00783,
   "lon": 150.7767,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Listed on GolfNow, which may not always show times. Prices can differ from the club's, so check when you book. We couldn't confirm the club's phone number.",
+  "platform": "golfnow",
+  "enabled": true,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/courses/-5052-lakeside-golf-club-at-camden-details",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "www.golfnow.com.au",
+  "facility_id": 15858
  },
  {
   "id": "macquarie-links",
@@ -499,14 +507,15 @@
   "lat": -33.91682,
   "lon": 151.1379,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Books through TeeItUp and GolfNow. Times aren't shown here yet.",
+  "platform": "teeitup",
+  "enabled": true,
   "phone": "(02) 9558 6862",
   "cta": "Book online (TeeItUp)",
   "book_url": "https://marrickville-golf-club.book.teeitup.com/",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "marrickville-golf-club.book.teeitup.com",
+  "facility_id": 16264
  },
  {
   "id": "beverley-park",
@@ -635,7 +644,7 @@
   "status": "walkup",
   "platform": "none",
   "enabled": false,
-  "note": "Driving range and mini golf rather than a full course. Listings say open daily 8am\u20139pm, and disagree on the phone number.",
+  "note": "Driving range and mini golf rather than a full course. Listings say open daily 8am–9pm, and disagree on the phone number.",
   "source": "directory",
   "checked": "2026-11-03"
  },
@@ -711,16 +720,18 @@
   "lat": -33.7643,
   "lon": 150.64968,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "note": "Listed on GolfNow, which may not always show times. Prices can differ from the club's, so check when you book.",
+  "platform": "golfnow",
+  "enabled": true,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/courses/-4775-leonay-golf-club-details",
   "phone": "(02) 4735 5300",
   "address": "1 Leonay Pde, Leonay",
   "holes": 18,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-04",
+  "host": "www.golfnow.com.au",
+  "facility_id": 15322
  },
  {
   "id": "fox-hills",

@@ -78,6 +78,37 @@ assert [(r["time"], r["label"], r["price"], r["spots"]) for r in got] == [
 one["maxPlayers"] = 1  # a two-player rate can't fit in one remaining spot
 assert [r["label"] for r in parse_teeitup(json.dumps([{"teetimes": [one]}]), gr, "2026-11-06")] == ["18 Holes"]
 
+from build_feed import golfnow_players, parse_golfnow
+assert golfnow_players("Any") == [1, 2, 3, 4] and golfnow_players("OneTwo") == [1, 2] and golfnow_players("TwoFour") == [2, 4]
+try:
+    golfnow_players("Sometimes")
+    raise SystemExit("unknown player rule should have raised")
+except ValueError:
+    pass
+gn = {"id": "lakeside-camden", "host": "www.golfnow.com.au", "facility_id": 15858}
+def gn_rate(name, holes, price, rule="Any", cart=False, hidden=False, url="/tee-times/facility/15858/tee-time/1"):
+    return {"rateName": name, "holeCount": holes, "playerRule": rule, "isCartIncluded": cart, "isHotDealHidden": hidden, "detailUrl": url,
+            "singlePlayerPrice": {"greensFees": {"value": price}, "transactionFeesTotal": {"value": 1.0}}}
+gn_time = lambda when, *rates: {"time": {"date": when}, "teeTimeRates": list(rates)}
+gn_day = parse_golfnow(json.dumps({"ttResults": {"teeTimes": [
+    gn_time("2026-11-06T13:28:00+00:00", gn_rate("9 Holes", 9, 35.0, "OneTwoThree")),
+    gn_time("2026-11-06T13:36:00+00:00", gn_rate("18 Holes", 18, 95.0, "TwoFour", cart=True)),
+    gn_time("2026-11-06T13:44:00+00:00", gn_rate("Hot Deal", 18, 49.0, hidden=True)),
+    gn_time("2026-11-06T13:52:00+00:00", gn_rate("Senior", 18, 30.0)),
+    gn_time("2026-11-06T14:00:00+00:00", gn_rate("Member", 18, 10.0)),
+    gn_time("2026-11-07T07:00:00+00:00", gn_rate("18 Holes", 18, 60.0))]}}), gn, "2026-11-06")
+assert [(r["time"], r["holes"], r["price"], r["spots"], r["min_players"], r["label"], r["only"]) for r in gn_day] == [
+    ("13:28", 9, 35.0, 3, 1, "9 Holes", ""),
+    ("13:36", 18, 190.0, 4, 2, "18 Holes with cart (2 players)", ""),
+    ("13:52", 18, 30.0, 4, 1, "Senior", "Seniors only")], gn_day
+assert gn_day[0]["url"] == "https://www.golfnow.com.au/tee-times/facility/15858/tee-time/1"
+assert parse_golfnow(json.dumps({"ttResults": {"teeTimes": []}}), gn, "2026-11-06") == []
+try:
+    parse_golfnow("{}", gn, "2026-11-06")
+    raise SystemExit("a response with no results should have raised")
+except ValueError:
+    pass
+
 lane = {"id": "lane-cove", "host": "lanecove.quick18.com"}
 day = parse_quick18(rd("lane-cove-weekday.html"), lane, "2026-11-05")
 assert len(day) == 54, len(day)  # 5 of the 59 times only have a member rate
