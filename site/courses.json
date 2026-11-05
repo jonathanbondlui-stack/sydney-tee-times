@@ -35,7 +35,8 @@
   "platform": "miclub",
   "host": "northbridge.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 64
  },
  {
   "id": "eastlake",
@@ -47,7 +48,8 @@
   "platform": "miclub",
   "host": "www.eastlakegolfclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "chatswood",
@@ -143,7 +145,8 @@
   "platform": "miclub",
   "host": "www.bexleygolf.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 64
  },
  {
   "id": "the-coast",
@@ -155,7 +158,8 @@
   "platform": "miclub",
   "host": "www.coastgolf.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 70
  },
  {
   "id": "carnarvon",
@@ -179,7 +183,8 @@
   "platform": "miclub",
   "host": "longreef.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "sefton",
@@ -215,7 +220,8 @@
   "platform": "miclub",
   "host": "kareela.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 65
  },
  {
   "id": "lane-cove",
@@ -326,7 +332,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "monavale.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "bardwell-valley",
@@ -370,7 +377,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "cabramatta.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "bankstown",
@@ -382,7 +390,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "bankstown.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "palm-beach",
@@ -402,7 +411,8 @@
   "source": "directory",
   "checked": "2026-11-04",
   "host": "www.golfnow.com.au",
-  "facility_id": 17230
+  "facility_id": 17230,
+  "par": 32
  },
  {
   "id": "asquith",
@@ -414,7 +424,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "asquith.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "dunheved",
@@ -477,7 +488,8 @@
   "source": "directory",
   "checked": "2026-11-04",
   "host": "www.golfnow.com.au",
-  "facility_id": 15858
+  "facility_id": 15858,
+  "par": 72
  },
  {
   "id": "macquarie-links",
@@ -675,7 +687,8 @@
   "cta": "Visitor booking information",
   "book_url": "https://glenmoregolf.com.au/bookings/",
   "checked": "2026-11-05",
-  "website": "https://glenmoregolf.com.au/"
+  "website": "https://glenmoregolf.com.au/",
+  "par": 72
  },
  {
   "id": "bondi-golf",
@@ -788,7 +801,8 @@
     "After 11:30am",
     "After 11:30am"
    ]
-  }
+  },
+  "par": 59
  },
  {
   "id": "camden",
@@ -1070,7 +1084,8 @@
   "address": "52 Weeroona Rd, Strathfield",
   "holes": 18,
   "website": "https://www.strathfieldgolf.com.au/",
-  "checked": "2026-11-03"
+  "checked": "2026-11-03",
+  "par": 71
  },
  {
   "id": "bayview",
@@ -1086,7 +1101,8 @@
   "phone": "(02) 9999 3078",
   "address": "1825 Pittwater Rd, Mona Vale",
   "source": "club",
-  "checked": "2026-11-03"
+  "checked": "2026-11-03",
+  "par": 71
  },
  {
   "id": "riverside-oaks",
@@ -1182,7 +1198,8 @@
   "website": "https://www.nswgolfclub.com.au/",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "manly",
