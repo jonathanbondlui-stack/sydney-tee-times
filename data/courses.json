@@ -606,7 +606,7 @@
   "holes": 9,
   "website": "https://www.northernbeaches.nsw.gov.au/things-to-do/recreation-area/avalon-golf-course",
   "source": "directory",
-  "checked": "2026-11-04",
+  "checked": "2026-11-05",
   "email": "info@avalongolfcourse.com.au"
  },
  {
@@ -615,13 +615,15 @@
   "suburb": "Werrington",
   "lat": -33.75439,
   "lon": 150.76292,
-  "status": "contact",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Nine-hole course. We couldn't find a phone number or booking method.",
+  "note": "Nine-hole course. A listing says bookings are essential. Hours aren't published and wet weather can affect play, so call first.",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05",
+  "phone": "(02) 9673 3639",
+  "address": "Lot 1 Werrington Rd, Werrington"
  },
  {
   "id": "windsor",
@@ -742,12 +744,12 @@
   "status": "phone",
   "platform": "none",
   "enabled": false,
-  "note": "Directories say visitors are welcome every day and booking ahead is essential.",
+  "note": "Directories say visitors are welcome every day and booking ahead is essential. One listing gives the pro shop as (02) 9631 7689.",
   "phone": "(02) 9631 3390",
   "address": "55 Fox Hills Cres, Prospect",
   "holes": 18,
   "source": "directory",
-  "checked": "2026-11-04",
+  "checked": "2026-11-05",
   "website": "https://foxhillsgolfclub.com.au/"
  },
  {
@@ -791,9 +793,9 @@
   "status": "check",
   "platform": "none",
   "enabled": false,
-  "note": "It's on the map, but we couldn't confirm it's operating or find a phone number. Check before you go.",
+  "note": "It's on the map, but we couldn't find any evidence it's operating, or a phone number. Check before you go.",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05"
  },
  {
   "id": "lynwood",
@@ -842,7 +844,7 @@
   "address": "Nutmans Rd, Grose Wold",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05"
  },
  {
   "id": "parramatta",
@@ -854,12 +856,12 @@
   "platform": "none",
   "enabled": false,
   "coords_approx": true,
-  "note": "One directory says this course has permanently closed, while another still lists it. Call before you go.",
+  "note": "Probably closed. Two directories list it as closed, one saying 2015, while another still lists it. Call before you go.",
   "phone": "(02) 9635 6781",
   "address": "Park Pde, Parramatta",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05"
  },
  {
   "id": "botany",
@@ -986,10 +988,10 @@
   "phone": "(02) 9540 1669",
   "address": "223B Belgrave Esp, Sylvania Waters",
   "holes": 9,
-  "website": "https://sylvaniapar3.com.au/cms/",
+  "website": "https://sylvaniapar3golfandsoccer.com.au/",
   "email": "enquiries@sylvaniapar3golf.com.au",
   "source": "directory",
-  "checked": "2026-11-04"
+  "checked": "2026-11-05"
  },
  {
   "id": "wallacia",
@@ -1000,11 +1002,13 @@
   "status": "check",
   "platform": "none",
   "enabled": false,
-  "note": "A plan reported in 2021 would cut this to nine holes for cemetery use. We couldn't confirm what is open now, so call first.",
+  "note": "Directories list an 18-hole course, with player reviews as recent as June 2026. A cemetery plan for the site has been reported and we couldn't confirm what is open now, so call first.",
   "phone": "(02) 4773 8417",
   "address": "13 Park Rd, Wallacia",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05",
+  "holes": 18,
+  "email": "reception@wallaciacountryclub.com.au"
  },
  {
   "id": "hurstville",
@@ -1039,7 +1043,7 @@
   "phone": "(02) 9604 4007",
   "address": "Cnr Smithfield Rd and Beavors St, Prairiewood",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-05"
  },
  {
   "id": "strathfield",
@@ -1123,8 +1127,8 @@
   "phone": "(02) 9728 7777",
   "address": "Hollywood Dr, Lansvale",
   "source": "directory",
-  "note": "Pro shop: (02) 9727 2422.",
-  "checked": "2026-11-03"
+  "note": "Pro shop: (02) 9727 2422. One listing mentions online booking, but we couldn't find it.",
+  "checked": "2026-11-05"
  },
  {
   "id": "kogarah",
@@ -1138,8 +1142,8 @@
   "phone": "(02) 9567 0334",
   "address": "Marsh St, Arncliffe",
   "source": "directory",
-  "note": "Directories say visitors are welcome daily.",
-  "checked": "2026-11-03"
+  "note": "Directories say visitors are welcome daily. One lists a different number, (02) 9567 7172, if this one doesn't work.",
+  "checked": "2026-11-05"
  },
  {
   "id": "castle-hill",
@@ -1442,12 +1446,15 @@
   "suburb": "Kurrajong Hills",
   "lat": -33.53213,
   "lon": 150.67827,
-  "status": "contact",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course."
+  "checked": "2026-11-05",
+  "note": "Listed as a nine-hole public course, though one directory says 18 holes. Call to check how visitors can play.",
+  "phone": "(02) 4573 2012",
+  "address": "102 Peel Pde, Kurrajong",
+  "holes": 9
  },
  {
   "id": "orchard-hills",
@@ -1459,8 +1466,8 @@
   "platform": "none",
   "enabled": false,
   "source": "directory",
-  "checked": "2026-11-03",
-  "note": "Found on OpenStreetMap. We haven't confirmed how visitors can play, so check with the course."
+  "checked": "2026-11-05",
+  "note": "This looks like a club based at Colonial Golf and Footgolf Course in Werrington, not a separate course. Golf Australia's listing shows no phone number, so try Colonial."
  },
  {
   "id": "shortees",
