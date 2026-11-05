@@ -74,6 +74,7 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 #pkX{background:none;border:0;color:var(--mute);font:inherit;font-size:18px;line-height:1;padding:0 2px;margin:-2px -2px 0 0;cursor:pointer}
 #pkName{font-weight:600;margin-top:2px}#pkFacts{margin:4px 0 0}#pkRate,#pkNote{margin:4px 0 0;color:var(--mute);font-size:12px}
 #pick-panel a.go{display:block;margin:10px 0 0;padding:8px 12px;text-align:center}#pick-panel .fine{margin:6px 0 0;font-size:11px;color:var(--mute);text-align:center}
+#backMap{position:fixed;z-index:1000;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:11px 20px;font:600 15px "Hanken Grotesk",sans-serif;white-space:nowrap;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)}
 @media(max-width:560px){.row{grid-template-columns:1fr auto}.time{grid-column:1/-1;font-size:26px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -107,6 +108,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one, nearest first from your starting point.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
 </main>
+<button type="button" id="backMap" hidden>← Back to map</button>
 <div id="pick-panel" role="dialog" aria-labelledby="pkName" hidden>
   <div class="pk-top"><span id="pkTime"></span><button type="button" id="pkX" aria-label="Close">×</button></div>
   <div id="pkName"></div>
@@ -210,10 +212,10 @@ const sunset=ds=>{const d=new Date(ds+"T00:00:00Z"),g=2*Math.PI*((d-Date.UTC(d.g
   return mins(new Date(d.getTime()+utc*6e4).toLocaleTimeString("en-GB",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit"}))};
 const distinct=a=>new Set(a.map(x=>x.course+x.time+(x.tee||""))).size;
 const loadMap=()=>window.L?Promise.resolve():new Promise((ok,no)=>{const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=ok;s.onerror=no;document.head.append(s)});
-function setView(v){view=v;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").hidden=v=="map";
+function setView(v){view=v;backTo=null;$("backMap").hidden=true;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").hidden=v=="map";
   if(v=="map")loadMap().then(render).catch(()=>{$("map").innerHTML='<div class="empty">The map couldn’t load. Check your connection and try again.</div>'});else render()}
 // From a map popup: open the List with that club's times expanded and in view.
-function showCourse(id){setView("list");
+function showCourse(id){const y=scrollY;setView("list");backTo={id,y};$("backMap").hidden=false;
   const find=()=>document.querySelector(`#list [data-course="${id}"]`);
   while(!find()&&!$("more").hidden){shown+=12;render()}
   const el=find();if(!el)return;
@@ -223,11 +225,11 @@ function showCourse(id){setView("list");
 function drawMap(groups,chip,card,pf,w,dm){
   if(!window.L||view!="map")return;
   if(!M){M=L.map("map",{zoomSnap:.25});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);LY=L.layerGroup().addTo(M)}
-  M.invalidateSize();LY.clearLayers();
+  M.invalidateSize();LY.clearLayers();MK={};
   const live=new Set(groups.map(a=>a[0].course)),pts=[[w.lat??w.la,w.lo]];
   COURSES.filter(c=>!live.has(c.id)).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away${c.par?" · Par "+c.par:""}</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
   groups.forEach(a=>{const c=a[0].c,n=distinct(a),ps=a.map(x=>x.each).filter(p=>p!=null);pts.push([c.lat,c.lon]);
-    L.circleMarker([c.lat,c.lon],{radius:12,color:"#fff",fillColor:"#1F6B3A",fillOpacity:1,weight:2}).bindTooltip(String(n),{permanent:true,direction:"center",className:"mc"})
+    MK[c.id]=L.circleMarker([c.lat,c.lon],{radius:12,color:"#fff",fillColor:"#1F6B3A",fillOpacity:1,weight:2}).bindTooltip(String(n),{permanent:true,direction:"center",className:"mc"})
      .bindPopup(`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${c.par?" · Par "+c.par:""} · ${n} ${n==1?"time":"times"}${ps.length?" from "+pf(Math.min(...ps)):""}</div><div class="chips">${slotsOf(a).slice(0,6).map(chip).join("")}</div>${slotsOf(a).length>6?`<button class="more seeall" onclick="showCourse('${c.id}')">See all ${n} times</button>`:""}`).addTo(LY)});
   L.circleMarker(pts[0],{radius:6,color:"#fff",fillColor:"#2563EB",fillOpacity:1,weight:2}).bindTooltip("Starting point").addTo(LY);
   if(dm<999)L.circle(pts[0],{radius:dm*1000,color:"#2563EB",weight:1,fill:false,dashArray:"4 6"}).addTo(LY);
@@ -304,6 +306,9 @@ function render(){
   const card=c=>`<div class="dc"><span class="course">${c.name}</span><div class="meta">${c.address||c.suburb} · ${Math.round(c.d)} km away${c.holes?" · "+c.holes+" holes":""}${c.par?" · Par "+c.par:""}</div>${c.note?`<p class="dn">${c.note}</p>`:""}${c.visitor_hours?`<div class="hw">${hrs(c.visitor_hours)}</div>`:""}<div class="acts">${c.book_url?`<a class="go" href="${c.book_url.replace("{date}",ymd).replace("{gn_date}",gn)}" target="_blank" rel="noopener">${c.cta||"Visit booking page"}</a>`:""}${c.phone?`<a class="lk" href="tel:${c.phone.replace(/[^\d+]/g,"")}">${c.phone}</a>`:""}${c.email?`<a class="lk" href="mailto:${c.email}">Email</a>`:""}${c.website?`<a class="lk" href="${c.website}" target="_blank" rel="noopener">Website</a>`:""}</div>${c.source==="directory"?`<p class="src">From directory listings, so confirm before you go.</p>`:""}</div>`;
   $("dirlist").innerHTML=order.map(k=>{const a=list.filter(c=>(lab[c.status]?c.status:"contact")===k);return a.length?`<h3 class="dh">${lab[k]} <span>${a.length}</span></h3>${a.map(card).join("")}`:""}).join("")||`<div class="empty">No courses match that name.</div>`;
   drawMap(groups,chip,card,pf,w,dm)}
+// After "See all" on the map: back to the same spot, with that club's popup open.
+let backTo=null,MK={};
+$("backMap").onclick=()=>{const b=backTo;setView("map");loadMap().then(()=>{scrollTo(0,b.y);if(MK[b.id])MK[b.id].openPopup()})};
 // Clicking a time shows its details first. Ctrl, Cmd or Shift clicks still go straight to the club.
 const PICKS=[];
 let pickA=null;
