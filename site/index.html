@@ -65,10 +65,16 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 .dq{margin-bottom:8px}.dq input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
 .hw{overflow-x:auto;margin-top:10px}.hrs{border-collapse:collapse;font-size:12px;white-space:nowrap}.hrs th,.hrs td{padding:4px 8px;border:1px solid var(--line);text-align:left}.hrs th{font-weight:600}
 :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-#pick-panel{width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow-y:auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:0}#pick-panel::backdrop{background:rgba(0,0,0,.45)}
-.pk{padding:18px}.pk .time{display:block;margin-bottom:6px}.pk .course{font:700 20px/1.2 "Bricolage Grotesque",system-ui,sans-serif}
-.pk dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0;font-size:14px}.pk dt{color:var(--mute)}.pk dd{margin:0;font-weight:500;overflow-wrap:anywhere}
-.pk .dn{margin:0 0 14px}.pk .fine{font-size:13px;color:var(--mute);margin:0 0 14px}.pk .btns{display:flex;gap:8px;align-items:stretch}.pk a.go{flex:1;margin:0;text-align:center;padding:11px 14px}.pk button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 16px;font:600 14px "Hanken Grotesk",sans-serif;cursor:pointer}
+#pick-panel{position:absolute;z-index:1200;width:min(270px,calc(100vw - 16px));padding:12px;background:var(--surface);color:var(--ink);border:1px solid var(--accent);border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.25);font-size:13px;line-height:1.35;animation:pop .12s ease-out;transform-origin:var(--ax,50%) 0}
+#pick-panel.up{transform-origin:var(--ax,50%) 100%}
+#pick-panel::before{content:"";position:absolute;left:var(--ax,50%);top:-6px;width:10px;height:10px;margin-left:-5px;background:var(--surface);border:solid var(--accent);border-width:1px 0 0 1px;transform:rotate(45deg)}
+#pick-panel.up::before{top:auto;bottom:-6px;border-width:0 1px 1px 0}
+@keyframes pop{from{opacity:0;transform:scale(.96)}}@media(prefers-reduced-motion:reduce){#pick-panel{animation:none}}
+.pk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;font-weight:600}.pk-top small{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
+#pkX{background:none;border:0;color:var(--mute);font:inherit;font-size:18px;line-height:1;padding:0 2px;margin:-2px -2px 0 0;cursor:pointer}
+#pkName{font-weight:600;margin-top:2px}#pkFacts{margin:4px 0 0}#pkRate,#pkNote{margin:4px 0 0;color:var(--mute);font-size:12px}
+#pick-panel a.go{display:block;margin:10px 0 0;padding:8px 12px;text-align:center}#pick-panel .fine{margin:6px 0 0;font-size:11px;color:var(--mute);text-align:center}
+a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)}
 @media(max-width:560px){.row{grid-template-columns:1fr auto}.time{grid-column:1/-1;font-size:26px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -101,15 +107,15 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one, nearest first from your starting point.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
 </main>
-<dialog id="pick-panel" aria-labelledby="pkName"><div class="pk">
-  <span class="time" id="pkTime"></span>
-  <div class="course" id="pkName"></div>
-  <div class="meta" id="pkWhere"></div>
-  <dl id="pkFacts"></dl>
-  <p class="dn" id="pkNote" hidden></p>
-  <p class="fine">Opens the booking page in a new tab, where you finish booking. The price there is the final one.</p>
-  <div class="btns"><button type="button" id="pkBack">Back</button><a class="go" id="pkGo" target="_blank" rel="noopener"></a></div>
-</div></dialog>
+<div id="pick-panel" role="dialog" aria-labelledby="pkName" hidden>
+  <div class="pk-top"><span id="pkTime"></span><button type="button" id="pkX" aria-label="Close">×</button></div>
+  <div id="pkName"></div>
+  <div id="pkFacts"></div>
+  <p id="pkRate" hidden></p>
+  <p id="pkNote" hidden></p>
+  <a class="go" id="pkGo" target="_blank" rel="noopener"></a>
+  <p class="fine">Opens in a new tab. The club’s price is final.</p>
+</div>
 <script>
 const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "Moore Park", "lat": -33.8955, "lon": 151.2245, "status": "online", "platform": "miclub", "host": "moorepark.miclub.com.au", "resource_id": 3050007, "enabled": true, "phone": "(02) 9663 1064", "note": "Course is being reduced to 12 holes."}, {"id": "cammeray", "name": "Cammeray Golf Club", "suburb": "Cammeray", "lat": -33.816, "lon": 151.216, "status": "online", "platform": "miclub", "host": "cammeray.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "northbridge", "name": "Northbridge Golf Club", "suburb": "Northbridge", "lat": -33.804, "lon": 151.223, "status": "online", "platform": "miclub", "host": "northbridge.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "eastlake", "name": "Eastlake Golf Club", "suburb": "Eastlakes", "lat": -33.925, "lon": 151.219, "status": "online", "platform": "miclub", "host": "www.eastlakegolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "chatswood", "name": "Newgreens Chatswood Golf Club", "suburb": "Chatswood", "lat": -33.799, "lon": 151.15, "status": "online", "platform": "miclub", "host": "chatswood.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "massey-park", "name": "Massey Park Golf Club", "suburb": "Concord", "lat": -33.8545, "lon": 151.098, "status": "online", "platform": "miclub", "host": "masseypark.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "balgowlah", "name": "Balgowlah Golf Club", "suburb": "Balgowlah", "lat": -33.799, "lon": 151.264, "status": "online", "platform": "miclub", "host": "www.balgowlahgolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "wakehurst", "name": "Wakehurst Golf Club", "suburb": "Seaforth", "lat": -33.77, "lon": 151.25, "status": "online", "platform": "miclub", "host": "www.wakehurstgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-ryde", "name": "North Ryde Golf Club", "suburb": "North Ryde", "lat": -33.801, "lon": 151.125, "status": "online", "platform": "miclub", "host": "northryde.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "warringah", "name": "Warringah Golf Club", "suburb": "Allambie Heights", "lat": -33.765, "lon": 151.24, "status": "online", "platform": "miclub", "host": "warringah.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "gordon", "name": "Gordon Golf Club", "suburb": "Gordon", "lat": -33.755, "lon": 151.152, "status": "online", "platform": "miclub", "host": "www.gordongolfcourse.com.au", "resource_id": 187, "enabled": true}, {"id": "bexley", "name": "Bexley Golf Club", "suburb": "Bexley", "lat": -33.94, "lon": 151.122, "status": "online", "platform": "miclub", "host": "www.bexleygolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "the-coast", "name": "The Coast Golf Club", "suburb": "Little Bay", "lat": -33.975, "lon": 151.245, "status": "online", "platform": "miclub", "host": "www.coastgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "carnarvon", "name": "Carnarvon Golf Club", "suburb": "Auburn", "lat": -33.853, "lon": 151.036, "status": "online", "platform": "miclub", "host": "carnarvon.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "long-reef", "name": "Long Reef Golf Club", "suburb": "Collaroy", "lat": -33.735, "lon": 151.301, "status": "online", "platform": "miclub", "host": "longreef.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "sefton", "name": "Sefton Golf Club", "suburb": "Sefton", "lat": -33.892, "lon": 151.017, "status": "online", "platform": "miclub", "host": "sefton.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-turramurra", "name": "North Turramurra Public Golf Club", "suburb": "North Turramurra", "lat": -33.724, "lon": 151.163, "status": "online", "platform": "miclub", "host": "northturramurra.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "kareela", "name": "Kareela Golf Club", "suburb": "Kareela", "lat": -34.015, "lon": 151.085, "status": "online", "platform": "miclub", "host": "kareela.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "lane-cove", "name": "Lane Cove Golf", "suburb": "Lane Cove", "lat": -33.812, "lon": 151.14, "status": "online", "platform": "quick18", "host": "lanecove.quick18.com", "enabled": false, "note": "Books online through Quick18. Times aren't shown here yet, so this opens their tee sheet for the day you've selected.", "cta": "Book online at Lane Cove", "book_url": "https://lanecove.quick18.com/teetimes/searchmatrix?teedate={date}"}, {"id": "bonnie-doon", "name": "Bonnie Doon", "suburb": "Pagewood", "lat": -33.935, "lon": 151.225, "status": "private", "platform": "none", "enabled": false, "phone": "(02) 9349 2101", "note": "Completely private. Members and their guests only."}, {"id": "the-lakes", "name": "The Lakes", "suburb": "Eastlakes", "lat": -33.9235, "lon": 151.213, "status": "enquiry", "platform": "none", "enabled": false, "phone": "(02) 9669 1311", "note": "Visitors by enquiry only (online form or phone). Visitor times: Mon from 9am, Tue from 12:30pm, Thu, Fri from 1:30pm. Cart $70, clubs $75.", "cta": "Request a tee time", "book_url": "https://thelakesgolfclub.com.au/cms/golf-booking-enquiry/"}];
 const FROMS=[{n:"Sydney CBD",la:-33.8688,lo:151.2093},{n:"Parramatta",la:-33.815,lo:151.0},{n:"Chatswood",la:-33.797,lo:151.181},{n:"Manly",la:-33.797,lo:151.288},{n:"Cronulla",la:-34.058,lo:151.152},{n:"Penrith",la:-33.751,lo:150.694}];
@@ -258,7 +264,7 @@ function setup(){
   $("more").onclick=()=>{shown+=12;render()};let cols=colsNow();
   addEventListener("resize",()=>{const n=colsNow();if(n!=cols&&view=="list"){cols=n;render()}});render()}
 function render(){
-  PICKS.length=0;
+  closePick();PICKS.length=0;
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur()),latest=sunset(dt)-ROUND_MINS;
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party;return{...x,c:by[x.course],m:mins(x.time),party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
@@ -300,19 +306,30 @@ function render(){
   drawMap(groups,chip,card,pf,w,dm)}
 // Clicking a time shows its details first. Ctrl, Cmd or Shift clicks still go straight to the club.
 const PICKS=[];
-function showPick(x){
-  const c=x.c,money=p=>"$"+(Number.isInteger(p)?p:p.toFixed(2)),h=holesOf(x),rate=x.only?tipOf(x):(x.group||x.label||"");
-  const price=x.shown==null?"Shown on the club’s page":x.party>1?`${money(x.shown)} each (${money(x.price)} total for ${x.party} players)`:money(x.shown)+" per player";
-  const facts=[["Date",new Date(x.date+"T00:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"})],["Round",h?h+" holes":""],["Price",price],["Available",x.party>1?"Package for "+x.party+" players":x.spots+(x.spots==1?" spot left":" spots left")],[/tee|front|back/i.test(x.tee||"")?"Start":"Session",x.tee?teeTag(x.tee):""],["Rate",rate],["For",x.only||""]].filter(f=>f[1]);
-  $("pkTime").innerHTML=fmt(x.m);$("pkName").textContent=c.name;$("pkWhere").textContent=`${c.suburb} · ${Math.round(x.d)} km away`;
-  const dl=$("pkFacts");dl.textContent="";facts.forEach(([k,v])=>{const dt=document.createElement("dt"),dd=document.createElement("dd");dt.textContent=k;dd.textContent=v;dl.append(dt,dd)});
+let pickA=null;
+function closePick(refocus){const p=$("pick-panel");p.hidden=true;if(pickA){pickA.classList.remove("picked");if(refocus&&pickA.isConnected)pickA.focus({preventScroll:true})}pickA=null}
+function showPick(x,a,byKey){closePick();
+  const c=x.c,money=p=>"$"+(Number.isInteger(p)?p:p.toFixed(2)),h=holesOf(x),p=$("pick-panel"),raw=x.only?tipOf(x):(x.group||x.label||"");
+  const price=x.shown==null?"":x.party>1?`${money(x.shown)} each (${money(x.price)} for ${x.party})`:money(x.shown)+" per player";
+  const when=new Date(x.date+"T00:00:00").toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"});
+  $("pkTime").innerHTML=fmt(x.m)+" · "+when;$("pkName").textContent=c.name;
+  $("pkFacts").textContent=[h?h+" holes":"",price,x.party>1?"":x.spots+(x.spots==1?" spot left":" spots left")].filter(Boolean).join(" · ");
+  // Leave out a rate name that only repeats the holes.
+  const rate=[x.tee?teeTag(x.tee):"",/^\d+\s*-?\s*holes?$/i.test(raw.trim())?"":raw].filter(Boolean).join(" · ");
+  $("pkRate").textContent=rate;$("pkRate").hidden=!rate;
   $("pkNote").textContent=c.note||"";$("pkNote").hidden=!c.note;
   const go=$("pkGo");go.href=x.url;go.textContent=c.cta||"Book at the club";
-  $("pick-panel").showModal()}
-// Capture, because map popups stop clicks from bubbling up to the page.
-document.addEventListener("click",e=>{if(e.ctrlKey||e.metaKey||e.shiftKey)return;
-  const a=e.target.closest&&e.target.closest("a[data-k]");if(!a)return;const x=PICKS[+a.dataset.k];if(!x)return;e.preventDefault();e.stopPropagation();showPick(x)},true);
-$("pick-panel").onclick=e=>{if(e.target===e.currentTarget||e.target.id=="pkBack"||e.target.id=="pkGo")$("pick-panel").close()};
+  // It sits in the page, so it scrolls with the time it came from. Above the time when there's no room below.
+  p.hidden=false;const r=a.getBoundingClientRect(),w=p.offsetWidth,ph=p.offsetHeight,dw=document.documentElement.clientWidth,mid=r.left+r.width/2,left=Math.max(8,Math.min(mid-w/2,dw-w-8)),up=r.bottom+10+ph>innerHeight-8&&r.top-10-ph>8;
+  p.classList.toggle("up",up);p.style.left=left+scrollX+"px";p.style.top=(up?r.top-10-ph:r.bottom+10)+scrollY+"px";p.style.setProperty("--ax",Math.max(14,Math.min(mid-left,w-14))+"px");
+  pickA=a;a.classList.add("picked");if(byKey)go.focus({preventScroll:true})}
+// Capture, because map popups stop clicks from bubbling up to the page. Clicks elsewhere close the popover and still do their own job.
+document.addEventListener("click",e=>{if(e.ctrlKey||e.metaKey||e.shiftKey||!e.target.closest)return;
+  const a=e.target.closest("a[data-k]"),x=a&&PICKS[+a.dataset.k];
+  if(x){e.preventDefault();e.stopPropagation();if(a===pickA)closePick();else showPick(x,a,!e.detail);return}
+  if(e.target.closest("#pkX"))closePick(true);else if(e.target.closest("#pkGo")||!e.target.closest("#pick-panel"))closePick()},true);
+document.addEventListener("keydown",e=>{if(!pickA)return;if(e.key=="Escape"){e.preventDefault();closePick(true)}
+  else if(e.key=="Tab"&&e.target.closest("#pick-panel")&&(e.shiftKey?e.target.id=="pkX":e.target.id=="pkGo")){e.preventDefault();closePick(true)}});
 load();
 </script>
 </body>
