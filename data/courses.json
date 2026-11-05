@@ -654,15 +654,17 @@
   "suburb": "Five Dock",
   "lat": -33.86447,
   "lon": 151.11756,
-  "status": "phone",
+  "status": "online",
   "platform": "none",
   "enabled": false,
-  "note": "Open 7 days, sunrise to sunset. Call the pro shop to book. Weekend bookings are essential, and competitions run on Saturday and Sunday mornings.",
+  "note": "Book online through the club's booking page or call the pro shop. Times aren't shown here yet. Bookings open one month in advance, and weekend bookings are essential.",
   "phone": "(02) 9713 9019",
   "address": "551 Lyons Rd West, Five Dock",
-  "website": "https://www.canadabay.nsw.gov.au/community/community-services/golf-courses",
+  "website": "https://elitegolfbarnwellpark.com.au/pages/golf-bookings",
   "source": "club",
-  "checked": "2026-11-04"
+  "checked": "2026-11-05",
+  "cta": "Book online",
+  "book_url": "https://visitors.brsgolf.com/barnwellparkgc#/course/1"
  },
  {
   "id": "glenmore-heritage-valley",
