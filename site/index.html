@@ -123,7 +123,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” means 18 holes, or every hole at a 9- or 12-hole course. It includes twilight rates, and only shows tee times with enough daylight left to finish (about 4¼ hours before sunset for 18 holes). Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other courses nearby</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
@@ -227,7 +227,8 @@ const colsNow=()=>{const w=$("list").clientWidth;return w?Math.max(1,Math.floor(
 const firstCount=c=>c*Math.max(2,Math.ceil(8/c));
 const rateName=x=>(x.label||"")+" "+(x.group||"");
 const partyOf=x=>{const m=/(\d)\s*(?:players?|persons?)\b/i.exec(rateName(x));return m&&+m[1]>1?+m[1]:1};
-const fullRound=(x,latest)=>!NO_FINISH.test(rateName(x))&&x.m<=latest&&(holesOf(x)==null||holesOf(x)>=18);
+// a full round of that course: 18 holes, or all of a 9- or 12-hole course, which also needs less daylight to finish
+const fullRound=(x,latest)=>{const all=Math.min(18,x.c&&x.c.holes||18),h=holesOf(x);return !NO_FINISH.test(rateName(x))&&x.m<=latest+ROUND_MINS*(1-all/18)&&(h==null||h>=all)};
 // Sydney sunset in minutes after midnight, Sydney time (NOAA's approximation).
 const sunset=ds=>{const d=new Date(ds+"T00:00:00Z"),g=2*Math.PI*((d-Date.UTC(d.getUTCFullYear(),0,0))/864e5-1)/365,r=Math.PI/180,la=-33.87*r,
   eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g)),
