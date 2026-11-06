@@ -22,6 +22,8 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .day{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 14px;font:inherit;text-align:center;cursor:pointer;min-width:64px}
 .day b{display:block;font:700 20px/1.1 "Bricolage Grotesque",sans-serif}.day span{font-size:12px;color:var(--mute)}
 .day[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.day[aria-pressed=true] span{color:inherit}
+.multi{display:flex!important;flex-direction:row!important;align-items:center;gap:8px;margin:-4px 0 10px;font-size:14px;cursor:pointer}.multi input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.chip .dl{display:block;font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.03em}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:20px}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:500}
 select,input[type=range],#where{font:inherit;color:var(--ink)}
@@ -90,6 +92,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <h1>Every tee time in and around Sydney, in one search</h1>
   <p class="sub">Pick a day, set your window, and see what’s open across the city. Courses without online booking are listed below so you never wonder if you missed one.</p>
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+  <label class="multi"><input type="checkbox" id="multi"> Search several days at once</label>
   <label class="pick">Or pick a later date, up to 4 weeks ahead<input type="date" id="pick"></label>
   <section class="filters" aria-label="Filters">
     <label>Players<select id="players"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
@@ -127,11 +130,11 @@ const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "
 const FROMS=[{n:"Sydney CBD",la:-33.8688,lo:151.2093},{n:"Parramatta",la:-33.815,lo:151.0},{n:"Chatswood",la:-33.797,lo:151.181},{n:"Manly",la:-33.797,lo:151.288},{n:"Cronulla",la:-34.058,lo:151.152},{n:"Penrith",la:-33.751,lo:150.694}];
 const $=id=>document.getElementById(id);
 let COURSES=EMBED_COURSES,TIMES=[],demo=false,day=0,shown=12,rows=[],ME=null,START=null,view="list",M=null,LY=null,fitKey="";
-let picked=null,farAt=null,farState="none",KEPT={};
+let picked=null,farAt=null,farState="none",KEPT={},multi=false,sel=new Set([0]);
 const cur=()=>picked||days[day],addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d};
 async function loadFar(){if(farState!="none")return;farState="loading";
   try{const r=await fetch("tee-times-far.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json(),near=iso(addDays(7));TIMES=TIMES.concat((j.times||[]).filter(t=>t.date>near));KEPT={...(j.kept||{}),...KEPT};farAt=j.generated_at;farState="ok"}catch(e){farState="failed"}}
-async function pickDate(){const v=$("pick").value;shown=12;
+async function pickDate(){const v=$("pick").value;shown=12;if(multi&&v){multi=false;$("multi").checked=false;sel=new Set([day])}
   if(!v||v<$("pick").min||v>$("pick").max){picked=null;$("pick").value="";$("days").querySelector(`[data-i="${day}"]`).click();return}
   const i=days.findIndex(d=>iso(d)===v);if(i>=0){picked=null;$("days").querySelector(`[data-i="${i}"]`).click();return}
   const[y,m,d]=v.split("-").map(Number);picked=new Date(y,m-1,d);document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",false));
@@ -201,9 +204,9 @@ const SHORT_HOLES=/\b(\d+)H\b/i;
 const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");return g?+g[1]:null};
 // Package rates such as "4 Player + 2 Carts" are a total price for that exact group, and MiClub counts each package as one spot.
 // One box per tee time. A time's rates stay separate only when their holes, price or group size differ.
-const slotsOf=a=>{const m=new Map();a.forEach(x=>{const k=x.time+"|"+(x.tee||"");if(!m.has(k))m.set(k,[]);m.get(k).push(x)});
-  const perTime={};[...m.values()].forEach(s=>{perTime[s[0].time]=(perTime[s[0].time]||0)+1});
-  return[...m.values()].map(s=>{const seen=new Set(),out=s.filter(x=>{const k=[holesOf(x),x.shown,x.party,x.only].join("|");if(seen.has(k))return false;seen.add(k);return true});out.tee=perTime[s[0].time]>1?teeTag(s[0].tee):"";return out})};
+const slotsOf=a=>{const m=new Map();a.forEach(x=>{const k=x.date+x.time+"|"+(x.tee||"");if(!m.has(k))m.set(k,[]);m.get(k).push(x)});
+  const perTime={};[...m.values()].forEach(s=>{perTime[s[0].date+s[0].time]=(perTime[s[0].date+s[0].time]||0)+1});
+  return[...m.values()].map(s=>{const seen=new Set(),out=s.filter(x=>{const k=[holesOf(x),x.shown,x.party,x.only].join("|");if(seen.has(k))return false;seen.add(k);return true});out.tee=perTime[s[0].date+s[0].time]>1?teeTag(s[0].tee):"";return out})};
 const teeTag=t=>{t=t||"";const n=/(\d+)(?:st|nd|rd|th)\s*tee/i.exec(t);if(n)return n[1]+({1:"st",2:"nd",3:"rd"}[n[1]]||"th")+" tee";const b=/(front|back)\s*9/i.exec(t);return b?b[1][0].toUpperCase()+b[1].slice(1).toLowerCase()+" 9":t.slice(0,14)};
 const tipOf=x=>x.only?(x.fees||[]).map(f=>f.label+" $"+f.price).join(", "):(x.group||x.label||"")+(x.party>1&&x.price!=null?` (${"$"+x.price} total for ${x.party} players)`:"");
 // Fill whole rows before "Show all": at least 8 times, and always at least two rows.
@@ -243,7 +246,7 @@ function drawMap(groups,chip,card,pf,w,dm){
   if(dm<999)L.circle(pts[0],{radius:dm*1000,color:"#2563EB",weight:1,fill:false,dashArray:"4 6"}).addTo(LY);
   const k=pts[0].join()+dm;if(k!=fitKey){fitKey=k;M.fitBounds(dm<999?L.latLng(pts[0]).toBounds(dm*2000):L.latLngBounds(pts),{padding:[20,20]})}}
 const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return d});
+const days=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return d});
 const mins=t=>{const[a,b]=t.split(":");return +a*60+ +b};
 const km=(a,b,c,d)=>{const r=Math.PI/180,x=(d-b)*r*Math.cos((a+c)/2*r),y=(c-a)*r;return Math.sqrt(x*x+y*y)*6371};
 const fmt=m=>{const h=Math.floor(m/60),mm=m%60;return `${h%12||12}:${String(mm).padStart(2,"0")}<small>${h>=12?"pm":"am"}</small>`};
@@ -259,9 +262,14 @@ async function load(){
   catch(e){demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}
   setup()}
 function setup(){
-  const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0)day=first;
+  const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0)day=first;sel=new Set([day]);
   $("days").innerHTML=days.map((d,i)=>`<button class="day" aria-pressed="${i==day}" data-i="${i}"><span>${i==0?"Today":d.toLocaleDateString("en-AU",{weekday:"short"})}</span><b>${d.getDate()}</b><span>${d.toLocaleDateString("en-AU",{month:"short"})}</span></button>`).join("");
-  $("days").onclick=e=>{const b=e.target.closest(".day");if(!b)return;day=+b.dataset.i;picked=null;$("pick").value="";document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",x===b));shown=12;render()};
+  // One day at a time, or with "Search several days" ticked, each tile toggles on and off.
+  const markDays=()=>document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",!picked&&sel.has(+x.dataset.i)));
+  const show=async()=>{markDays();shown=12;if([...sel].some(i=>i>7)&&farState=="none"){$("unrel").hidden=false;$("unrel").textContent="Loading later dates…";await loadFar()}render()};
+  $("days").onclick=e=>{const b=e.target.closest(".day");if(!b)return;const i=+b.dataset.i;picked=null;$("pick").value="";
+    if(multi){if(sel.has(i)&&sel.size>1)sel.delete(i);else sel.add(i)}else sel=new Set([i]);day=Math.min(...sel);show()};
+  $("multi").onchange=()=>{multi=$("multi").checked;if(!multi)sel=new Set([day]);else if(picked){picked=null;$("pick").value="";sel=new Set([day])}show()};
   const hrs=[...Array(28)].map((_,i)=>5+i/2); // every 30 minutes
   $("from").innerHTML=hrs.map(h=>`<option value="${h}">${hl(h)}</option>`).join("");
   $("to").innerHTML=hrs.map(h=>`<option value="${h+.5}" ${h==18.5?"selected":""}>${hl(h+.5)}</option>`).join("");
@@ -275,30 +283,31 @@ function setup(){
   addEventListener("resize",()=>{const n=colsNow();if(n!=cols&&view=="list"){cols=n;render()}});render()}
 function render(){
   closePick();PICKS.length=0;
-  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dt=iso(cur()),latest=sunset(dt)-ROUND_MINS;
+  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||FROMS[0],pl=+$("players").value,hf=+$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1;dates.forEach(d=>late[d]=sunset(d)-ROUND_MINS);
   $("pv").textContent="$"+mx+(mx==200?"+":"");
-  let r=TIMES.filter(x=>x.date===dt&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party;return{...x,c:by[x.course],m:mins(x.time),party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
-   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,latest):holesOf(x)&&holesOf(x)<=9)));
-  const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.m-b.m:s=="d"?a.d-b.d||a.m-b.m:a.m-b.m||a.d-b.d);
+  let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
+   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf==0||(hf==18?fullRound(x,late[x.date]):holesOf(x)&&holesOf(x)<=9)));
+  const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.t-b.t:s=="d"?a.d-b.d||a.t-b.t:a.t-b.t||a.d-b.d);
   const last={};TIMES.forEach(t=>{if(!last[t.course]||t.date>last[t.course])last[t.course]=t.date});
   const notYet=COURSES.filter(c=>c.enabled&&(!last[c.id]||last[c.id]<dt)&&km(w.lat??w.la,w.lo,c.lat,c.lon)<=dm).map(c=>c.name.replace(/ (Public )?Golf( Club| Course)?$/,""));
-  const far=dt>iso(addDays(7)),msg=[];
+  const far=dates.some(d=>d>iso(addDays(7))),msg=[];
   if(far&&farState=="failed")msg.push("Later dates aren’t available right now. Please try again soon.");
   if(far&&farState=="ok"&&farAt)msg.push("Times this far ahead update every 6 hours, last at "+new Date(farAt).toLocaleString("en-AU",{dateStyle:"medium",timeStyle:"short"})+".");
-  if(notYet.length&&!(far&&farState=="failed"))msg.push(`${notYet.length} nearby ${notYet.length==1?"club doesn’t":"clubs don’t"} show times for this date yet: ${notYet.join(", ")}.`);
+  if(notYet.length&&!(far&&farState=="failed"))msg.push(`${notYet.length} nearby ${notYet.length==1?"club doesn’t":"clubs don’t"} show times for ${several?"these dates":"this date"} yet: ${notYet.join(", ")}.`);
   $("unrel").textContent=msg.join(" ");$("unrel").hidden=!msg.length;
   const nc=new Set(r.map(x=>x.course)).size;$("count").textContent=r.length?`${distinct(r)} tee times at ${nc} ${nc==1?"course":"courses"}`:"";
   const pf=p=>p==null?"":"$"+(Number.isInteger(p)?p:p.toFixed(2));
   const G=new Map();r.forEach(x=>{if(!G.has(x.course))G.set(x.course,[]);G.get(x.course).push(x)});
-  const groups=[...G.values()].map(a=>a.sort((p,q)=>p.m-q.m||(holesOf(q)||0)-(holesOf(p)||0)));
+  const groups=[...G.values()].map(a=>a.sort((p,q)=>p.t-q.t||(holesOf(q)||0)-(holesOf(p)||0)));
   const esc=s=>s.replace(/"/g,"&quot;"),spotText=x=>x.party>1?"for "+x.party:x.spots+(x.spots==1?" spot":" left");
+  const dl=x=>several?`<span class="dl">${new Date(x.date+"T12:00").toLocaleDateString("en-AU",{weekday:"short",day:"numeric"})}</span>`:"";
   const chip=s=>{const x=s[0];
     if(s.length==1){const h=holesOf(x),sub=[h?h+" holes":"",x.party>1&&x.shown!=null?pf(x.shown)+" each":pf(x.shown)].filter(Boolean).join(" · ");
-      return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener" data-k="${PICKS.push(x)-1}"`:""} title="${esc(tipOf(x))}"><b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}${x.only?`<span class="only">${x.only}</span>`:""}<span class="sp">${spotText(x)}${s.tee?" · "+s.tee:""}</span></a>`}
+      return `<a class="chip ${x.party==1&&x.spots<=2?"low":""} ${x.url?"":"off"}" ${x.url?`href="${x.url}" target="_blank" rel="noopener" data-k="${PICKS.push(x)-1}"`:""} title="${esc(tipOf(x))}">${dl(x)}<b>${fmt(x.m)}</b>${sub?`<span class="hs">${sub}</span>`:""}${x.only?`<span class="only">${x.only}</span>`:""}<span class="sp">${spotText(x)}${s.tee?" · "+s.tee:""}</span></a>`}
     const solo=s.filter(r=>r.party==1),top=solo.length?solo.reduce((p,q)=>q.spots>p.spots?q:p):x;
     const rates=[...s].sort((p,q)=>(holesOf(q)||0)-(holesOf(p)||0)||(!!p.only-!!q.only)||(p.shown??0)-(q.shown??0)).map(r=>{const h=holesOf(r),txt=[h?h+"h":/twilight/i.test(rateName(r))?"Twilight":"",pf(r.shown)+(r.party>1?" each":""),r.only?r.only.replace(" only",""):""].filter(Boolean).join(" ")||"Book";
       return r.url?`<a class="rate" href="${r.url}" target="_blank" rel="noopener" data-k="${PICKS.push(r)-1}" title="${esc(tipOf(r))}">${txt}</a>`:`<span class="rate" title="${esc(tipOf(r))}">${txt}</span>`}).join("");
-    return `<div class="chip ${top.party==1&&top.spots<=2?"low":""}"><b>${fmt(x.m)}</b><div class="rates">${rates}</div><span class="sp">${spotText(top)}${s.tee?" · "+s.tee:""}</span></div>`};
+    return `<div class="chip ${top.party==1&&top.spots<=2?"low":""}">${dl(x)}<b>${fmt(x.m)}</b><div class="rates">${rates}</div><span class="sp">${spotText(top)}${s.tee?" · "+s.tee:""}</span></div>`};
   $("list").innerHTML=groups.length?groups.slice(0,shown).map(a=>{const slots=slotsOf(a),c=a[0].c,ps=a.map(x=>x.each).filter(p=>p!=null),lo=Math.min(...ps),hi=Math.max(...ps),
     pr=ps.length?(lo==hi?pf(lo):pf(lo)+"–"+pf(hi)):"",N=firstCount(colsNow()),hl=[...new Set(a.map(holesOf).filter(Boolean))].sort((p,q)=>p-q).join("/");
     return `<article class="cg" data-course="${c.id}"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}${c.par?" · Par "+c.par:""}${KEPT[c.id]?`<span class="old">Couldn’t update, times from ${new Date(KEPT[c.id]).toLocaleString("en-AU",{weekday:"short",hour:"numeric",minute:"2-digit"})}</span>`:""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${slots.slice(0,N).map(chip).join("")}</div>${slots.length>N?`<details><summary>Show all ${slots.length} times</summary><div class="chips">${slots.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
