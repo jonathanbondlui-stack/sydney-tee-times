@@ -11,7 +11,9 @@
   "resource_id": 3050007,
   "enabled": true,
   "phone": "(02) 9663 1064",
-  "note": "Course is being reduced to 12 holes."
+  "note": "Course is being reduced to 12 holes.",
+  "par": 45,
+  "holes": 12
  },
  {
   "id": "cammeray",
@@ -1117,7 +1119,8 @@
   "phone": "(02) 9604 4007",
   "address": "Cnr Smithfield Rd and Beavors St, Prairiewood",
   "source": "directory",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 68
  },
  {
   "id": "strathfield",
@@ -1531,7 +1534,9 @@
   "enabled": false,
   "source": "directory",
   "checked": "2026-11-05",
-  "note": "Call to book. It looks to be based at Colonial Golf and Footgolf Course, so try (02) 9673 3639."
+  "note": "Call to book. It looks to be based at Colonial Golf and Footgolf Course, so try (02) 9673 3639.",
+  "par": 35,
+  "holes": 9
  },
  {
   "id": "shortees",
