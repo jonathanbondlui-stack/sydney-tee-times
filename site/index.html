@@ -87,7 +87,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
 <body>
 <main class="wrap">
   <div class="note" id="note" hidden></div>
-  <h1>Every Sydney tee time, in one search</h1>
+  <h1>Every tee time in and around Sydney, in one search</h1>
   <p class="sub">Pick a day, set your window, and see what’s open across the city. Courses without online booking are listed below so you never wonder if you missed one.</p>
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
   <label class="pick">Or pick a later date, up to 4 weeks ahead<input type="date" id="pick"></label>
@@ -97,7 +97,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <label>Earliest<select id="from"></select></label>
     <label>Latest<select id="to"></select></label>
     <label>Location<div class="combo"><input type="text" id="where" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Starting places" hidden></ul></div><small class="wm" id="whereMsg" aria-live="polite" hidden></small></label>
-    <label>Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="999">Any distance</option></select></label>
+    <label>Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any distance</option></select></label>
     <label>Max price: <span id="pv"></span><input type="range" id="price" min="20" max="200" step="5" value="200"></label>
   </section>
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
@@ -108,7 +108,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
   <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
-  <section id="dir" aria-label="Courses without online tee times"><h2>Other Sydney courses</h2>
+  <section id="dir" aria-label="Courses without online tee times"><h2>Other courses nearby</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
 </main>
@@ -162,7 +162,7 @@ async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase();
   const known=FROMS.find(f=>f.n.toLowerCase()==k)||FOUND.get(k);
   if(known){startAt(known);return}
   whereMsg("Finding "+q+"…");pending=k;
-  try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", New South Wales, Australia",countrycodes:"au",viewbox:"149.9,-33.2,151.9,-34.6",bounded:1,limit:5};
+  try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", New South Wales, Australia",countrycodes:"au",viewbox:"149.8,-32.4,152.4,-35.0",bounded:1,limit:5};
     if(!postcode)ask.featureType="settlement"; // a suburb, not a council area of the same name
     const r=await fetch("https://nominatim.openstreetmap.org/search?"+new URLSearchParams(ask));if(!r.ok)throw 0;const hits=await r.json();if(id!=lookup)return;
     const hit=hits.find(h=>/^(suburb|neighbourhood|quarter|town|village|hamlet|locality)$/.test(h.addresstype))||hits[0];

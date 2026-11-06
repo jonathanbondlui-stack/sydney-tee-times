@@ -144,7 +144,8 @@ _DISC = re.compile(r"\bdisc golf\b", re.I)
 _LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b", re.I),
             "Seniors": re.compile(r"\bseniors?\b|\bpension", re.I),
             "Students": re.compile(r"\bstudents?\b", re.I),
-            "Concession": re.compile(r"\bconcession", re.I)}
+            "Concession": re.compile(r"\bconcession", re.I),
+            "Members' guests": re.compile(r"\bmembers?'?s?\s+guests?\b", re.I)}
 
 def limited_to(label):
     """Who a rate is limited to, by its name. Empty means anyone can book it."""
@@ -310,6 +311,8 @@ def parse_teeitup(text, course, date):
             fees = []
             for r in t.get("rates", []):
                 each = r.get("greenFeeWalking", r.get("greenFeeCart"))
+                promo = r.get("promotion") or {}  # a hot deal's real price; its listed fee is a made-up "was" price
+                each = promo.get("greenFeeWalking", promo.get("greenFeeCart", each))
                 if each is None or re.search(r"member", r["name"], re.I):
                     continue
                 party = min(r.get("allowedPlayers") or [1])
