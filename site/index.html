@@ -96,7 +96,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <label>Round<select id="holes"><option value="18" selected>Full round</option><option value="9">9 holes or fewer</option><option value="0">Any length</option></select></label>
     <label>Earliest<select id="from"></select></label>
     <label>Latest<select id="to"></select></label>
-    <label>Starting from<div class="combo"><input type="text" id="where" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Starting places" hidden></ul></div><small class="wm" id="whereMsg" aria-live="polite" hidden></small></label>
+    <label>Location<div class="combo"><input type="text" id="where" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Starting places" hidden></ul></div><small class="wm" id="whereMsg" aria-live="polite" hidden></small></label>
     <label>Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="999">Any distance</option></select></label>
     <label>Max price: <span id="pv"></span><input type="range" id="price" min="20" max="200" step="5" value="200"></label>
   </section>
@@ -107,7 +107,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device. Suburb search by <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other Sydney courses</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
@@ -150,7 +150,9 @@ const locate=()=>{const back=()=>{if(!START){$("where").value=FROMS[0].n;render(
 const whereMsg=t=>{$("whereMsg").textContent=t;$("whereMsg").hidden=!t};
 const startAt=p=>{START=p;$("where").value=p.n;whereMsg("");shown=12;savePlace();render()};
 // Looks up what someone typed, once they've finished. OpenStreetMap's rules don't allow searching on every keystroke.
-const FOUND=new Map();let lookup=0,pending="";
+const FOUND=new Map();let lookup=0,pending="",SUBURBS=[];
+// Sydney-area suburbs and towns, so the box can suggest them as you type without asking a server.
+fetch("places.json").then(r=>r.ok?r.json():[]).then(a=>{SUBURBS=a.map(([n,la,lo])=>({n,la,lo}));SUBURBS.forEach(p=>{const k=p.n.toLowerCase();if(!FOUND.has(k))FOUND.set(k,p)})}).catch(()=>{});
 async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase();
   if(k&&k==pending)return;
   const id=++lookup;
@@ -175,7 +177,9 @@ function placeBox(){const w=$("where"),ul=$("placeList"),all=[MY_PLACE,...FROMS.
     if(active>=0){w.setAttribute("aria-activedescendant","place"+active);ul.children[active].scrollIntoView({block:"nearest"})}else w.removeAttribute("aria-activedescendant")};
   const draw=narrow=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"";
     items=all.filter(n=>n.toLowerCase().includes(q)).map(n=>({text:n,pick:n}));
-    if(q&&!all.some(n=>n.toLowerCase()==q))items.push({text:`Search for “${typed}”`,pick:typed,find:true});
+    if(q.length>=2){const have=new Set(items.map(it=>it.pick.toLowerCase())),at=n=>{const l=n.toLowerCase();return l.startsWith(q)?0:l.includes(" "+q)?1:-1};
+      items=items.concat(SUBURBS.filter(p=>!have.has(p.n.toLowerCase())&&at(p.n)>=0).sort((a,b)=>at(a.n)-at(b.n)||a.n.length-b.n.length||a.n.localeCompare(b.n)).slice(0,Math.max(0,8-items.length)).map(p=>({text:p.n,pick:p.n})))}
+    if(q&&!items.some(it=>it.pick.toLowerCase()==q))items.push({text:`Search for “${typed}”`,pick:typed,find:true});
     ul.replaceChildren(...items.map((it,i)=>{const li=document.createElement("li");li.id="place"+i;li.setAttribute("role","option");li.dataset.i=i;li.textContent=it.text;if(it.find)li.className="find";return li}));
     active=-1;mark();ul.hidden=!items.length;w.setAttribute("aria-expanded",String(!!items.length))};
   const pick=it=>{w.value=it.pick;close();findPlace();w.blur()};
@@ -310,11 +314,11 @@ function render(){
   const card=c=>`<div class="dc"><span class="course">${c.name}</span><div class="meta">${c.address||c.suburb} · ${Math.round(c.d)} km away${c.holes?" · "+c.holes+" holes":""}${c.par?" · Par "+c.par:""}</div>${c.note?`<p class="dn">${c.note}</p>`:""}${c.visitor_hours?`<div class="hw">${hrs(c.visitor_hours)}</div>`:""}<div class="acts">${c.book_url?`<a class="go" href="${c.book_url.replace("{date}",ymd).replace("{gn_date}",gn)}" target="_blank" rel="noopener">${c.cta||"Visit booking page"}</a>`:""}${c.phone?`<a class="lk" href="tel:${c.phone.replace(/[^\d+]/g,"")}">${c.phone}</a>`:""}${c.email?`<a class="lk" href="mailto:${c.email}">Email</a>`:""}${c.website?`<a class="lk" href="${c.website}" target="_blank" rel="noopener">Website</a>`:""}</div>${c.source==="directory"?`<p class="src">From directory listings, so confirm before you go.</p>`:""}</div>`;
   // Each group folds away, and the choice is remembered. Private clubs start folded. A name search opens every group.
   const shut=groupsShut();
-  $("dirlist").innerHTML=order.map(k=>{const a=list.filter(c=>(lab[c.status]?c.status:"contact")===k);return a.length?`<details class="dg" data-k="${k}"${q||!shut[k]?" open":""}><summary class="dh">${lab[k]} <span>${a.length}</span></summary>${a.map(card).join("")}</details>`:""}).join("")||`<div class="empty">${q?"No courses match that name.":`No other courses within ${dm} km. Try a larger distance, or search by name.`}</div>`;
+  $("dirlist").innerHTML=order.map(k=>{const a=list.filter(c=>(lab[c.status]?c.status:"contact")===k);return a.length?`<details class="dg" data-k="${k}"${q||shut[k]===false?" open":""}><summary class="dh">${lab[k]} <span>${a.length}</span></summary>${a.map(card).join("")}</details>`:""}).join("")||`<div class="empty">${q?"No courses match that name.":`No other courses within ${dm} km. Try a larger distance, or search by name.`}</div>`;
   $("dirlist").querySelectorAll("details").forEach(d=>d.ontoggle=()=>{if($("dirq").value.trim())return;const s=groupsShut();s[d.dataset.k]=!d.open;try{localStorage.setItem(DIRK,JSON.stringify(s))}catch(e){}});
   drawMap(groups,chip,card,pf,w,dm)}
 const DIRK="tee-dir-shut";
-function groupsShut(){try{const s=JSON.parse(localStorage.getItem(DIRK)||"null");if(s)return s}catch(e){}return{private:true,members:true}}
+function groupsShut(){try{const s=JSON.parse(localStorage.getItem(DIRK)||"null");if(s)return s}catch(e){}return{}}  // a group is folded unless it was opened
 // After "See all" on the map: back to the same spot, with that club's popup open.
 let backTo=null,MK={};
 $("backMap").onclick=()=>{const b=backTo;setView("map");loadMap().then(()=>{scrollTo(0,b.y);if(MK[b.id])MK[b.id].openPopup()})};
