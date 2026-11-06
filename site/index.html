@@ -59,7 +59,10 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 .pick{margin-bottom:14px}.pick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;max-width:220px}.unrel{font-size:14px;color:var(--mute);margin:0 0 12px}
 #map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}#map a.chip,#map .chip a.rate{color:var(--ink)}#map a.go{color:var(--accent-ink)}#map a.lk{color:var(--accent)}
 #map .leaflet-tooltip.mc{background:none;border:0;box-shadow:none;color:#fff;font-weight:700;font-size:11px;padding:0}#map .leaflet-tooltip.mc::before{display:none}
-.dh{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:24px 0 10px}.dh span{font-size:14px;font-weight:500;color:var(--mute);margin-left:4px}
+.dh{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:24px 0 10px}
+.dg summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.dg summary::-webkit-details-marker{display:none}
+.dg summary::before{content:"";width:8px;height:8px;border:solid var(--mute);border-width:0 2px 2px 0;transform:rotate(-45deg);margin-right:4px;flex:none;align-self:center;transition:transform .15s}.dg[open] summary::before{transform:rotate(45deg)}
+.dg[open] summary{margin-bottom:10px}.dg summary:hover{color:var(--accent)}.dh span{font-size:14px;font-weight:500;color:var(--mute);margin-left:4px}
 .dn{margin:8px 0 0;font-size:14px}.src{margin:8px 0 0;font-size:12px;color:var(--mute)}
 .acts{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:10px}.acts a.go{margin-top:0}a.lk{color:var(--accent);font-weight:600;font-size:14px}
 .dq{margin-bottom:8px}.dq input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
@@ -105,7 +108,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <button class="more" id="more" hidden>Show more</button>
   <p class="sub" style="font-size:13px;margin-top:12px">“Full round” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset. Your filter choices are remembered on this device. Suburb search by <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other Sydney courses</h2>
-    <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one, nearest first from your starting point.</p>
+    <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
 </main>
 <button type="button" id="backMap" hidden>← Back to map</button>
@@ -296,16 +299,21 @@ function render(){
     return `<article class="cg" data-course="${c.id}"><header><div><div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${hl?" · "+hl+" holes":""}${c.par?" · Par "+c.par:""}</div></div><div class="gs"><b>${distinct(a)} ${distinct(a)==1?"time":"times"}</b>${pr?`<span>${pr}</span>`:""}</div></header><div class="chips">${slots.slice(0,N).map(chip).join("")}</div>${slots.length>N?`<details><summary>Show all ${slots.length} times</summary><div class="chips">${slots.slice(N).map(chip).join("")}</div></details>`:""}</article>`}).join(""):`<div class="empty"><strong>No tee times match.</strong>${far&&farState=="failed"?"":`<br>${dm<999?`Nothing within ${dm} km for these filters.`:"Try a wider time window, a higher max price, or fewer players."}${dm<999?`<button class="more" id="widen">Search further away</button>`:""}`}</div>`;
   if($("widen"))$("widen").onclick=()=>{$("dist").value=dm==10?"20":dm==20?"35":"999";shown=12;save();render()};
   $("more").textContent="Show more courses";$("more").hidden=groups.length<=shown||view=="map";rows=r;
-  const lab={online:"Book online",set_times:"Visitors at set times",phone:"Call to book",walkup:"No booking needed",enquiry:"Limited visitor access",contact:"Details still being confirmed",check:"Check it’s open",members:"Members and guests only",private:"Private club"};
+  const lab={online:"Book online",set_times:"Bookings by enquiry only",phone:"Call to book",walkup:"Walk-ins only, no bookings",enquiry:"Limited visitor access",contact:"Details still being confirmed",check:"Check it’s open",members:"Members and guests only",private:"Members only, no public play"};
   const order=["online","set_times","phone","walkup","enquiry","contact","check","members","private"];
   const q=$("dirq").value.trim().toLowerCase();
-  const list=COURSES.filter(c=>(c.status!=="online"||c.enabled===false&&!TIMES.some(t=>t.course===c.id))&&(!q||(c.name+" "+c.suburb).toLowerCase().includes(q))).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).sort((a,b)=>a.d-b.d);
+  const list=COURSES.filter(c=>(c.status!=="online"||c.enabled===false&&!TIMES.some(t=>t.course===c.id))&&(!q||(c.name+" "+c.suburb).toLowerCase().includes(q))).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>q||dm>=999||c.d<=dm).sort((a,b)=>a.d-b.d);
   const D=cur(),ymd=iso(D).replace(/-/g,""),gn=D.toLocaleDateString("en-US",{month:"short"})+"+"+String(D.getDate()).padStart(2,"0")+"+"+D.getFullYear();
   const WD=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const hrs=h=>`<table class="hrs"><thead><tr><th></th>${WD.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${Object.entries(h).map(([s,t])=>`<tr><th>${s}</th>${t.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
   const card=c=>`<div class="dc"><span class="course">${c.name}</span><div class="meta">${c.address||c.suburb} · ${Math.round(c.d)} km away${c.holes?" · "+c.holes+" holes":""}${c.par?" · Par "+c.par:""}</div>${c.note?`<p class="dn">${c.note}</p>`:""}${c.visitor_hours?`<div class="hw">${hrs(c.visitor_hours)}</div>`:""}<div class="acts">${c.book_url?`<a class="go" href="${c.book_url.replace("{date}",ymd).replace("{gn_date}",gn)}" target="_blank" rel="noopener">${c.cta||"Visit booking page"}</a>`:""}${c.phone?`<a class="lk" href="tel:${c.phone.replace(/[^\d+]/g,"")}">${c.phone}</a>`:""}${c.email?`<a class="lk" href="mailto:${c.email}">Email</a>`:""}${c.website?`<a class="lk" href="${c.website}" target="_blank" rel="noopener">Website</a>`:""}</div>${c.source==="directory"?`<p class="src">From directory listings, so confirm before you go.</p>`:""}</div>`;
-  $("dirlist").innerHTML=order.map(k=>{const a=list.filter(c=>(lab[c.status]?c.status:"contact")===k);return a.length?`<h3 class="dh">${lab[k]} <span>${a.length}</span></h3>${a.map(card).join("")}`:""}).join("")||`<div class="empty">No courses match that name.</div>`;
+  // Each group folds away, and the choice is remembered. Private clubs start folded. A name search opens every group.
+  const shut=groupsShut();
+  $("dirlist").innerHTML=order.map(k=>{const a=list.filter(c=>(lab[c.status]?c.status:"contact")===k);return a.length?`<details class="dg" data-k="${k}"${q||!shut[k]?" open":""}><summary class="dh">${lab[k]} <span>${a.length}</span></summary>${a.map(card).join("")}</details>`:""}).join("")||`<div class="empty">${q?"No courses match that name.":`No other courses within ${dm} km. Try a larger distance, or search by name.`}</div>`;
+  $("dirlist").querySelectorAll("details").forEach(d=>d.ontoggle=()=>{if($("dirq").value.trim())return;const s=groupsShut();s[d.dataset.k]=!d.open;try{localStorage.setItem(DIRK,JSON.stringify(s))}catch(e){}});
   drawMap(groups,chip,card,pf,w,dm)}
+const DIRK="tee-dir-shut";
+function groupsShut(){try{const s=JSON.parse(localStorage.getItem(DIRK)||"null");if(s)return s}catch(e){}return{private:true,members:true}}
 // After "See all" on the map: back to the same spot, with that club's popup open.
 let backTo=null,MK={};
 $("backMap").onclick=()=>{const b=backTo;setView("map");loadMap().then(()=>{scrollTo(0,b.y);if(MK[b.id])MK[b.id].openPopup()})};
