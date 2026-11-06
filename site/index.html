@@ -65,6 +65,8 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 [hidden]{display:none!important}
 .pick{margin-bottom:14px}.pick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;max-width:220px}.unrel{font-size:14px;color:var(--mute);margin:0 0 12px}
 #map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}#map a.chip,#map .chip a.rate{color:var(--ink)}#map a.go{color:var(--accent-ink)}#map a.lk{color:var(--accent)}
+.mp span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:#1F6B3A;color:#fff;border:2px solid #fff;border-radius:999px;padding:2px 7px;font:700 12px/1.2 "Hanken Grotesk",sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:pointer}
+.mp:hover span{background:#174F2B}
 #map .leaflet-tooltip.mc{background:none;border:0;box-shadow:none;color:#fff;font-weight:700;font-size:11px;padding:0}#map .leaflet-tooltip.mc::before{display:none}
 .dh{font:700 18px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:24px 0 10px}
 .dg summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.dg summary::-webkit-details-marker{display:none}
@@ -246,7 +248,8 @@ function drawMap(groups,chip,card,pf,w,dm){
   const live=new Set(groups.map(a=>a[0].course)),pts=[[w.lat??w.la,w.lo]];
   COURSES.filter(c=>!live.has(c.id)).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away${c.par?" · Par "+c.par:""}</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
   groups.forEach(a=>{const c=a[0].c,n=distinct(a),ps=a.map(x=>x.each).filter(p=>p!=null);pts.push([c.lat,c.lon]);
-    MK[c.id]=L.circleMarker([c.lat,c.lon],{radius:12,color:"#fff",fillColor:"#1F6B3A",fillOpacity:1,weight:2}).bindTooltip(String(n),{permanent:true,direction:"center",className:"mc"})
+    const low=ps.length?Math.min(...ps):null,tag=low!=null?"$"+Math.round(low):n+(n==1?" time":" times");  // cheapest open rate per player, rounded
+    MK[c.id]=L.marker([c.lat,c.lon],{icon:L.divIcon({className:"mp",html:`<span>${tag}</span>`,iconSize:[0,0]}),title:c.name,riseOnHover:true})
      .bindPopup(`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(a[0].d)} km away${c.par?" · Par "+c.par:""} · ${n} ${n==1?"time":"times"}${ps.length?" from "+pf(Math.min(...ps)):""}</div><div class="chips">${slotsOf(a).slice(0,6).map(chip).join("")}</div>${slotsOf(a).length>6?`<button class="more seeall" onclick="showCourse('${c.id}')">See all ${n} times</button>`:""}`).addTo(LY)});
   L.circleMarker(pts[0],{radius:6,color:"#fff",fillColor:"#2563EB",fillOpacity:1,weight:2}).bindTooltip("Starting point").addTo(LY);
   if(dm<999)L.circle(pts[0],{radius:dm*1000,color:"#2563EB",weight:1,fill:false,dashArray:"4 6"}).addTo(LY);
