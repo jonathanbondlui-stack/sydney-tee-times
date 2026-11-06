@@ -24,6 +24,7 @@ CAL_STEP = 6  # days shown on one MiClub calendar page
 FAR_FEED = "tee-times-far.json"
 FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
 FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
+KEEP_HOURS = 12  # how long a club's last good times stand in when its refresh fails
 
 _robots, _last = {}, {}
 
@@ -418,14 +419,43 @@ def build(courses, today, first, last):
         except CaptchaRequired as e:
             print(f"SKIP {c['id']}: {e}", file=sys.stderr); tried -= 1
         except Exception as e:
-            failures.append(f"{c['id']}: {e}")
-    for f in failures[:20]:
-        print("FAIL", f, file=sys.stderr)
+            failures.append((c["id"], e))
+    for cid, e in failures[:20]:
+        print(f"FAIL {cid}: {e}", file=sys.stderr)
     return out, failures, tried
 
-def write_feed(name, rows):
+def carry_over(name, rows, failed, now=None):
+    """Add each failed club's times from the last published feed, so one bad refresh doesn't
+    make it vanish. Only times not yet passed are kept, and only for KEEP_HOURS after they were
+    last read. Returns {course id: when its times were read} for the clubs carried over."""
+    now = now or dt.datetime.now().astimezone()
+    try:
+        with open(os.path.join(ROOT, "site", name)) as fh:
+            prev = json.load(fh)
+    except (OSError, ValueError):
+        return {}
+    today, clock = now.date().isoformat(), now.strftime("%H:%M")
+    kept = {}
+    for cid in failed:
+        read_at = prev.get("kept", {}).get(cid, prev.get("generated_at"))
+        try:
+            if (now - dt.datetime.fromisoformat(read_at)).total_seconds() > KEEP_HOURS * 3600:
+                continue
+        except (TypeError, ValueError):
+            continue
+        old = [r for r in prev.get("times", []) if r.get("course") == cid
+               and (r["date"] > today or (r["date"] == today and r["time"] >= clock))]
+        if old:
+            rows.extend(old)
+            kept[cid] = read_at
+            print(f"KEPT {len(old)} earlier times for {cid}, read {read_at}", file=sys.stderr)
+    return kept
+
+def write_feed(name, rows, kept=None):
     path = os.path.join(ROOT, "site", name)
     feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "times": rows}
+    if kept:
+        feed["kept"] = kept
     tmp = path + ".tmp"
     with open(tmp, "w") as fh:
         json.dump(feed, fh)
@@ -471,14 +501,16 @@ def main():
     if not out or len(failures) > tried * 0.5:
         print("Too little data or too many failures. Keeping the previous feed.", file=sys.stderr)
         sys.exit(1)
-    write_feed("tee-times.json", out)
+    kept = carry_over("tee-times.json", out, [cid for cid, _ in failures])
+    write_feed("tee-times.json", out, kept)
     print(f"Wrote {len(out)} tee times from {tried - len(failures)} clubs.")
     if far_due():
         out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS)
         if not out or len(failures) > tried * 0.5:
             print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
             return
-        write_feed(FAR_FEED, out)
+        kept = carry_over(FAR_FEED, out, [cid for cid, _ in failures])
+        write_feed(FAR_FEED, out, kept)
         print(f"Wrote {len(out)} later tee times from {tried - len(failures)} clubs.")
 
 if __name__ == "__main__":
