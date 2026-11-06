@@ -138,14 +138,17 @@ def miclub_fees(body):
         pop = _FEE_POPOVER.search(body)
         if pop:
             found = [(p, l) for l, p in _POPOVER_LI.findall(unescape(pop.group(1)))]
-    return [{"price": float(p.replace(",", "")), "label": unescape(l).strip()} for p, l in found]
+    # Some clubs (such as Tanilba Bay) leave every fee at $0 and charge at the counter, so $0 means "not shown".
+    return [{"price": float(p.replace(",", "")) or None, "label": unescape(l).strip()} for p, l in found]
 
 _DISC = re.compile(r"\bdisc golf\b", re.I)
 _LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b", re.I),
             "Seniors": re.compile(r"\bseniors?\b|\bpension", re.I),
             "Students": re.compile(r"\bstudents?\b", re.I),
             "Concession": re.compile(r"\bconcession", re.I),
-            "Members' guests": re.compile(r"\bmembers?'?s?\s+guests?\b", re.I)}
+            "Members' guests": re.compile(r"\bmembers?'?s?\s+guests?\b", re.I),
+            # rates for members of a partner club, such as "Wests Member 18 Holes" at Port Kembla or "DLC Member" at The Grange
+            "Partner club members": re.compile(r"\b(?:wests|dlc|rsl|leagues)\s+members?\b", re.I)}
 
 def limited_to(label):
     """Who a rate is limited to, by its name. Empty means anyone can book it."""

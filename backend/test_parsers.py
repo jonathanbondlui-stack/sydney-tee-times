@@ -47,6 +47,9 @@ assert pick("Student (Mon-Fri)", "Disc Golf") == ("Student (Mon-Fri)", "Students
 assert pick("Junior 18 Holes", "Pensioner") == ("Junior 18 Holes", "Concession only")
 assert pick("18 Holes Student & Pensioner (Mon - Fri)") == ("18 Holes Student & Pensioner (Mon - Fri)", "Concession only")
 assert pick("Disc Golf") == ("Disc Golf", "Disc golf only")
+assert pick("Wests Member 18 Holes", "Public Social Weekday 18 Holes") == ("Public Social Weekday 18 Holes", "")
+assert pick("18 Hole Monday Special DLC Member") == ("18 Hole Monday Special DLC Member", "Partner club members only")
+assert not limited_to("Non Member 18 Holes") and not limited_to("Non-Member Weekend")
 assert headline_fee([]) == (None, "")
 for name in ("Adult Visitor Midweek", "18 Holes International Green Fee", "Social Weekday - Online", "Gangurru 18 holes", "Twilight $15",
              "1 Player  (Twilight)", "Foreplay Friday", "Afternoon Special Mon-Fri", "12 HOLES OFF PEAK", "Green Fee M-F", "9 Holes Adult"):
