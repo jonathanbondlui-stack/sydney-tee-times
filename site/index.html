@@ -27,7 +27,8 @@ label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute
 select,input[type=range],#where{font:inherit;color:var(--ink)}
 select,#where{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
 input[type=range]{width:100%;accent-color:var(--accent)}
-.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap}.count{font-weight:600}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap}
+@media (min-width:640px){.bar{display:grid;grid-template-columns:1fr auto 1fr}.bar #sortl{justify-self:end}}.count{font-weight:600}
 .row{display:grid;grid-template-columns:104px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
 .time{font:700 30px/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em}.time small{font-size:14px;font-weight:500;color:var(--mute);margin-left:2px}
 .course{font-weight:600}.meta{font-size:14px;color:var(--mute)}.meta .old{display:block;color:var(--warn-ink)}.right{text-align:right}
@@ -215,7 +216,7 @@ const sunset=ds=>{const d=new Date(ds+"T00:00:00Z"),g=2*Math.PI*((d-Date.UTC(d.g
   return mins(new Date(d.getTime()+utc*6e4).toLocaleTimeString("en-GB",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit"}))};
 const distinct=a=>new Set(a.map(x=>x.course+x.time+(x.tee||""))).size;
 const loadMap=()=>window.L?Promise.resolve():new Promise((ok,no)=>{const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=ok;s.onerror=no;document.head.append(s)});
-function setView(v){view=v;backTo=null;$("backMap").hidden=true;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").hidden=v=="map";
+function setView(v){view=v;backTo=null;$("backMap").hidden=true;$("vList").setAttribute("aria-pressed",v=="list");$("vMap").setAttribute("aria-pressed",v=="map");$("map").hidden=v!="map";$("list").hidden=v=="map";$("sortl").style.visibility=v=="map"?"hidden":"";
   if(v=="map")loadMap().then(render).catch(()=>{$("map").innerHTML='<div class="empty">The map couldn’t load. Check your connection and try again.</div>'});else render()}
 // From a map popup: open the List with that club's times expanded and in view.
 function showCourse(id){const y=scrollY;setView("list");backTo={id,y};$("backMap").hidden=false;
