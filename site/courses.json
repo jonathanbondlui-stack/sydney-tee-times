@@ -73,7 +73,8 @@
   "platform": "miclub",
   "host": "masseypark.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 66
  },
  {
   "id": "balgowlah",
@@ -85,7 +86,8 @@
   "platform": "miclub",
   "host": "www.balgowlahgolfclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 33
  },
  {
   "id": "wakehurst",
@@ -97,7 +99,8 @@
   "platform": "miclub",
   "host": "www.wakehurstgolf.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "north-ryde",
@@ -109,7 +112,8 @@
   "platform": "miclub",
   "host": "northryde.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 69
  },
  {
   "id": "warringah",
@@ -121,7 +125,8 @@
   "platform": "miclub",
   "host": "warringah.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 70
  },
  {
   "id": "gordon",
@@ -133,7 +138,8 @@
   "platform": "miclub",
   "host": "www.gordongolfcourse.com.au",
   "resource_id": 187,
-  "enabled": true
+  "enabled": true,
+  "par": 65
  },
  {
   "id": "bexley",
@@ -171,7 +177,8 @@
   "platform": "miclub",
   "host": "carnarvon.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "long-reef",
@@ -196,7 +203,8 @@
   "platform": "miclub",
   "host": "sefton.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 54
  },
  {
   "id": "north-turramurra",
@@ -238,7 +246,8 @@
   "address": "180 River Rd, Lane Cove",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-03",
+  "par": 30
  },
  {
   "id": "bonnie-doon",
@@ -251,7 +260,8 @@
   "enabled": false,
   "phone": "(02) 9349 2101",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 71
  },
  {
   "id": "the-lakes",
@@ -267,7 +277,8 @@
   "cta": "Request a tee time",
   "book_url": "https://thelakesgolfclub.com.au/cms/golf-booking-enquiry/",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-03",
+  "par": 72
  },
  {
   "id": "st-michaels",
@@ -457,7 +468,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "woollahra.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 34
  },
  {
   "id": "oak-point",
@@ -471,7 +483,8 @@
   "host": "oakpoint.miclub.com.au",
   "resource_id": 3000000,
   "note": "Some directories still list this course as Liverpool Golf Club.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "lakeside-camden",
@@ -501,7 +514,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "macquarielinks.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "campbelltown",
@@ -513,7 +527,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "campbelltown.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "marrickville",
@@ -530,7 +545,8 @@
   "source": "directory",
   "checked": "2026-11-04",
   "host": "marrickville-golf-club.book.teeitup.com",
-  "facility_id": 16264
+  "facility_id": 16264,
+  "par": 60
  },
  {
   "id": "beverley-park",
@@ -542,7 +558,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "beverleypark.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "cumberland",
@@ -604,7 +621,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "antillpark.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "avalon",
@@ -668,7 +686,8 @@
   "source": "club",
   "checked": "2026-11-05",
   "cta": "Book online",
-  "book_url": "https://visitors.brsgolf.com/barnwellparkgc#/course/1"
+  "book_url": "https://visitors.brsgolf.com/barnwellparkgc#/course/1",
+  "par": 61
  },
  {
   "id": "glenmore-heritage-valley",
@@ -715,7 +734,8 @@
     "11am–sundown",
     "11am–sundown"
    ]
-  }
+  },
+  "par": 28
  },
  {
   "id": "muirfield",
@@ -727,7 +747,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "muirfield.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 69
  },
  {
   "id": "leonay",
@@ -747,7 +768,8 @@
   "source": "directory",
   "checked": "2026-11-04",
   "host": "www.golfnow.com.au",
-  "facility_id": 15322
+  "facility_id": 15322,
+  "par": 66
  },
  {
   "id": "fox-hills",
@@ -775,7 +797,8 @@
     "From 1pm",
     "From 12pm"
    ]
-  }
+  },
+  "par": 69
  },
  {
   "id": "randwick",
@@ -839,7 +862,8 @@
   "host": "lynwoodcc.miclub.com.au",
   "resource_id": 3000000,
   "cta": "Book a tee time",
-  "book_url": "https://lynwoodcc.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000"
+  "book_url": "https://lynwoodcc.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000",
+  "par": 72
  },
  {
   "id": "brighton-lakes",
@@ -851,7 +875,8 @@
   "platform": "miclub",
   "enabled": true,
   "host": "brightonlakes.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "grose-river",
@@ -882,7 +907,8 @@
   "note": "Pay and play. No bookings: turn up in opening hours, first come first served. Run by Bayside Council.",
   "phone": "(02) 9316 4930",
   "source": "club",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 33
  },
  {
   "id": "auburn",
@@ -917,7 +943,8 @@
   "phone": "(02) 9632 3582",
   "address": "118 Rawson Rd, Guildford",
   "source": "club",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "penrith",
@@ -973,7 +1000,8 @@
   "checked": "2026-11-05",
   "phone": "(02) 9820 4446",
   "email": "hello@macarthurgrange.com.au",
-  "website": "https://macarthurgrange.com.au/"
+  "website": "https://macarthurgrange.com.au/",
+  "par": 70
  },
  {
   "id": "georges-river",
@@ -991,7 +1019,8 @@
   "website": "https://georgesrivergolf.com.au/",
   "source": "club",
   "note": "From 2pm, tee times are unlimited holes, and you need to be off the course before the gates close.",
-  "checked": "2026-11-04"
+  "checked": "2026-11-04",
+  "par": 70
  },
  {
   "id": "sylvania-par3",
@@ -1009,7 +1038,8 @@
   "website": "https://sylvaniapar3golfandsoccer.com.au/",
   "email": "enquiries@sylvaniapar3golf.com.au",
   "source": "directory",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 27
  },
  {
   "id": "wallacia",
@@ -1030,7 +1060,8 @@
   "host": "www.golfnow.com.au",
   "facility_id": 16535,
   "cta": "Book on GolfNow",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/16535-wallacia-country-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16535-wallacia-country-club/search#date={gn_date}",
+  "par": 71
  },
  {
   "id": "hurstville",
@@ -1119,7 +1150,8 @@
   "phone": "(02) 4560 3200",
   "address": "74 O'Briens Rd, Cattai",
   "source": "directory",
-  "checked": "2026-11-03"
+  "checked": "2026-11-03",
+  "par": 72
  },
  {
   "id": "ryde-parramatta",
@@ -1136,7 +1168,8 @@
   "source": "club",
   "note": "Fully private, not open to the public.",
   "checked": "2026-11-05",
-  "phone": "02 9874 1204"
+  "phone": "02 9874 1204",
+  "par": 71
  },
  {
   "id": "castle-hill",
@@ -1152,7 +1185,8 @@
   "source": "club",
   "note": "Fully private, not open to the public.",
   "checked": "2026-11-05",
-  "website": "https://www.castlehillcountryclub.com.au/cms/"
+  "website": "https://www.castlehillcountryclub.com.au/cms/",
+  "par": 72
  },
  {
   "id": "concord",
@@ -1167,7 +1201,8 @@
   "address": "Majors Bay Rd, Concord",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 71
  },
  {
   "id": "monash",
@@ -1183,7 +1218,8 @@
   "email": "golf@monashcc.com.au",
   "source": "directory",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "nsw-golf",
@@ -1214,7 +1250,8 @@
   "website": "https://manlygolf.com.au/",
   "source": "directory",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 71
  },
  {
   "id": "terrey-hills",
@@ -1229,7 +1266,8 @@
   "website": "https://www.terreyhillsgolf.com.au/",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "elanora",
@@ -1245,7 +1283,8 @@
   "email": "sportadmin@elanoracc.com.au",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "cromer",
@@ -1261,7 +1300,8 @@
   "website": "https://cromergolfclub.com.au/",
   "source": "directory",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 70
  },
  {
   "id": "cronulla",
@@ -1308,7 +1348,8 @@
   "website": "https://www.kgc.com.au/",
   "source": "directory",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "roseville",
@@ -1335,7 +1376,8 @@
   "website": "https://www.australiangolfclub.com/",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "royal-sydney",
@@ -1363,7 +1405,8 @@
   "website": "https://www.pymblegolf.com.au/cms/",
   "source": "club",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 72
  },
  {
   "id": "pennant-hills",
@@ -1379,7 +1422,8 @@
   "note": "Fully private, not open to the public.",
   "checked": "2026-11-05",
   "phone": "(02) 8860 5860",
-  "email": "proshop@pennanthillsgolfclub.com.au"
+  "email": "proshop@pennanthillsgolfclub.com.au",
+  "par": 71
  },
  {
   "id": "oatlands",
@@ -1395,7 +1439,8 @@
   "note": "Fully private, not open to the public.",
   "website": "https://www.oatlandsgolf.com.au/cms/",
   "phone": "(02) 9630 4444",
-  "address": "94 Bettington Road, Oatlands"
+  "address": "94 Bettington Road, Oatlands",
+  "par": 70
  },
  {
   "id": "the-ridge",
@@ -1429,7 +1474,8 @@
   "host": "www.twincreeksgolf.com.au",
   "resource_id": 3000000,
   "cta": "Book a tee time",
-  "book_url": "https://www.twincreeksgolf.com.au/cms/public-bookings/"
+  "book_url": "https://www.twincreeksgolf.com.au/cms/public-bookings/",
+  "par": 72
  },
  {
   "id": "kurrajong-hills",
