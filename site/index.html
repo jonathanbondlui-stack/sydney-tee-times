@@ -300,7 +300,7 @@ function render(){
   if($("widen"))$("widen").onclick=()=>{$("dist").value=dm==10?"20":dm==20?"35":"999";shown=12;save();render()};
   $("more").textContent="Show more courses";$("more").hidden=groups.length<=shown||view=="map";rows=r;
   const lab={online:"Book online",set_times:"Bookings by enquiry only",phone:"Call to book",walkup:"Walk-ins only, no bookings",enquiry:"Limited visitor access",contact:"Details still being confirmed",check:"Check it’s open",members:"Members and guests only",private:"Members only, no public play"};
-  const order=["online","set_times","phone","walkup","enquiry","contact","check","members","private"];
+  const order=["online","phone","walkup","enquiry","contact","check","set_times","members","private"];
   const q=$("dirq").value.trim().toLowerCase();
   const list=COURSES.filter(c=>(c.status!=="online"||c.enabled===false&&!TIMES.some(t=>t.course===c.id))&&(!q||(c.name+" "+c.suburb).toLowerCase().includes(q))).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>q||dm>=999||c.d<=dm).sort((a,b)=>a.d-b.d);
   const D=cur(),ymd=iso(D).replace(/-/g,""),gn=D.toLocaleDateString("en-US",{month:"short"})+"+"+String(D.getDate()).padStart(2,"0")+"+"+D.getFullYear();
