@@ -655,7 +655,8 @@
   "website": "https://www.northernbeaches.nsw.gov.au/things-to-do/recreation-area/avalon-golf-course",
   "source": "directory",
   "checked": "2026-11-05",
-  "email": "info@avalongolfcourse.com.au"
+  "email": "info@avalongolfcourse.com.au",
+  "par": 32
  },
  {
   "id": "colonial",
@@ -911,7 +912,8 @@
   "address": "Nutmans Rd, Grose Wold",
   "holes": 9,
   "source": "directory",
-  "checked": "2026-11-05"
+  "checked": "2026-11-05",
+  "par": 33
  },
  {
   "id": "botany",
