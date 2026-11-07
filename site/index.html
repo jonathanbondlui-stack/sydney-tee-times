@@ -15,7 +15,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Hanken Grotesk",system-ui,sans-serif}
 .wrap{max-width:880px;margin:0 auto;padding:20px 16px 64px}
-.note{background:var(--warn);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:28px}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute);margin:0 0 14px}
+.note::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent);flex:none}
+.note.warn{background:var(--warn);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px}.note.warn::before{display:none}
 h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 8px;max-width:14em}
 .sub{color:var(--mute);margin:0 0 24px}
 .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:14px}
@@ -100,8 +102,8 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
 <body>
 <main class="wrap">
   <div class="note" id="note" hidden></div>
-  <h1>Every tee time in and around Sydney, in one search</h1>
-  <p class="sub">Pick a day, set your window, and see what’s open across the city. Courses without online booking are listed below so you never wonder if you missed one.</p>
+  <h1>Tee times across Sydney and beyond, in one search</h1>
+  <p class="sub">Live times from <span id="ncourses">80+</span> courses between Port Stephens and the Southern Highlands. Courses you can’t book online are listed below, with how to play there.</p>
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
   <div class="dayopts">
   <label class="multi"><input type="checkbox" id="multi"> Search several days at once</label>
@@ -118,7 +120,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   </section>
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
-    <label id="sortl" style="flex-direction:row;align-items:center;gap:8px">Sort by<select id="sort" style="width:auto"><option value="t">Earliest</option><option value="p">Cheapest</option><option value="d">Nearest</option></select></label></div>
+    <label id="sortl" style="flex-direction:row;align-items:center;gap:8px">Sort by<select id="sort" style="width:auto"><option value="d" selected>Nearest</option><option value="t">Earliest</option><option value="p">Cheapest</option></select></label></div>
   <p class="unrel" id="unrel" hidden></p>
   <div id="map" hidden></div>
   <div id="list"></div>
@@ -210,8 +212,8 @@ function placeBox(){const w=$("where"),ul=$("placeList"),all=[MY_PLACE,...FROMS.
     else if(e.key=="Escape"&&!ul.hidden){e.preventDefault();close();w.value=START?START.n:MY_PLACE}};
   ul.onpointerdown=e=>e.preventDefault();
   ul.onclick=e=>{e.preventDefault();const li=e.target.closest("li");if(li)pick(items[+li.dataset.i])}}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(Object.fromEntries(SAVED.map(id=>[id,$(id).value]))))}catch(e){}};
-const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...Object.fromEntries(SAVED.map(id=>[id,$(id).value])),v:2}))}catch(e){}};
+const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(id=="sort"&&s.v!==2)return;if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
 const SHORT_HOLES=/\b(\d+)H\b/i;
 const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");return g?+g[1]:null};
@@ -273,8 +275,10 @@ function demoFeed(){const out=[];days.forEach(d=>{const seed=d.getFullYear()*100
 async function load(){
   try{const r=await fetch("courses.json",{cache:"no-store"});if(r.ok)COURSES=await r.json()}catch(e){}
   try{const r=await fetch("tee-times.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();TIMES=j.times||[];KEPT={...KEPT,...(j.kept||{})};
-    const n=$("note");n.hidden=false;n.textContent="Times updated "+new Date(j.generated_at).toLocaleString("en-AU",{dateStyle:"medium",timeStyle:"short"})+". Check the course’s own page before you travel."}
-  catch(e){demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}
+    const n=$("note"),at=new Date(j.generated_at),same=at.toDateString()==new Date().toDateString();n.hidden=false;
+    n.textContent="Updated "+(same?"today at ":at.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})+", ")+at.toLocaleTimeString("en-AU",{hour:"numeric",minute:"2-digit"})+" · Confirm on the club’s page before you go";
+    $("ncourses").textContent=new Set(TIMES.map(t=>t.course)).size}
+  catch(e){demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.classList.add("warn");n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}
   setup()}
 function setup(){
   const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0)day=first;sel=new Set([day]);
