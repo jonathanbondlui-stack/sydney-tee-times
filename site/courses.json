@@ -1574,13 +1574,13 @@
   "suburb": "Magenta",
   "lat": -33.3107,
   "lon": 151.5274,
-  "status": "enquiry",
+  "status": "resort",
   "platform": "miclub",
   "host": "magentashores.miclub.com.au",
   "resource_id": 3000000,
   "enabled": false,
   "website": "https://magentagolf.com.au/",
-  "note": "Private club. Visitors are welcome at limited times, but the online tee sheet only shows members' guest rates, so contact the club to book."
+  "note": "Resort course. Stay at Magenta Shores to play."
  },
  {
   "id": "shelly-beach",
@@ -2404,10 +2404,10 @@
   "suburb": "Bowral",
   "lat": -34.4674,
   "lon": 150.4053,
-  "status": "private",
+  "status": "resort",
   "platform": "none",
   "enabled": false,
-  "note": "Nine-hole resort course for Peppers Craigieburn guests.",
+  "note": "Nine-hole resort course. Stay at Peppers Craigieburn to play.",
   "checked": "2026-11-07",
   "website": "https://www.peppers.com.au/craigieburn/",
   "source": "club",
