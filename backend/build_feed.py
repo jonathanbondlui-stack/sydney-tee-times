@@ -351,8 +351,18 @@ def collect_teeitup(c, today, first=0, last=DAYS):
     for ahead in range(first, last + 1):
         d = (today + dt.timedelta(days=ahead)).isoformat()
         q = urlencode({"date": d, "facilityIds": c["facility_id"]})
-        with _teeitup_lock:
-            text = fetch(f"{TEEITUP_API}/v2/tee-times?{q}", {"x-be-alias": c["host"].split(".")[0]})
+        try:
+            with _teeitup_lock:
+                text = fetch(f"{TEEITUP_API}/v2/tee-times?{q}", {"x-be-alias": c["host"].split(".")[0]})
+        except urllib.error.HTTPError as e:
+            # TeeItUp's API sometimes stops answering partway ("too many requests"). Keep the days
+            # already read rather than lose the club, and note how long it asked us to wait.
+            if e.code == 429 and rows:
+                print(f"PART {c['id']}: stopped at {d}, Retry-After {e.headers.get('Retry-After')!r}", file=sys.stderr)
+                return rows
+            if e.code == 429:
+                raise urllib.error.HTTPError(e.url, e.code, f"{e.msg} (Retry-After {e.headers.get('Retry-After')!r})", e.headers, None)
+            raise
         rows.extend(parse_teeitup(text, c, d))
     return rows
 
