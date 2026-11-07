@@ -19,7 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = os.environ.get("TEE_UA") or "TeeSheetBot/0.1 (+mailto:YOUR_EMAIL_HERE)"
 DAYS = int(os.environ.get("TEE_DAYS", "7"))
 MIN_GAP = 1.0  # seconds between requests to the same host
-WORKERS = 8  # clubs read at the same time
+WORKERS = 16  # clubs read at the same time; each club's own site still gets at most one request per MIN_GAP
 CAL_STEP = 6  # days shown on one MiClub calendar page
 FAR_FEED = "tee-times-far.json"
 FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
@@ -70,11 +70,21 @@ def fetch(url, headers=None, data=None):
     if wait > 0:
         time.sleep(wait)
     req = urllib.request.Request(url, data=data, headers={**(headers or {}), "User-Agent": UA})
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            return r.read().decode("utf-8", "replace")
-    finally:
-        _last[host] = time.time()
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            # "Too many requests" or "busy": back off for as long as the server asks (within reason), then try again
+            if e.code not in (429, 503) or attempt == 2:
+                raise
+            try:
+                pause = float(e.headers.get("Retry-After") or 0)
+            except ValueError:
+                pause = 0
+            time.sleep(min(max(pause, 20 * (attempt + 1)), 90))
+        finally:
+            _last[host] = time.time()
 
 import re
 
@@ -416,8 +426,15 @@ def build(courses, today, first, last):
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
     assert len({(c["host"], c.get("facility_id")) for c in live}) == len(live), "two courses share a host"
+    # GolfNow and TeeItUp clubs share one host each, so they queue on a worker of their own and
+    # don't hold up the pool while they wait their turn.
+    shared = {p: ThreadPoolExecutor(max_workers=1) for p in ("golfnow", "teeitup")}
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        jobs = [(c, pool.submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
+        jobs = [(c, shared.get(c["platform"], pool).submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
+        for c, job in jobs:
+            job.exception()  # wait for every club, shared queues included
+    for p in shared.values():
+        p.shutdown()
     for c, job in jobs:
         tried += 1
         try:

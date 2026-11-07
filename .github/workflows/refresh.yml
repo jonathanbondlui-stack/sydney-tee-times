@@ -24,7 +24,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # longer when the builder also rebuilds the far feed, every 6 hours
+    timeout-minutes: 50  # a normal run takes about 8 minutes; the far feed, rebuilt every 6 hours, adds more
     env:
       TEE_UA: ${{ secrets.TEE_UA }}
       TZ: Australia/Sydney  # build_feed.py uses the local date for "today"
@@ -62,7 +62,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # GitHub refuses a publish while the previous one is still going through, so wait and try once more.
       - id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Wait for the previous publish
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 90
+      - id: deploy-again
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
       # Publish first, then fail the run so a failed refresh still shows up and emails you.
       - name: Report a failed refresh
