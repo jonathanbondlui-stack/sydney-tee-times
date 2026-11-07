@@ -2426,7 +2426,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.gungahlinlakesgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "gold-creek",
@@ -2440,11 +2442,13 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.goldcreekcountryclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "belconnen",
-  "name": "Belconnen Magpies Golf Club",
+  "name": "Burns Golf Club Belconnen",
   "suburb": "Holt",
   "lat": -35.2285,
   "lon": 149.0024,
@@ -2453,8 +2457,10 @@
   "host": "belconnen.miclub.com.au",
   "resource_id": 3000000,
   "enabled": true,
-  "website": "https://belconnenmagpies.com.au/",
-  "checked": "2026-11-08"
+  "website": "https://www.burnsclub.com.au/play-golf/",
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "federal",
@@ -2468,7 +2474,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.federalgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "murrumbidgee",
@@ -2482,7 +2490,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.murrumbidgeegolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "goulburn",
@@ -2496,7 +2506,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.goulburngolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71,
+  "holes": 18
  },
  {
   "id": "yass",
@@ -2510,7 +2522,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "http://yassgolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 68,
+  "holes": 18
  },
  {
   "id": "worrigee-links",
@@ -2524,7 +2538,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.worrigeelinks.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70,
+  "holes": 18
  },
  {
   "id": "mollymook",
@@ -2538,7 +2554,10 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.mollymookgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18,
+  "note": "Two courses: the 18-hole Hilltop course (par 72) and the 9-hole Beachside course."
  },
  {
   "id": "moruya",
@@ -2552,7 +2571,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.moruyagolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71,
+  "holes": 18
  },
  {
   "id": "bermagui",
@@ -2566,7 +2587,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.bermaguicountryclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "tura-beach",
@@ -2580,7 +2603,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://www.turabeachcountryclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 73,
+  "holes": 18
  },
  {
   "id": "eden",
@@ -2594,6 +2619,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://edenfishermens.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71,
+  "holes": 18
  }
 ]
