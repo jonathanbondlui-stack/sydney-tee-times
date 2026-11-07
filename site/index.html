@@ -115,7 +115,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   </div>
   <section class="filters" aria-label="Filters">
     <label>Players<select id="players"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
-    <label>Round<select id="holes"><option value="18" selected>Full round</option><option value="18h">18 holes</option><option value="9">Under 18 holes</option><option value="0">Any length</option></select></label>
+    <label>Round<select id="holes"><option value="18" selected>18 holes</option><option value="9">Under 18 holes</option><option value="0">Any length</option></select></label>
     <label>Earliest<select id="from"></select></label>
     <label>Latest<select id="to"></select></label>
     <label class="wide">Location<div class="combo"><input type="text" id="where" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Starting places" hidden></ul></div><small class="wm" id="whereMsg" aria-live="polite" hidden></small></label>
@@ -129,7 +129,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">“Full round” means 18 holes, or every hole at a 9- or 12-hole course. “18 holes” leaves the shorter courses out. It includes twilight rates, and only shows tee times with enough daylight left to finish (about 4¼ hours before sunset for 18 holes). Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“18 holes” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset, so you can finish. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other courses nearby</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
@@ -309,7 +309,7 @@ function render(){
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||FROMS[0],pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1;dates.forEach(d=>late[d]=sunset(d)-ROUND_MINS);
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
-   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf=="0"||(hf=="18"?fullRound(x,late[x.date]):hf=="18h"?fullRound(x,late[x.date],18):holesOf(x)&&holesOf(x)<18)));
+   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
   const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.t-b.t:s=="d"?a.d-b.d||a.t-b.t:a.t-b.t||a.d-b.d);
   const last={};TIMES.forEach(t=>{if(!last[t.course]||t.date>last[t.course])last[t.course]=t.date});
   const notYet=!dates.length?[]:COURSES.filter(c=>c.enabled&&(!last[c.id]||last[c.id]<dt)&&km(w.lat??w.la,w.lo,c.lat,c.lon)<=dm).map(c=>c.name.replace(/ (Public )?Golf( Club| Course)?$/,""));
