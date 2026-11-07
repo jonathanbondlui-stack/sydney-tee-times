@@ -19,6 +19,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = os.environ.get("TEE_UA") or "TeeSheetBot/0.1 (+mailto:YOUR_EMAIL_HERE)"
 DAYS = int(os.environ.get("TEE_DAYS", "7"))
 MIN_GAP = 1.0  # seconds between requests to the same host
+# Hosts that ask for more room. TeeItUp's API answers "too many requests" at one a second over three weeks of dates.
+HOST_GAP = {"phx-api-be-east-1b.kenna.io": 3.0}
 WORKERS = 16  # clubs read at the same time; each club's own site still gets at most one request per MIN_GAP
 CAL_STEP = 6  # days shown on one MiClub calendar page
 FAR_FEED = "tee-times-far.json"
@@ -66,7 +68,7 @@ def fetch(url, headers=None, data=None):
     if not ok:
         raise PermissionError(f"{reason}")
     host = urlparse(url).netloc
-    wait = MIN_GAP - (time.time() - _last.get(host, 0))
+    wait = HOST_GAP.get(host, MIN_GAP) - (time.time() - _last.get(host, 0))
     if wait > 0:
         time.sleep(wait)
     req = urllib.request.Request(url, data=data, headers={**(headers or {}), "User-Agent": UA})
