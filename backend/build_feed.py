@@ -468,7 +468,7 @@ def carry_over(name, rows, failed, now=None):
                 continue
         except (TypeError, ValueError):
             continue
-        old = [r for r in prev.get("times", []) if r.get("course") == cid
+        old = [r for r in unpack(prev) if r.get("course") == cid
                and (r["date"] > today or (r["date"] == today and r["time"] >= clock))]
         if old:
             rows.extend(old)
@@ -476,14 +476,52 @@ def carry_over(name, rows, failed, now=None):
             print(f"KEPT {len(old)} earlier times for {cid}, read {read_at}", file=sys.stderr)
     return kept
 
+# Feed format 2 keeps the files small: fields at their usual value are left out, and each
+# booking link and list of rates is stored once, with times pointing to it by number.
+_USUAL = {"only": "", "group": "", "tee": "", "min_players": 1}
+
+def pack(rows):
+    """Rows to the compact feed fields {"urls", "fees", "times"}."""
+    urls, fees, ui, fi, times = [], [], {}, {}, []
+    for r in rows:
+        r = dict(r)
+        u, f = r.pop("url", None), r.pop("fees", None)
+        fk = json.dumps(f, sort_keys=True)
+        if u not in ui:
+            ui[u] = len(urls); urls.append(u)
+        if fk not in fi:
+            fi[fk] = len(fees); fees.append(f)
+        for k, v in _USUAL.items():
+            if r.get(k) == v:
+                del r[k]
+        r["u"], r["f"] = ui[u], fi[fk]
+        times.append(r)
+    return {"v": 2, "urls": urls, "fees": fees, "times": times}
+
+def unpack(feed):
+    """A feed's rows in full, from either format."""
+    if feed.get("v") != 2:
+        return feed.get("times", [])
+    urls, fees = feed["urls"], feed["fees"]
+    out = []
+    for r in feed["times"]:
+        r = {**_USUAL, **r}
+        r["url"], r["fees"] = urls[r.pop("u")], fees[r.pop("f")]
+        if r["url"] is None:
+            del r["url"]
+        if r["fees"] is None:
+            del r["fees"]
+        out.append(r)
+    return out
+
 def write_feed(name, rows, kept=None):
     path = os.path.join(ROOT, "site", name)
-    feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "times": rows}
+    feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), **pack(rows)}
     if kept:
         feed["kept"] = kept
     tmp = path + ".tmp"
     with open(tmp, "w") as fh:
-        json.dump(feed, fh)
+        json.dump(feed, fh, separators=(",", ":"))
     os.replace(tmp, path)
 
 def far_due():

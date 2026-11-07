@@ -107,7 +107,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div class="brand">Tee Time Finder</div>
   <div class="note" id="note" hidden></div>
   <h1>Tee times across Sydney and beyond, in one search</h1>
-  <p class="sub">Live times from <span id="ncourses">80+</span> courses between Port Stephens and the Southern Highlands. Courses you can’t book online are listed below, with how to play there.</p>
+  <p class="sub">Live times from <span id="ncourses">80+</span> courses from Port Stephens to Canberra and down the South Coast to Eden. Courses you can’t book online are listed below, with how to play there.</p>
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
   <div class="dayopts">
   <label class="multi"><input type="checkbox" id="multi"> Search several days at once</label>
@@ -152,7 +152,7 @@ let COURSES=EMBED_COURSES,TIMES=[],demo=false,day=0,shown=12,rows=[],ME=null,STA
 let picked=null,farAt=null,farState="none",KEPT={},multi=false,sel=new Set([0]);
 const cur=()=>picked||days[day],addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d};
 async function loadFar(){if(farState!="none")return;farState="loading";
-  try{const r=await fetch("tee-times-far.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json(),near=iso(addDays(7));TIMES=TIMES.concat((j.times||[]).filter(t=>t.date>near));KEPT={...(j.kept||{}),...KEPT};farAt=j.generated_at;farState="ok"}catch(e){farState="failed"}}
+  try{const r=await fetch("tee-times-far.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json(),near=iso(addDays(7));TIMES=TIMES.concat(unpackFeed(j).filter(t=>t.date>near));KEPT={...(j.kept||{}),...KEPT};farAt=j.generated_at;farState="ok"}catch(e){farState="failed"}}
 async function pickDate(){const v=$("pick").value;shown=12;if(multi&&v){multi=false;$("multi").checked=false;sel=new Set([day])}
   if(!v||v<$("pick").min||v>$("pick").max){picked=null;$("pick").value="";$("days").querySelector(`[data-i="${day}"]`).click();return}
   const i=days.findIndex(d=>iso(d)===v);if(i>=0){picked=null;$("days").querySelector(`[data-i="${i}"]`).click();return}
@@ -184,7 +184,7 @@ async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase();
   const known=FROMS.find(f=>f.n.toLowerCase()==k)||FOUND.get(k);
   if(known){startAt(known);return}
   whereMsg("Finding "+q+"…");pending=k;
-  try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", New South Wales, Australia",countrycodes:"au",viewbox:"149.8,-32.4,152.4,-35.0",bounded:1,limit:5};
+  try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", New South Wales, Australia",countrycodes:"au",viewbox:"148.6,-32.3,152.4,-37.2",bounded:1,limit:5};
     if(!postcode)ask.featureType="settlement"; // a suburb, not a council area of the same name
     const r=await fetch("https://nominatim.openstreetmap.org/search?"+new URLSearchParams(ask));if(!r.ok)throw 0;const hits=await r.json();if(id!=lookup)return;
     const hit=hits.find(h=>/^(suburb|neighbourhood|quarter|town|village|hamlet|locality)$/.test(h.addresstype))||hits[0];
@@ -276,9 +276,11 @@ function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15
 function demoFeed(){const out=[];days.forEach(d=>{const seed=d.getFullYear()*1000+d.getMonth()*50+d.getDate();
   COURSES.filter(c=>c.status==="online").forEach((c,ci)=>{const r=rng(seed*31+ci*7);let t=360+Math.floor(r()*4)*2;
     while(t<1020){if(r()<.45)out.push({course:c.id,date:iso(d),time:`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`.replace(/^(\d):/,"0$1:"),holes:r()<.3?9:18,price:Math.round(30+r()*50),spots:1+Math.floor(r()*4),url:""});t+=8+(r()<.5?0:2)}})});return out}
+// Feed format 2 stores each booking link and rate list once; times point to them by number.
+const unpackFeed=j=>j.v!==2?(j.times||[]):j.times.map(r=>{const x={only:"",group:"",tee:"",min_players:1,...r,url:j.urls[r.u],fees:j.fees[r.f]};delete x.u;delete x.f;if(x.url==null)delete x.url;if(x.fees==null)delete x.fees;return x});
 async function load(){
   try{const r=await fetch("courses.json",{cache:"no-store"});if(r.ok)COURSES=await r.json()}catch(e){}
-  try{const r=await fetch("tee-times.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();TIMES=j.times||[];KEPT={...KEPT,...(j.kept||{})};
+  try{const r=await fetch("tee-times.json",{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();TIMES=unpackFeed(j);KEPT={...KEPT,...(j.kept||{})};
     const n=$("note"),at=new Date(j.generated_at),same=at.toDateString()==new Date().toDateString();n.hidden=false;
     n.textContent="Updated "+(same?"today at ":at.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})+", ")+at.toLocaleTimeString("en-AU",{hour:"numeric",minute:"2-digit"})+" · Confirm on the club’s page before you go";
     $("ncourses").textContent=new Set(TIMES.map(t=>t.course)).size}
