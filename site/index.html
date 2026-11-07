@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sydney tee times</title>
+<title>Tee Time Finder</title>
+<meta name="description" content="Live golf tee times from courses across Sydney and beyond, in one search.">
+<meta name="application-name" content="Tee Time Finder"><meta name="apple-mobile-web-app-title" content="Tee Time Finder">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,6 +17,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Hanken Grotesk",system-ui,sans-serif}
 .wrap{max-width:880px;margin:0 auto;padding:20px 16px 64px}
+.brand{font:700 18px/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.01em;color:var(--accent);margin:4px 0 22px}
 .note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute);margin:0 0 14px}
 .note::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent);flex:none}
 .note.warn{background:var(--warn);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px}.note.warn::before{display:none}
@@ -101,6 +104,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
 </head>
 <body>
 <main class="wrap">
+  <div class="brand">Tee Time Finder</div>
   <div class="note" id="note" hidden></div>
   <h1>Tee times across Sydney and beyond, in one search</h1>
   <p class="sub">Live times from <span id="ncourses">80+</span> courses between Port Stephens and the Southern Highlands. Courses you can’t book online are listed below, with how to play there.</p>

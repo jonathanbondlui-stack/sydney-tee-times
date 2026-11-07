@@ -1,4 +1,4 @@
-# Sydney tee times
+# Tee Time Finder
 
 ```
 data/courses.json        the course directory (status, platform, location). Edit this to add courses.
