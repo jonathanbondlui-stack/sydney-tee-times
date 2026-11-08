@@ -175,7 +175,7 @@ const FROMS=[{n:"Sydney CBD",la:-33.8688,lo:151.2093},{n:"Parramatta",la:-33.815
 // Each region has its own times file, so a visit only downloads the times near the chosen place.
 // A course without a "region" is in NSW & ACT. la/lo is where that region's sunset is worked out.
 const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down the South Coast to Eden",la:-33.87,lo:151.21},
-  vic:{city:"Melbourne",span:"across Melbourne and the Mornington Peninsula",la:-37.81,lo:144.96}};
+  vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96}};
 const regionOf=c=>c.region||"nsw";
 const $=id=>document.getElementById(id);
 let ALL=EMBED_COURSES,COURSES=ALL,REG=null,TIMES=[],demo=false,day=0,shown=12,rows=[],ME=null,START=null,view="list",M=null,LY=null,fitKey="";

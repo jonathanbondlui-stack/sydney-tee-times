@@ -128,3 +128,11 @@ assert sorted({x["spots"] for x in end}) == [2, 4]
 assert parse_quick18(rd("lane-cove-weekend.html"), lane, "2026-11-08") == []  # page shows another date
 assert parse_quick18("<html>no tee sheet</html>", lane, "2026-11-07") == []
 print("all parser tests passed")
+
+# Victorian rate names
+assert limited_to("Mid Week - 13 - 17 Year Old 18 Holes") == {"Juniors"}
+assert limited_to("Midweek - 13-17 Year Old 9 Holes") == {"Juniors"}
+assert limited_to("Midweek Over 60's") == {"Seniors"}
+assert limited_to("RACV Member Required to Show Member Card") == {"Partner club members"}
+assert not limited_to("Adult Midweek 18H") and not limited_to("2026 Green Fee - 9 Holes") and not limited_to("Adult Midweek 13 Holes")
+print("victorian rate tests passed")

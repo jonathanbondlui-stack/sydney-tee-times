@@ -21,7 +21,7 @@ DAYS = int(os.environ.get("TEE_DAYS", "7"))
 MIN_GAP = 1.0  # seconds between requests to the same host
 # Hosts that ask for more room. TeeItUp's API answers "too many requests" at one a second over three weeks of dates.
 HOST_GAP = {"phx-api-be-east-1b.kenna.io": 3.0}
-WORKERS = 16  # clubs read at the same time; each club's own site still gets at most one request per MIN_GAP
+WORKERS = 24  # clubs read at the same time; each club's own site still gets at most one request per MIN_GAP
 CAL_STEP = 6  # days shown on one MiClub calendar page
 FAR_FEED = "tee-times-far.json"  # before the split by region; read once for carry-over, then removed
 NEAR_FEED = "tee-times.json"
@@ -163,13 +163,13 @@ def miclub_fees(body):
     return [{"price": float(p.replace(",", "")) or None, "label": unescape(l).strip()} for p, l in found]
 
 _DISC = re.compile(r"\bdisc golf\b", re.I)
-_LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b", re.I),
-            "Seniors": re.compile(r"\bseniors?\b|\bpension", re.I),
+_LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b|\b\d{1,2}\s*-\s*1[0-8]\s*y(?:ea)?rs?\b", re.I),
+            "Seniors": re.compile(r"\bseniors?\b|\bpension|\bover\s*(?:5[5-9]|[6-9]\d)'?s?\b", re.I),
             "Students": re.compile(r"\bstudents?\b", re.I),
             "Concession": re.compile(r"\bconcession", re.I),
             "Members' guests": re.compile(r"\bmembers?'?s?\s+guests?\b", re.I),
-            # rates for members of a partner club, such as "Wests Member 18 Holes" at Port Kembla or "DLC Member" at The Grange
-            "Partner club members": re.compile(r"\b(?:wests|dlc|rsl|leagues)\s+members?\b", re.I)}
+            # rates for members of a partner club, such as "Wests Member 18 Holes" at Port Kembla, "DLC Member" at The Grange or "RACV Member" at Torquay
+            "Partner club members": re.compile(r"\b(?:wests|dlc|rsl|leagues|racv)\s+members?\b", re.I)}
 
 def limited_to(label):
     """Who a rate is limited to, by its name. Empty means anyone can book it."""
