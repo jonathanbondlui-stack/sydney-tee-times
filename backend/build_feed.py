@@ -27,6 +27,7 @@ FAR_FEED = "tee-times-far.json"
 FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
 FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
 KEEP_HOURS = 12  # how long a club's last good times stand in when its refresh fails
+FAR_KEEP_HOURS = 36  # the same for dates more than a week ahead, which change slowly and are only rebuilt every few hours
 
 _robots, _last = {}, {}
 
@@ -435,6 +436,12 @@ def build(courses, today, first, last):
     """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
     live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
+    # TeeItUp's API cuts us off partway through a long run, so a different TeeItUp club goes first each hour.
+    tee = [c for c in live if c["platform"] == "teeitup"]
+    if tee:
+        k = int(time.time() // 3600) % len(tee)
+        tee = tee[k:] + tee[:k]
+        live = [c for c in live if c["platform"] != "teeitup"] + tee
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
     assert len({(c["host"], c.get("facility_id")) for c in live}) == len(live), "two courses share a host"
@@ -459,7 +466,7 @@ def build(courses, today, first, last):
         print(f"FAIL {cid}: {e}", file=sys.stderr)
     return out, failures, tried
 
-def carry_over(name, rows, failed, now=None):
+def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS):
     """Add each failed club's times from the last published feed, so one bad refresh doesn't
     make it vanish. Only times not yet passed are kept, and only for KEEP_HOURS after they were
     last read. Returns {course id: when its times were read} for the clubs carried over."""
@@ -474,7 +481,7 @@ def carry_over(name, rows, failed, now=None):
     for cid in failed:
         read_at = prev.get("kept", {}).get(cid, prev.get("generated_at"))
         try:
-            if (now - dt.datetime.fromisoformat(read_at)).total_seconds() > KEEP_HOURS * 3600:
+            if (now - dt.datetime.fromisoformat(read_at)).total_seconds() > keep_hours * 3600:
                 continue
         except (TypeError, ValueError):
             continue
@@ -582,7 +589,7 @@ def main():
         if not out or len(failures) > tried * 0.5:
             print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
             return
-        kept = carry_over(FAR_FEED, out, [cid for cid, _ in failures])
+        kept = carry_over(FAR_FEED, out, [cid for cid, _ in failures], keep_hours=FAR_KEEP_HOURS)
         write_feed(FAR_FEED, out, kept)
         print(f"Wrote {len(out)} later tee times from {tried - len(failures)} clubs.")
 
