@@ -87,7 +87,7 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 #dir{margin-top:44px}#dir h2{font:700 24px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 6px}
 .dc{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
 .view{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}.view button{border:0;background:var(--surface);color:var(--ink);font:600 14px "Hanken Grotesk",sans-serif;padding:8px 16px;cursor:pointer}.view button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
-#map{height:min(70vh,560px);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--surface)}#map .chips{grid-template-columns:repeat(2,minmax(84px,1fr));margin-top:8px}#map .dc{border:0;padding:0;margin:0;background:none}#map .leaflet-popup-content{min-width:200px}
+#map{height:min(70vh,560px);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--surface)}#map .chips{grid-template-columns:repeat(2,minmax(84px,1fr));margin-top:8px}#map .dc{border:0;padding:0;margin:0;background:none}#map .leaflet-popup-content{min-width:200px}#map .nudged .leaflet-popup-tip-container{display:none}
 [hidden]{display:none!important}
 .pick{margin-bottom:14px}.pick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;max-width:220px}.unrel{font-size:14px;color:var(--mute);margin:0 0 12px}
 #map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}#map a.chip,#map .chip a.rate{color:var(--ink)}#map a.go{color:var(--accent-ink)}#map a.lk{color:var(--accent)}
@@ -171,11 +171,26 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
 </div>
 <script>
 const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "Moore Park", "lat": -33.8955, "lon": 151.2245, "status": "online", "platform": "miclub", "host": "moorepark.miclub.com.au", "resource_id": 3050007, "enabled": true, "phone": "(02) 9663 1064", "note": "Course is being reduced to 12 holes."}, {"id": "cammeray", "name": "Cammeray Golf Club", "suburb": "Cammeray", "lat": -33.816, "lon": 151.216, "status": "online", "platform": "miclub", "host": "cammeray.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "northbridge", "name": "Northbridge Golf Club", "suburb": "Northbridge", "lat": -33.804, "lon": 151.223, "status": "online", "platform": "miclub", "host": "northbridge.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "eastlake", "name": "Eastlake Golf Club", "suburb": "Eastlakes", "lat": -33.925, "lon": 151.219, "status": "online", "platform": "miclub", "host": "www.eastlakegolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "chatswood", "name": "Newgreens Chatswood Golf Club", "suburb": "Chatswood", "lat": -33.799, "lon": 151.15, "status": "online", "platform": "miclub", "host": "chatswood.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "massey-park", "name": "Massey Park Golf Club", "suburb": "Concord", "lat": -33.8545, "lon": 151.098, "status": "online", "platform": "miclub", "host": "masseypark.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "balgowlah", "name": "Balgowlah Golf Club", "suburb": "Balgowlah", "lat": -33.799, "lon": 151.264, "status": "online", "platform": "miclub", "host": "www.balgowlahgolfclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "wakehurst", "name": "Wakehurst Golf Club", "suburb": "Seaforth", "lat": -33.77, "lon": 151.25, "status": "online", "platform": "miclub", "host": "www.wakehurstgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-ryde", "name": "North Ryde Golf Club", "suburb": "North Ryde", "lat": -33.801, "lon": 151.125, "status": "online", "platform": "miclub", "host": "northryde.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "warringah", "name": "Warringah Golf Club", "suburb": "Allambie Heights", "lat": -33.765, "lon": 151.24, "status": "online", "platform": "miclub", "host": "warringah.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "gordon", "name": "Gordon Golf Club", "suburb": "Gordon", "lat": -33.755, "lon": 151.152, "status": "online", "platform": "miclub", "host": "www.gordongolfcourse.com.au", "resource_id": 187, "enabled": true}, {"id": "bexley", "name": "Bexley Golf Club", "suburb": "Bexley", "lat": -33.94, "lon": 151.122, "status": "online", "platform": "miclub", "host": "www.bexleygolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "the-coast", "name": "The Coast Golf Club", "suburb": "Little Bay", "lat": -33.975, "lon": 151.245, "status": "online", "platform": "miclub", "host": "www.coastgolf.com.au", "resource_id": 3000000, "enabled": true}, {"id": "carnarvon", "name": "Carnarvon Golf Club", "suburb": "Auburn", "lat": -33.853, "lon": 151.036, "status": "online", "platform": "miclub", "host": "carnarvon.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "long-reef", "name": "Long Reef Golf Club", "suburb": "Collaroy", "lat": -33.735, "lon": 151.301, "status": "online", "platform": "miclub", "host": "longreef.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "sefton", "name": "Sefton Golf Club", "suburb": "Sefton", "lat": -33.892, "lon": 151.017, "status": "online", "platform": "miclub", "host": "sefton.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "north-turramurra", "name": "North Turramurra Public Golf Club", "suburb": "North Turramurra", "lat": -33.724, "lon": 151.163, "status": "online", "platform": "miclub", "host": "northturramurra.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "kareela", "name": "Kareela Golf Club", "suburb": "Kareela", "lat": -34.015, "lon": 151.085, "status": "online", "platform": "miclub", "host": "kareela.miclub.com.au", "resource_id": 3000000, "enabled": true}, {"id": "lane-cove", "name": "Lane Cove Golf", "suburb": "Lane Cove", "lat": -33.812, "lon": 151.14, "status": "online", "platform": "quick18", "host": "lanecove.quick18.com", "enabled": false, "note": "Books online through Quick18. Times aren't shown here yet, so this opens their tee sheet for the day you've selected.", "cta": "Book online at Lane Cove", "book_url": "https://lanecove.quick18.com/teetimes/searchmatrix?teedate={date}"}, {"id": "bonnie-doon", "name": "Bonnie Doon", "suburb": "Pagewood", "lat": -33.935, "lon": 151.225, "status": "private", "platform": "none", "enabled": false, "phone": "(02) 9349 2101", "note": "Completely private. Members and their guests only."}, {"id": "the-lakes", "name": "The Lakes", "suburb": "Eastlakes", "lat": -33.9235, "lon": 151.213, "status": "enquiry", "platform": "none", "enabled": false, "phone": "(02) 9669 1311", "note": "Visitors by enquiry only (online form or phone). Visitor times: Mon from 9am, Tue from 12:30pm, Thu, Fri from 1:30pm. Cart $70, clubs $75.", "cta": "Request a tee time", "book_url": "https://thelakesgolfclub.com.au/cms/golf-booking-enquiry/"}];
-const FROMS=[{n:"Sydney CBD",la:-33.8688,lo:151.2093},{n:"Parramatta",la:-33.815,lo:151.0},{n:"Chatswood",la:-33.797,lo:151.181},{n:"Manly",la:-33.797,lo:151.288},{n:"Cronulla",la:-34.058,lo:151.152},{n:"Penrith",la:-33.751,lo:150.694},{n:"Melbourne CBD",la:-37.8136,lo:144.9631}];
 // Each region has its own times file, so a visit only downloads the times near the chosen place.
-// A course without a "region" is in NSW & ACT. la/lo is where that region's sunset is worked out.
-const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down the South Coast to Eden",la:-33.87,lo:151.21},
-  vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96}};
+// A course without a "region" is in NSW & ACT. la/lo is where that region's sunset is worked out,
+// and cbd is the city's centre, offered as a starting place.
+const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down the South Coast to Eden",la:-33.87,lo:151.21,cbd:{n:"Sydney CBD",la:-33.8688,lo:151.2093}},
+  vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96,cbd:{n:"Melbourne CBD",la:-37.8136,lo:144.9631}}};
+// The cities with live times, A to Z, so no city comes first by choice.
+const CITIES=Object.values(REGIONS).map(r=>r.cbd).sort((a,b)=>a.n.localeCompare(b.n));
+// Where to start before anyone picks a place: the covered city nearest the browser's time zone city,
+// which every browser reports without asking. Outside Australia, the first city A to Z.
+const HOME=(()=>{const TZ={Sydney:[-33.87,151.21],ACT:[-35.28,149.13],Canberra:[-35.28,149.13],NSW:[-33.87,151.21],Melbourne:[-37.81,144.96],Victoria:[-37.81,144.96],
+    Brisbane:[-27.47,153.03],Queensland:[-27.47,153.03],Lindeman:[-20.45,149.04],Adelaide:[-34.93,138.6],South:[-34.93,138.6],Broken_Hill:[-31.95,141.45],Yancowinna:[-31.95,141.45],
+    Perth:[-31.95,115.86],West:[-31.95,115.86],Eucla:[-31.68,128.88],Hobart:[-42.88,147.33],Tasmania:[-42.88,147.33],Currie:[-39.93,143.85],Darwin:[-12.46,130.84],North:[-12.46,130.84],
+    Lord_Howe:[-31.55,159.08],LHI:[-31.55,159.08]};
+  let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
+  const at=/^Australia\//.test(tz)&&TZ[tz.slice(10)];if(!at)return CITIES[0];
+  const d=c=>(c.la-at[0])**2+((c.lo-at[1])*Math.cos(at[0]*Math.PI/180))**2;return CITIES.reduce((a,b)=>d(b)<d(a)?b:a)})();
+// The last few places someone picked, kept on this device, are what the place box offers first.
+const RECENTK="tee-recent",RECENT_MAX=5;
+const recent=()=>{try{const a=JSON.parse(localStorage.getItem(RECENTK)||"[]");return Array.isArray(a)?a.filter(p=>p&&p.n&&Number.isFinite(p.la)&&Number.isFinite(p.lo)):[]}catch(e){return[]}};
+const remember=p=>{try{localStorage.setItem(RECENTK,JSON.stringify([p,...recent().filter(q=>q.n.toLowerCase()!=p.n.toLowerCase())].slice(0,RECENT_MAX)))}catch(e){}};
 const regionOf=c=>c.region||"nsw";
 const $=id=>document.getElementById(id);
 let ALL=EMBED_COURSES,COURSES=ALL,REG=null,TIMES=[],demo=false,day=0,shown=12,rows=[],ME=null,START=null,view="list",M=null,LY=null,fitKey="";
@@ -193,12 +208,13 @@ const SAVED=["players","holes","from","to","dist","price","sort"],KEY="tee-filte
 // The starting point is only remembered when someone picks a place; otherwise it's their location.
 const MY_PLACE="My location";
 // What the suburb box shows: the chosen place, nothing when "Near me" is on, or the default.
-const placeName=()=>START?START.n:ME?"":FROMS[0].n;
+const placeName=()=>START?START.n:ME?"":HOME.n;
 const markNear=()=>{$("nearMe").setAttribute("aria-pressed",String(!START&&!!ME));$("where").value=placeName()};
 const savePlace=()=>{try{if(START)localStorage.setItem(PLACE,JSON.stringify(START));else localStorage.removeItem(PLACE)}catch(e){}};
 const restorePlace=()=>{let v=null;try{v=JSON.parse(localStorage.getItem(PLACE))}catch(e){}
-  if(typeof v=="number")v=FROMS[v]; // saved before suburbs could be typed
-  START=v&&v.n&&Number.isFinite(v.la)&&Number.isFinite(v.lo)?v:null;markNear()};
+  START=v&&v.n&&Number.isFinite(v.la)&&Number.isFinite(v.lo)?v:null; // an old saved list number isn't an object, so it's dropped
+  if(START&&!recent().length)remember(START); // a place saved before recent places were kept
+  markNear()};
 // "Near me" asks the browser for your location; choosing it again later reuses the last fix.
 const nearMe=()=>{const b=$("nearMe");whereMsg("");
   const use=()=>{START=null;savePlace();markNear();shown=12;moved()};
@@ -211,7 +227,7 @@ const nearMe=()=>{const b=$("nearMe");whereMsg("");
 const locate=()=>{if(START||!navigator.permissions||!navigator.geolocation)return;
   navigator.permissions.query({name:"geolocation"}).then(r=>{if(r.state=="granted"&&!START)navigator.geolocation.getCurrentPosition(p=>{if(START)return;ME={la:p.coords.latitude,lo:p.coords.longitude};markNear();moved()},()=>{},{timeout:10000,maximumAge:600000})}).catch(()=>{})};
 const whereMsg=t=>{$("whereMsg").textContent=t;$("whereMsg").hidden=!t};
-const startAt=p=>{START=p;markNear();whereMsg("");shown=12;savePlace();moved()};
+const startAt=p=>{START=p;remember(p);markNear();whereMsg("");shown=12;savePlace();moved()};
 // Looks up what someone typed, once they've finished. OpenStreetMap's rules don't allow searching on every keystroke.
 const FOUND=new Map();let lookup=0,pending="",SUBURBS=[];
 // Suburbs and towns near the courses, so the box can suggest them as you type without asking a server.
@@ -222,7 +238,7 @@ async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase();
   if(!q){$("where").value=placeName();whereMsg("");return}
   if(k==MY_PLACE.toLowerCase()||k=="near me"){nearMe();return}
   if(START&&k==START.n.toLowerCase()){whereMsg("");return}
-  const known=FROMS.find(f=>f.n.toLowerCase()==k)||FOUND.get(k);
+  const known=[...recent(),...CITIES].find(f=>f.n.toLowerCase()==k)||FOUND.get(k);
   if(known){startAt(known);return}
   whereMsg("Finding "+q+"…");pending=k;
   try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", Australia",countrycodes:"au",limit:5};
@@ -234,11 +250,14 @@ async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase();
   catch(e){if(id==lookup)whereMsg("We couldn’t look that up just now. Please try again.")}
   finally{if(id==lookup)pending=""}}
 // One box: click to type, and the list of places opens at the same time and narrows as you type.
-function placeBox(){const w=$("where"),ul=$("placeList"),all=FROMS.map(f=>f.n);let items=[],active=-1;
+// Before typing it shows your recent places, or the covered cities A to Z if you have none.
+// Typing searches recent places, the cities and every suburb in places.json.
+function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
   const close=()=>{ul.hidden=true;w.setAttribute("aria-expanded","false");w.removeAttribute("aria-activedescendant");active=-1};
   const mark=()=>{[...ul.children].forEach((li,i)=>{li.classList.toggle("on",i==active);li.setAttribute("aria-selected",i==active)});
     if(active>=0){w.setAttribute("aria-activedescendant","place"+active);ul.children[active].scrollIntoView({block:"nearest"})}else w.removeAttribute("aria-activedescendant")};
-  const draw=narrow=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"";
+  const draw=narrow=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"",mine=recent().map(p=>p.n);
+    const all=q?[...new Set([...mine,...CITIES.map(c=>c.n)])]:mine.length?mine:CITIES.map(c=>c.n);
     items=all.filter(n=>n.toLowerCase().includes(q)).map(n=>({text:n,pick:n}));
     if(q.length>=2){const have=new Set(items.map(it=>it.pick.toLowerCase())),at=n=>{const l=n.toLowerCase();return l.startsWith(q)?0:l.includes(" "+q)?1:-1};
       items=items.concat(SUBURBS.filter(p=>!have.has(p.n.toLowerCase())&&at(p.n)>=0).sort((a,b)=>at(a.n)-at(b.n)||a.n.length-b.n.length||a.n.localeCompare(b.n)).slice(0,Math.max(0,8-items.length)).map(p=>({text:p.n,pick:p.n})))}
@@ -311,7 +330,7 @@ function showCourse(id){const y=scrollY;setView("list");backTo={id,y};$("backMap
   el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
 function drawMap(groups,chip,card,pf,w,dm){
   if(!window.L||view!="map")return;
-  if(!M){M=L.map("map",{zoomSnap:.25});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);LY=L.layerGroup().addTo(M)}
+  if(!M){L.Popup.prototype.options.autoPan=false;M=L.map("map",{zoomSnap:.25});M.on("popupopen",e=>fitPopup(e.popup));L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);LY=L.layerGroup().addTo(M)}
   M.invalidateSize();LY.clearLayers();MK={};
   const live=new Set(groups.map(a=>a[0].course)),pts=[[w.lat??w.la,w.lo]];
   COURSES.filter(c=>!live.has(c.id)).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away${c.par?" · Par "+c.par:""}</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
@@ -346,7 +365,7 @@ async function loadRegion(reg){if(reg==REG)return;REG=reg;COURSES=ALL.filter(c=>
     n.classList.remove("warn");$("ncourses").textContent=new Set(TIMES.map(t=>t.course)).size}
   catch(e){if(REG!=reg)return;demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.classList.add("warn");n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}}
 // After the place changes: switch region if the nearest course is in another one, then redraw.
-async function moved(){const w=START||ME||FROMS[0],reg=regionAt(w);
+async function moved(){const w=START||ME||HOME,reg=regionAt(w);
   if(reg!=REG){$("count").textContent="Loading tee times…";await loadRegion(reg);
     if((picked&&iso(picked)>iso(addDays(7)))||[...sel].some(i=>i>7))await loadFar()}
   render()}
@@ -387,13 +406,13 @@ function setup(){
   $("vList").onclick=()=>setView("list");$("vMap").onclick=()=>setView("map");
   $("more").onclick=()=>{shown+=12;render()};let cols=colsNow();
   addEventListener("resize",()=>{const n=colsNow();if(n!=cols&&view=="list"){cols=n;render()}});
-  loadRegion(regionAt(START||ME||FROMS[0])).then(()=>{
+  loadRegion(regionAt(START||ME||HOME)).then(()=>{
     const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0&&!sq.has("d")){day=first;sel=new Set([day]);markDays()}
     if(view=="map"){view="list";setView("map")}
     if(sharedPick){$("pick").value=sharedPick;pickDate()}else if([...sel].some(i=>i>7))show();else render()})}
 function render(){
   closePick();PICKS.length=0;
-  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||FROMS[0],pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,RG.la,RG.lo)-ROUND_MINS);
+  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,RG.la,RG.lo)-ROUND_MINS);
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
    .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
@@ -443,6 +462,16 @@ const DIRK="tee-dir-shut";
 function groupsShut(){try{const s=JSON.parse(localStorage.getItem(DIRK)||"null");if(s)return s}catch(e){}return{}}  // a group is folded unless it was opened
 // After "See all" on the map: back to the same spot, with that club's popup open.
 let backTo=null,MK={};
+// A popup opens without moving the map. One that would spill over an edge of the map is moved inside it instead,
+// below its marker if there's no room above, and then loses its pointer, which would no longer touch the marker.
+function fitPopup(p){const el=p.getElement(),src=p._source&&p._source.getElement&&p._source.getElement();if(!el)return;
+  if(!p._home)p._home=L.point(p.options.offset);p.options.offset=p._home;p.update();
+  const pad=8,m=M.getContainer().getBoundingClientRect(),r=el.getBoundingClientRect(),
+    mk=src?Math.max(...[src,...src.querySelectorAll("*")].map(x=>x.getBoundingClientRect().bottom)):null; // a price marker's box is empty; its label isn't
+  let dx=0,dy=0;
+  if(r.left<m.left+pad)dx=m.left+pad-r.left;else if(r.right>m.right-pad)dx=m.right-pad-r.right;
+  if(r.top<m.top+pad){dy=(mk!=null?mk+6:m.top+pad)-r.top;if(r.bottom+dy>m.bottom-pad)dy=m.top+pad-r.top}
+  el.classList.toggle("nudged",!!(dx||dy));if(dx||dy){p.options.offset=p._home.add([Math.round(dx),Math.round(dy)]);p.update()}}
 $("backMap").onclick=()=>{const b=backTo;setView("map");loadMap().then(()=>{scrollTo(0,b.y);if(MK[b.id])MK[b.id].openPopup()})};
 // Clicking a time shows its details first. Ctrl, Cmd or Shift clicks still go straight to the club.
 const PICKS=[];
