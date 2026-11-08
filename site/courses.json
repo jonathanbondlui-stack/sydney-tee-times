@@ -3541,7 +3541,7 @@
  },
  {
   "id": "rosebud",
-  "name": "Rosebud Country Club",
+  "name": "Rosebud Country Club – North Course",
   "suburb": "Rosebud",
   "lat": -38.3828,
   "lon": 144.8986,
@@ -3549,6 +3549,31 @@
   "platform": "miclub",
   "host": "rosebud.miclub.com.au",
   "resource_id": 3000000,
+  "split": [
+   {
+    "match": "South Course",
+    "to": "rosebud-south"
+   }
+  ],
+  "par": 71,
+  "holes": 18,
+  "enabled": true,
+  "region": "vic",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "rosebud-south",
+  "name": "Rosebud Country Club – South Course",
+  "suburb": "Rosebud",
+  "lat": -38.3828,
+  "lon": 144.8986,
+  "status": "online",
+  "platform": "miclub",
+  "host": "rosebud.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "rosebud",
+  "par": 72,
+  "holes": 18,
   "enabled": true,
   "region": "vic",
   "checked": "2026-11-08"
@@ -3563,6 +3588,32 @@
   "platform": "miclub",
   "host": "dunes.miclub.com.au",
   "resource_id": 3000000,
+  "split": [
+   {
+    "match": "^Cups",
+    "to": "the-dunes-cups"
+   }
+  ],
+  "par": 72,
+  "holes": 18,
+  "enabled": true,
+  "region": "vic",
+  "website": "https://www.dunesgolf.com.au/",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "the-dunes-cups",
+  "name": "The Dunes – Cups Course",
+  "suburb": "St Andrews Beach",
+  "lat": -38.4032,
+  "lon": 144.8265,
+  "status": "online",
+  "platform": "miclub",
+  "host": "dunes.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "the-dunes",
+  "par": 33,
+  "holes": 9,
   "enabled": true,
   "region": "vic",
   "website": "https://www.dunesgolf.com.au/",
@@ -3570,7 +3621,7 @@
  },
  {
   "id": "moonah-links",
-  "name": "Moonah Links",
+  "name": "Moonah Links – Open Course",
   "suburb": "Fingal",
   "lat": -38.406,
   "lon": 144.8544,
@@ -3578,6 +3629,36 @@
   "platform": "miclub",
   "host": "moonah.miclub.com.au",
   "resource_id": 3000000,
+  "split": [
+   {
+    "match": "^Trackman",
+    "to": null
+   },
+   {
+    "match": "^Legends",
+    "to": "moonah-legends"
+   }
+  ],
+  "par": 72,
+  "holes": 18,
+  "enabled": true,
+  "region": "vic",
+  "website": "https://www.moonahlinks.com.au/",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "moonah-legends",
+  "name": "Moonah Links – Legends Course",
+  "suburb": "Fingal",
+  "lat": -38.406,
+  "lon": 144.8544,
+  "status": "online",
+  "platform": "miclub",
+  "host": "moonah.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "moonah-links",
+  "par": 72,
+  "holes": 18,
   "enabled": true,
   "region": "vic",
   "website": "https://www.moonahlinks.com.au/",
@@ -3683,7 +3764,7 @@
  },
  {
   "id": "13th-beach",
-  "name": "13th Beach Golf Links",
+  "name": "13th Beach – Beach Course",
   "suburb": "Barwon Heads",
   "lat": -38.2758,
   "lon": 144.4565,
@@ -3691,6 +3772,52 @@
   "platform": "miclub",
   "host": "13thbeach.miclub.com.au",
   "resource_id": 3000000,
+  "split": [
+   {
+    "match": "^Short Course",
+    "to": "13th-beach-short"
+   },
+   {
+    "match": "^Creek",
+    "to": "13th-beach-creek"
+   }
+  ],
+  "par": 72,
+  "holes": 18,
+  "enabled": true,
+  "region": "vic",
+  "website": "http://www.13thbeach.net/",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "13th-beach-short",
+  "name": "13th Beach – Short Course",
+  "suburb": "Barwon Heads",
+  "lat": -38.2758,
+  "lon": 144.4565,
+  "status": "online",
+  "platform": "miclub",
+  "host": "13thbeach.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "13th-beach",
+  "par": 27,
+  "holes": 9,
+  "enabled": true,
+  "region": "vic",
+  "website": "http://www.13thbeach.net/",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "13th-beach-creek",
+  "name": "13th Beach – Creek Course",
+  "suburb": "Barwon Heads",
+  "lat": -38.2758,
+  "lon": 144.4565,
+  "status": "online",
+  "platform": "miclub",
+  "host": "13thbeach.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "13th-beach",
   "enabled": true,
   "region": "vic",
   "website": "http://www.13thbeach.net/",
@@ -3715,7 +3842,7 @@
  },
  {
   "id": "churchill-waverley",
-  "name": "Churchill-Waverley Golf & Bowls Club",
+  "name": "Churchill-Waverley – Rowville",
   "suburb": "Rowville",
   "lat": -37.9388,
   "lon": 145.2381,
@@ -3723,6 +3850,30 @@
   "platform": "miclub",
   "host": "waverley.miclub.com.au",
   "resource_id": 3000000,
+  "split": [
+   {
+    "match": "Endeavour Hills|Churchill Park",
+    "to": "churchill-park"
+   }
+  ],
+  "par": 72,
+  "holes": 18,
+  "enabled": true,
+  "region": "vic",
+  "website": "https://www.waverleygolfclub.com.au/",
+  "checked": "2026-11-08"
+ },
+ {
+  "id": "churchill-park",
+  "name": "Churchill-Waverley – Endeavour Hills",
+  "suburb": "Endeavour Hills",
+  "lat": -37.9613,
+  "lon": 145.257,
+  "status": "online",
+  "platform": "miclub",
+  "host": "waverley.miclub.com.au",
+  "resource_id": 3000000,
+  "part_of": "churchill-waverley",
   "par": 72,
   "holes": 18,
   "enabled": true,
@@ -4225,19 +4376,6 @@
   "suburb": "Sandhurst",
   "lat": -38.0817,
   "lon": 145.2085,
-  "status": "members",
-  "platform": "none",
-  "enabled": false,
-  "region": "vic",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
- },
- {
-  "id": "churchill-park",
-  "name": "Churchill Park Golf Club",
-  "suburb": "Endeavour Hills",
-  "lat": -37.9613,
-  "lon": 145.257,
   "status": "members",
   "platform": "none",
   "enabled": false,

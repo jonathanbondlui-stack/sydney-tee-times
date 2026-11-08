@@ -134,5 +134,21 @@ assert limited_to("Mid Week - 13 - 17 Year Old 18 Holes") == {"Juniors"}
 assert limited_to("Midweek - 13-17 Year Old 9 Holes") == {"Juniors"}
 assert limited_to("Midweek Over 60's") == {"Seniors"}
 assert limited_to("RACV Member Required to Show Member Card") == {"Partner club members"}
+assert not limited_to("Non RACV Member (Off Peak)") and not limited_to("Non-Wests Member")
+torquay = [{"price": 80.0, "label": "RACV Member Required to Show Member Card (Off Peak)"},
+           {"price": 100.0, "label": "Non RACV Member (Off Peak)"}, {"price": 35.0, "label": "Junior (Under 18)"}]
+assert headline_fee(torquay) == (torquay[1], ""), headline_fee(torquay)
 assert not limited_to("Adult Midweek 18H") and not limited_to("2026 Green Fee - 9 Holes") and not limited_to("Adult Midweek 13 Holes")
 print("victorian rate tests passed")
+
+# Clubs that book several courses on one site
+from build_feed import apply_splits, with_parts
+club = [{"id": "moonah-links", "split": [{"match": r"^Trackman", "to": None}, {"match": r"^Legends", "to": "moonah-legends"}]},
+        {"id": "moonah-legends", "part_of": "moonah-links"}, {"id": "other"}]
+got = apply_splits([{"course": "moonah-links", "group": "Open Course - 18 Holes", "tee": "1st Tee"},
+                    {"course": "moonah-links", "group": "Legends Course - 18 Holes", "tee": "1st Tee"},
+                    {"course": "moonah-links", "group": "Trackman", "tee": "Trackman"},
+                    {"course": "other", "group": "Legends", "tee": ""}], club)
+assert [r["course"] for r in got] == ["moonah-links", "moonah-legends", "other"], got
+assert with_parts(["moonah-links", "other"], club) == ["moonah-links", "moonah-legends", "other"]
+print("split tests passed")

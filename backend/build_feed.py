@@ -168,8 +168,9 @@ _LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|
             "Students": re.compile(r"\bstudents?\b", re.I),
             "Concession": re.compile(r"\bconcession", re.I),
             "Members' guests": re.compile(r"\bmembers?'?s?\s+guests?\b", re.I),
-            # rates for members of a partner club, such as "Wests Member 18 Holes" at Port Kembla, "DLC Member" at The Grange or "RACV Member" at Torquay
-            "Partner club members": re.compile(r"\b(?:wests|dlc|rsl|leagues|racv)\s+members?\b", re.I)}
+            # rates for members of a partner club, such as "Wests Member 18 Holes" at Port Kembla, "DLC Member" at The Grange or
+            # "RACV Member" at Torquay, but not the public rate beside it, "Non RACV Member"
+            "Partner club members": re.compile(r"(?<!non )(?<!non-)\b(?:wests|dlc|rsl|leagues|racv)\s+members?\b", re.I)}
 
 def limited_to(label):
     """Who a rate is limited to, by its name. Empty means anyone can book it."""
@@ -440,10 +441,37 @@ def collect_golfnow(c, today, first=0, last=DAYS):
 
 COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup, "golfnow": collect_golfnow}
 
+def apply_splits(rows, courses):
+    """Some clubs book more than one course on one site. Such a club lists "split" rules,
+    {"match": regex, "to": course id or null}, tried in order against each time's "group | tee".
+    The first match moves the time to that course (its entry has "part_of" the club), or drops
+    it when "to" is null, as for simulator bookings. Times that match no rule stay with the club."""
+    rules = {c["id"]: [(re.compile(s["match"], re.I), s.get("to")) for s in c["split"]]
+             for c in courses if c.get("split")}
+    out = []
+    for r in rows:
+        for rx, to in rules.get(r["course"], ()):
+            if rx.search(f'{r.get("group", "")} | {r.get("tee", "")}'):
+                if to:
+                    out.append({**r, "course": to})
+                break
+        else:
+            out.append(r)
+    return out
+
+def with_parts(failed, courses):
+    """Failed club IDs plus the courses split off from them, which fail along with the club."""
+    parts = {}
+    for c in courses:
+        if c.get("part_of"):
+            parts.setdefault(c["part_of"], []).append(c["id"])
+    return [x for cid in failed for x in [cid, *parts.get(cid, [])]]
+
 def build(courses, today, first, last):
     """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
-    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS]
+    # A course split off another club's site is read with that club, not on its own.
+    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
     # TeeItUp's API cuts us off partway through a long run, so a different TeeItUp club goes first each hour.
     tee = [c for c in live if c["platform"] == "teeitup"]
     if tee:
@@ -472,7 +500,7 @@ def build(courses, today, first, last):
             failures.append((c["id"], e))
     for cid, e in failures[:20]:
         print(f"FAIL {cid}: {e}", file=sys.stderr)
-    return out, failures, tried
+    return apply_splits(out, courses), failures, tried
 
 def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS):
     """Add each failed club's times from the last published feed, so one bad refresh doesn't
@@ -573,6 +601,7 @@ def far_due():
 def write_regions(rows, failed, courses, far=False):
     """Write one feed per region, each carrying over its own clubs' times after a failed read."""
     region = {c["id"]: region_of(c) for c in courses}
+    failed = with_parts(failed, courses)
     for r in REGIONS:
         mine = [x for x in rows if region.get(x["course"], "nsw") == r]
         name = feed_name(r, far)
