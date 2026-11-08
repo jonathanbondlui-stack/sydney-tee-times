@@ -2988,7 +2988,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.growlingfroggolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "goonawarra",
@@ -3061,7 +3063,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.keilorgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70,
+  "holes": 18
  },
  {
   "id": "yering-meadows",
@@ -3121,7 +3125,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.eynesburygolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "yarra-bend",
@@ -3193,7 +3199,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "rowville-lakes",
@@ -3326,7 +3334,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://eastgeelonggolfclub.com.au",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70,
+  "holes": 18
  },
  {
   "id": "clifton-springs",
@@ -3371,7 +3381,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://curlewisgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71,
+  "holes": 18
  },
  {
   "id": "queenscliff",
@@ -3446,7 +3458,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.langlanggolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70,
+  "holes": 18
  },
  {
   "id": "torquay",
@@ -3534,7 +3548,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.pigc.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72,
+  "holes": 18
  },
  {
   "id": "cape-schanck",
@@ -3549,7 +3565,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.racv.com.au/travel-experiences/resorts/cape-schanck/golf.html",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70,
+  "holes": 18
  },
  {
   "id": "flinders",
