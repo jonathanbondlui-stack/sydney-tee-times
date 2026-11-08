@@ -152,3 +152,7 @@ got = apply_splits([{"course": "moonah-links", "group": "Open Course - 18 Holes"
 assert [r["course"] for r in got] == ["moonah-links", "moonah-legends", "other"], got
 assert with_parts(["moonah-links", "other"], club) == ["moonah-links", "moonah-legends", "other"]
 print("split tests passed")
+
+from build_feed import _PASS
+assert _PASS.search("Annual Pass Booking") and _PASS.search("Pass Holders") and not _PASS.search("Twilight Passport")
+print("pass rate tests passed")

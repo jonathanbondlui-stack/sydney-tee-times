@@ -256,14 +256,15 @@ def collect_miclub(c, today, first=0, last=DAYS):
 def quick18_url(c, date):
     return f"https://{c['host']}/teetimes/searchmatrix?teedate={date.replace('-', '')}"
 
+_PASS = re.compile(r"\b(?:annual|season|yearly)\s+pass|\bpass\s*holders?\b", re.I)  # $0 bookings for pass holders
 _Q_ROW = re.compile(r"<tr>(.*?)</tr>", re.S)
 _Q_CELL = re.compile(r'<td class="matrixsched[^"]*">(.*?)</td>', re.S)
 
 def parse_quick18(html, course, date):
     """Parse a Quick18 tee sheet page into tee times, with one row per public rate at each time.
 
-    Verified against Lane Cove's pages. Member rates are left out, and concession rates are only
-    listed in fees. Returns [] when the page has no tee sheet or shows a different date.
+    Verified against Lane Cove's pages. Member and pass-holder rates are left out, and rates for seniors,
+    juniors or concessions are only listed in fees. Returns [] when the page has no tee sheet or shows a different date.
     """
     table = re.search(r'<table class="matrixTable".*?</table>', html, re.S)
     if not table:
@@ -286,11 +287,12 @@ def parse_quick18(html, course, date):
         for rate, cell in zip(rates, _Q_CELL.findall(body)):
             price = re.search(r'class="mtrxPrice">\$([\d.,]+)', cell)
             link = re.search(r'<a class="[^"]*teebutton[^"]*" href="([^"]+)"', cell)
-            if price and link and not re.search(r"member", rate, re.I):
+            if price and link and not re.search(r"member", rate, re.I) and not _PASS.search(rate) \
+                    and float(price.group(1).replace(",", "")) > 0:
                 fees.append({"price": float(price.group(1).replace(",", "")), "label": rate,
                              "url": f"https://{course['host']}{unescape(link.group(1))}"})
         for fee in fees:
-            if re.search(r"concession", fee["label"], re.I):
+            if limited_to(fee["label"]):  # seniors, juniors and the like stay in fees but get no row of their own
                 continue
             hm = re.search(r"(\d+)\s*-?\s*holes?", fee["label"], re.I)
             rows.append({"course": course["id"], "date": date, "time": time24, "holes": int(hm.group(1)) if hm else None,

@@ -4482,11 +4482,14 @@
   "suburb": "Middle Park",
   "lat": -37.8428,
   "lon": 144.9733,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book online",
+  "note": "Books through Chronogolf, which the site doesn't read yet.",
+  "book_url": "https://www.chronogolf.com/en/club/15748/widget?medium=widget&source=club#?course_id=18100&nb_holes=18",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "brighton",
@@ -4494,12 +4497,15 @@
   "suburb": "Brighton East",
   "lat": -37.9264,
   "lon": 145.0166,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book a tee time",
+  "book_url": "https://brightongolfcourse.com.au/book/",
+  "note": "Books online on the course's own booking page. Times aren't shown here yet.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.brightongolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "ivanhoe",
@@ -4507,12 +4513,15 @@
   "suburb": "Ivanhoe East",
   "lat": -37.7805,
   "lon": 145.0558,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book online",
+  "book_url": "https://secure.activecarrot.com/customer/booking/golf/1125",
+  "note": "Books online through ActiveCarrot, which needs a free account. Times aren't shown here.",
   "enabled": false,
   "region": "vic",
   "website": "http://www.ivanhoegolfcourse.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "royal-park",
@@ -4520,12 +4529,15 @@
   "suburb": "Parkville",
   "lat": -37.7808,
   "lon": 144.9531,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "host": "royalpark18.quick18.com",
+  "cta": "Book online at Royal Park",
+  "book_url": "https://royalpark18.quick18.com/teetimes/searchmatrix?teedate={date}",
+  "enabled": true,
   "region": "vic",
   "website": "http://www.royalparkgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "wattle-park",
@@ -4533,12 +4545,14 @@
   "suburb": "Surrey Hills",
   "lat": -37.8395,
   "lon": 145.101,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "phone": "(03) 9808 2455",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
   "website": "http://www.wattleparkgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "oakleigh",
@@ -4546,11 +4560,14 @@
   "suburb": "Oakleigh East",
   "lat": -37.8913,
   "lon": 145.1018,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book a tee time",
+  "book_url": "https://oakleighgolf.com.au/book/",
+  "note": "Books online on the course's own booking page. Times aren't shown here yet.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "waterford-valley",
@@ -4558,11 +4575,12 @@
   "suburb": "Knoxfield",
   "lat": -37.904,
   "lon": 145.2621,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "centenary-park",
@@ -4570,12 +4588,14 @@
   "suburb": "Frankston North",
   "lat": -38.1286,
   "lon": 145.1773,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "centenaryparkgc.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
   "website": "https://www.centenaryparkgolfclub.org/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "edithvale",
@@ -4583,12 +4603,17 @@
   "suburb": "Edithvale",
   "lat": -38.0362,
   "lon": 145.1228,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16574,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16574-edithvale-public-golf-course/search#date={gn_date}",
+  "enabled": true,
   "region": "vic",
   "website": "https://australasiangc.org.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "montuna",
@@ -4596,11 +4621,13 @@
   "suburb": "Guys Hill",
   "lat": -38.017,
   "lon": 145.3808,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "berwickmontuna.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "ranfurlie",
@@ -4608,12 +4635,14 @@
   "suburb": "Cranbourne West",
   "lat": -38.1206,
   "lon": 145.2443,
-  "status": "check",
   "platform": "none",
+  "status": "set_times",
+  "phone": "(03) 9788 8288",
+  "note": "Private members' club. Visitors can play at set times on Mondays and Fridays, and some Sunday midday times. Call the pro shop to book.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.amstel.org.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "ocean-grove",
@@ -4621,11 +4650,13 @@
   "suburb": "Ocean Grove",
   "lat": -38.26,
   "lon": 144.507,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "oceangrovegc.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "st-leonards",
@@ -4633,12 +4664,13 @@
   "suburb": "St Leonards",
   "lat": -38.1664,
   "lon": 144.7021,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.stleonards.golf/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "elcho-park",
@@ -4646,11 +4678,14 @@
   "suburb": "Lara",
   "lat": -38.0292,
   "lon": 144.3651,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book on TeeNet",
+  "book_url": "https://teenet.com.au/teenet",
+  "note": "Books online through TeeNet (listed as Lara), which needs a free account. Times aren't shown here.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "queens-park",
@@ -4658,11 +4693,13 @@
   "suburb": "Fyansford",
   "lat": -38.1469,
   "lon": 144.3176,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "queensparkgc.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "saint-andrews-beach",
@@ -4670,23 +4707,13 @@
   "suburb": "Fingal",
   "lat": -38.426,
   "lon": 144.849,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "standrews.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
- },
- {
-  "id": "pakenham",
-  "name": "Pakenham Golf Course",
-  "suburb": "Pakenham",
-  "lat": -38.0724,
-  "lon": 145.5077,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "safety-beach",
@@ -4694,12 +4721,13 @@
   "suburb": "Safety Beach",
   "lat": -38.3239,
   "lon": 144.9963,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
   "website": "https://safetybeachcountryclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "whittlesea",
@@ -4707,11 +4735,13 @@
   "suburb": "Humevale",
   "lat": -37.4997,
   "lon": 145.1705,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "phone": "(03) 9716 2607",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "ballan",
@@ -4719,36 +4749,14 @@
   "suburb": "Ballan",
   "lat": -37.5939,
   "lon": 144.2279,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "phone": "0409 798 757",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.ballangolfclub.com/",
-  "checked": "2026-11-08"
- },
- {
-  "id": "bembridge",
-  "name": "Bembridge Golf Course",
-  "suburb": "Pearcedale",
-  "lat": -38.2261,
-  "lon": 145.2391,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "vic",
-  "checked": "2026-11-08"
- },
- {
-  "id": "plenty-views-park",
-  "name": "Plenty Views Golf Park",
-  "suburb": "Plenty",
-  "lat": -37.6621,
-  "lon": 145.1262,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "studley-park",
@@ -4756,11 +4764,16 @@
   "suburb": "Abbotsford",
   "lat": -37.8054,
   "lon": 145.0073,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "host": "www.golfnow.com.au",
+  "facility_id": 18333,
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/18333-studley-greens/search#date={gn_date}",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "burnley",
@@ -4768,11 +4781,15 @@
   "suburb": "Burnley",
   "lat": -37.8292,
   "lon": 145.0166,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "host": "burnley.quick18.com",
+  "cta": "Book online at Burnley",
+  "book_url": "https://burnley.quick18.com/teetimes/searchmatrix?teedate={date}",
+  "holes": 9,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "gisborne",
@@ -4780,11 +4797,13 @@
   "suburb": "Gisborne",
   "lat": -37.4968,
   "lon": 144.5751,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "www.gisbornegolf.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "yarrambat-park",
@@ -4792,11 +4811,13 @@
   "suburb": "Yarrambat",
   "lat": -37.6289,
   "lon": 145.1262,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "www.yarrambatgolfclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "gardiners-run",
@@ -4804,13 +4825,15 @@
   "suburb": "Lilydale",
   "lat": -37.7355,
   "lon": 145.3493,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book at Chirnside Park",
+  "book_url": "https://www.chirnsideparkcc.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000",
+  "note": "Run with Chirnside Park Country Club, whose booking page takes its bookings. Its times aren't shown here separately yet.",
   "enabled": false,
   "region": "vic",
-  "note": "Run with Chirnside Park Country Club, which may take its bookings.",
   "website": "https://www.gardinersrun.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "melbourne-airport",
@@ -4832,11 +4855,12 @@
   "suburb": "Newtown",
   "lat": -38.1617,
   "lon": 144.3342,
-  "status": "check",
   "platform": "none",
+  "status": "walkup",
+  "note": "Par 3 course. No bookings, walk-ins only.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "altona-lakes",
@@ -4844,11 +4868,12 @@
   "suburb": "Williamstown North",
   "lat": -37.845,
   "lon": 144.8578,
-  "status": "check",
   "platform": "none",
+  "status": "phone",
+  "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "northcote",
@@ -4856,12 +4881,14 @@
   "suburb": "Brunswick East",
   "lat": -37.7605,
   "lon": 144.9837,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "northcotegc.miclub.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
   "website": "https://www.northcotegolfclub.com/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "malvern-valley",
@@ -4869,12 +4896,15 @@
   "suburb": "Ashburton",
   "lat": -37.8742,
   "lon": 145.0795,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book online",
+  "book_url": "https://malvernvalleygc.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000",
+  "note": "Books online through MiClub. Times aren't shown here because the booking page asks for a captcha.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.malvernvalleygolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "ringwood",
@@ -4882,12 +4912,15 @@
   "suburb": "Wantirna",
   "lat": -37.8359,
   "lon": 145.2227,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book online",
+  "book_url": "https://maroondah.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=3000000",
+  "note": "Books online through MiClub. Times aren't shown here because the booking page asks for a captcha.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.maroondahleisure.com.au/Our-venues/Ringwood-Golf/About-Ringwood-Golf-course",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "dorset",
@@ -4895,12 +4928,15 @@
   "suburb": "Kilsyth",
   "lat": -37.8079,
   "lon": 145.2992,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book online",
+  "book_url": "https://maroondah.miclub.com.au/guests/bookings/ViewPublicCalendar.msp?booking_resource_id=100884",
+  "note": "Books online through MiClub. Times aren't shown here because the booking page asks for a captcha.",
   "enabled": false,
   "region": "vic",
   "website": "https://www.maroondahleisure.com.au/venues/dorset-golf/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "raaf-williams-laverton",
@@ -4908,12 +4944,13 @@
   "suburb": "Laverton",
   "lat": -37.8569,
   "lon": 144.7618,
-  "status": "check",
   "platform": "none",
+  "status": "members",
+  "note": "Mainly a Defence golf club on the RAAF Williams base. Visitors can join club competitions; call the club first, and ask about getting onto the base.",
   "enabled": false,
   "region": "vic",
   "website": "https://raafwilliamsgolf.net.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "eagle-ridge",
@@ -4935,12 +4972,14 @@
   "suburb": "Mornington",
   "lat": -38.2082,
   "lon": 145.0601,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "www.morningtongolf.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
   "website": "https://www.morningtongolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "mount-derrimut",
@@ -4948,12 +4987,14 @@
   "suburb": "Derrimut",
   "lat": -37.7956,
   "lon": 144.7789,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "host": "mtderrimut.com.au",
+  "resource_id": 3000000,
+  "enabled": true,
   "region": "vic",
   "website": "https://mtderrimut.com.au/cms/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "riverside",
@@ -4961,11 +5002,14 @@
   "suburb": "Ascot Vale",
   "lat": -37.7791,
   "lon": 144.9006,
-  "status": "check",
   "platform": "none",
+  "status": "online",
+  "cta": "Book a tee time",
+  "book_url": "https://moveriverside.com.au/book/",
+  "note": "Books online on the course's own booking page. Times aren't shown here yet.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  },
  {
   "id": "dandenong-workers",
@@ -4973,10 +5017,11 @@
   "suburb": "Doveton",
   "lat": -37.992,
   "lon": 145.2291,
-  "status": "check",
   "platform": "none",
+  "status": "walkup",
+  "note": "No bookings, walk-ins only.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-09"
  }
 ]
