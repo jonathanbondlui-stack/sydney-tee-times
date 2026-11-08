@@ -3,12 +3,12 @@
 ```
 data/courses.json        the course directory (status, platform, location). Edit this to add courses.
 site/                    the website: static files, host anywhere (Cloudflare Pages, Netlify, GitHub Pages)
-backend/build_feed.py    builds site/tee-times.json from clubs' public booking pages
+backend/build_feed.py    builds site/tee-times-<region>.json from clubs' public booking pages
 ```
 
 ## How it fits together
-The site loads `courses.json` and `tee-times.json`. If the times file is missing it shows clearly labelled demo data.
-The builder runs about every 20 minutes and rewrites `tee-times.json`, which covers the next 7 days. Every 6 hours it also rewrites `tee-times-far.json`, which covers up to 28 days ahead and which the site only loads when someone picks a later date. Visitors always book on the club's own page.
+The site loads `courses.json`, then the times file for the region of the course nearest the chosen place (`tee-times-nsw.json` for NSW & ACT, `tee-times-vic.json` for Victoria). A course's `region` in `courses.json` says which file it's in; without one it's in NSW & ACT. To add a region, add it to `REGIONS` in `build_feed.py` and `index.html` and to the feed list in the workflow. If the times file is missing the site shows clearly labelled demo data.
+The builder runs about every 20 minutes and rewrites each region's `tee-times-<region>.json`, which covers the next 7 days. Every 6 hours it also rewrites `tee-times-far-<region>.json`, which covers up to 28 days ahead and which the site only loads when someone picks a later date. Visitors always book on the club's own page.
 
 ## To go live
 1. **Set your contact email** in `TEE_UA` so clubs can reach you. The builder won't fetch anything without it. Keep it out of the code, because the repo is public:

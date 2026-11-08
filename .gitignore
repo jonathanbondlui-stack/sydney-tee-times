@@ -5,6 +5,8 @@ site/tee-times.json
 site/tee-times.json.tmp
 site/tee-times-far.json
 site/tee-times-far.json.tmp
+site/tee-times-*.json
+site/tee-times-*.json.tmp
 # Private notes, kept out of this public repo
 COMMERCIAL-CHECKLIST.md
 # Local backups and saved debug pages

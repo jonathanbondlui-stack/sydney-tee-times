@@ -41,16 +41,19 @@ jobs:
       # place if a run fails, which keeps the last good feeds online. The far feed's age
       # also tells the builder when to rebuild it.
       - name: Fetch the last published feeds
+        # Each region has its own pair (REGIONS in build_feed.py). The two names without a region
+        # are from before the split; the builder shares them out to the regions once and removes them.
         run: |
-          curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times.json" -o site/tee-times.json || rm -f site/tee-times.json
-          curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/tee-times-far.json" -o site/tee-times-far.json || rm -f site/tee-times-far.json
+          for f in tee-times-nsw tee-times-far-nsw tee-times-vic tee-times-far-vic tee-times tee-times-far; do
+            curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/$f.json" -o "site/$f.json" || rm -f "site/$f.json"
+          done
       - name: Build the feed
         id: feed
         continue-on-error: true
         run: python backend/build_feed.py
       # Without a feed the site falls back to made-up demo data, so never publish that.
       - name: Check there is a feed to publish
-        run: test -s site/tee-times.json
+        run: test -s site/tee-times-nsw.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

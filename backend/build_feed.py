@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds site/tee-times.json from clubs' public guest timesheet pages.
+"""Builds site/tee-times-<region>.json from clubs' public guest timesheet pages.
 
 Polite by design: checks robots.txt, identifies itself, max 1 request/second per
 host, and skips any course marked enabled=false in data/courses.json.
@@ -23,7 +23,15 @@ MIN_GAP = 1.0  # seconds between requests to the same host
 HOST_GAP = {"phx-api-be-east-1b.kenna.io": 3.0}
 WORKERS = 16  # clubs read at the same time; each club's own site still gets at most one request per MIN_GAP
 CAL_STEP = 6  # days shown on one MiClub calendar page
-FAR_FEED = "tee-times-far.json"
+FAR_FEED = "tee-times-far.json"  # before the split by region; read once for carry-over, then removed
+NEAR_FEED = "tee-times.json"
+# Each region gets its own pair of feeds, so a visitor only downloads the times near them.
+# A course without a "region" is in NSW & ACT.
+REGIONS = ("nsw", "vic")
+def region_of(c):
+    return c.get("region", "nsw")
+def feed_name(region, far=False):
+    return f"tee-times-far-{region}.json" if far else f"tee-times-{region}.json"
 FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
 FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
 KEEP_HOURS = 12  # how long a club's last good times stand in when its refresh fails
@@ -471,10 +479,15 @@ def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS):
     make it vanish. Only times not yet passed are kept, and only for KEEP_HOURS after they were
     last read. Returns {course id: when its times were read} for the clubs carried over."""
     now = now or dt.datetime.now().astimezone()
-    try:
-        with open(os.path.join(ROOT, "site", name)) as fh:
-            prev = json.load(fh)
-    except (OSError, ValueError):
+    prev = None
+    for n in ([name] if isinstance(name, str) else name):  # the first one that's there
+        try:
+            with open(os.path.join(ROOT, "site", n)) as fh:
+                prev = json.load(fh)
+            break
+        except (OSError, ValueError):
+            pass
+    if prev is None:
         return {}
     today, clock = now.date().isoformat(), now.strftime("%H:%M")
     kept = {}
@@ -542,13 +555,62 @@ def write_feed(name, rows, kept=None):
     os.replace(tmp, path)
 
 def far_due():
-    """True when the far feed is missing or older than FAR_HOURS."""
+    """True when any region's far feed is missing or older than FAR_HOURS. Before the split,
+    the single far feed's age stands in, so the switch doesn't trigger an early rebuild."""
+    ages = []
+    for r in REGIONS:
+        for n in (feed_name(r, True), FAR_FEED):
+            try:
+                with open(os.path.join(ROOT, "site", n)) as fh:
+                    ages.append(dt.datetime.fromisoformat(json.load(fh)["generated_at"]))
+                break
+            except (OSError, ValueError, KeyError):
+                pass
+        else:
+            return True
+    return (dt.datetime.now(dt.timezone.utc) - min(ages)).total_seconds() >= FAR_HOURS * 3600
+
+def write_regions(rows, failed, courses, far=False):
+    """Write one feed per region, each carrying over its own clubs' times after a failed read."""
+    region = {c["id"]: region_of(c) for c in courses}
+    for r in REGIONS:
+        mine = [x for x in rows if region.get(x["course"], "nsw") == r]
+        name = feed_name(r, far)
+        kept = carry_over([name, FAR_FEED if far else NEAR_FEED], mine,
+                          [cid for cid in failed if region.get(cid, "nsw") == r],
+                          keep_hours=FAR_KEEP_HOURS if far else KEEP_HOURS)
+        write_feed(name, mine, kept)
+        print(f"  {name}: {len(mine)} times")
+
+def split_old_far(courses):
+    """Once, at the switch: share the single far feed out to the regions, keeping its age,
+    so later dates keep showing until the next far rebuild."""
     try:
         with open(os.path.join(ROOT, "site", FAR_FEED)) as fh:
-            made = dt.datetime.fromisoformat(json.load(fh)["generated_at"])
-    except (OSError, ValueError, KeyError):
-        return True
-    return (dt.datetime.now(dt.timezone.utc) - made).total_seconds() >= FAR_HOURS * 3600
+            old = json.load(fh)
+    except (OSError, ValueError):
+        return
+    region = {c["id"]: region_of(c) for c in courses}
+    rows = unpack(old)
+    for r in REGIONS:
+        path = os.path.join(ROOT, "site", feed_name(r, True))
+        if os.path.exists(path):
+            continue
+        mine = [x for x in rows if region.get(x["course"], "nsw") == r]
+        kept = {k: v for k, v in old.get("kept", {}).items() if region.get(k, "nsw") == r}
+        feed = {"generated_at": old["generated_at"], **pack(mine)}
+        if kept:
+            feed["kept"] = kept
+        with open(path, "w") as fh:
+            json.dump(feed, fh, separators=(",", ":"))
+
+def drop_old_feeds():
+    """Remove the feeds from before the split, so they aren't published again."""
+    for n in (NEAR_FEED, FAR_FEED):
+        try:
+            os.remove(os.path.join(ROOT, "site", n))
+        except OSError:
+            pass
 
 def main():
     ap = argparse.ArgumentParser()
@@ -581,17 +643,17 @@ def main():
     if not out or len(failures) > tried * 0.5:
         print("Too little data or too many failures. Keeping the previous feed.", file=sys.stderr)
         sys.exit(1)
-    kept = carry_over("tee-times.json", out, [cid for cid, _ in failures])
-    write_feed("tee-times.json", out, kept)
-    print(f"Wrote {len(out)} tee times from {tried - len(failures)} clubs.")
+    print(f"Writing {len(out)} tee times from {tried - len(failures)} clubs.")
+    write_regions(out, [cid for cid, _ in failures], courses)
+    split_old_far(courses)
     if far_due():
         out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS)
         if not out or len(failures) > tried * 0.5:
             print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
-            return
-        kept = carry_over(FAR_FEED, out, [cid for cid, _ in failures], keep_hours=FAR_KEEP_HOURS)
-        write_feed(FAR_FEED, out, kept)
-        print(f"Wrote {len(out)} later tee times from {tried - len(failures)} clubs.")
+        else:
+            print(f"Writing {len(out)} later tee times from {tried - len(failures)} clubs.")
+            write_regions(out, [cid for cid, _ in failures], courses, far=True)
+    drop_old_feeds()
 
 if __name__ == "__main__":
     main()
