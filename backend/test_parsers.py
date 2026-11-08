@@ -156,3 +156,8 @@ print("split tests passed")
 from build_feed import _PASS
 assert _PASS.search("Annual Pass Booking") and _PASS.search("Pass Holders") and not _PASS.search("Twilight Passport")
 print("pass rate tests passed")
+
+from build_feed import local_time
+assert local_time(utc(2026, 11, 5, 20, 0), "qld") == dt.datetime(2026, 11, 6, 6, 0)  # Brisbane has no daylight saving
+assert local_time(utc(2026, 11, 5, 20, 0), "vic") == dt.datetime(2026, 11, 6, 7, 0)
+print("local time tests passed")

@@ -44,7 +44,7 @@ jobs:
         # Each region has its own pair (REGIONS in build_feed.py). The two names without a region
         # are from before the split; the builder shares them out to the regions once and removes them.
         run: |
-          for f in tee-times-nsw tee-times-far-nsw tee-times-vic tee-times-far-vic tee-times tee-times-far; do
+          for f in tee-times-nsw tee-times-far-nsw tee-times-vic tee-times-far-vic tee-times-qld tee-times-far-qld tee-times tee-times-far; do
             curl -fsSL --retry 2 "${{ steps.pages.outputs.base_url }}/$f.json" -o "site/$f.json" || rm -f "site/$f.json"
           done
       - name: Build the feed

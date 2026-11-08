@@ -27,7 +27,7 @@ FAR_FEED = "tee-times-far.json"  # before the split by region; read once for car
 NEAR_FEED = "tee-times.json"
 # Each region gets its own pair of feeds, so a visitor only downloads the times near them.
 # A course without a "region" is in NSW & ACT.
-REGIONS = ("nsw", "vic")
+REGIONS = ("nsw", "vic", "qld")
 def region_of(c):
     return c.get("region", "nsw")
 def feed_name(region, far=False):
@@ -321,6 +321,13 @@ def sydney_time(utc):
     standard = change(4) <= utc < change(10)
     return (utc + dt.timedelta(hours=10 if standard else 11)).replace(tzinfo=None)
 
+def local_time(utc, region="nsw"):
+    """A course's local time for a UTC datetime. Queensland stays on UTC+10 all year; NSW, the ACT
+    and Victoria share Sydney's daylight saving."""
+    if region == "qld":
+        return (utc + dt.timedelta(hours=10)).replace(tzinfo=None)
+    return sydney_time(utc)
+
 def parse_teeitup(text, course, date):
     """Parse a TeeItUp tee time response. Each rate at a time becomes one row, as with Quick18.
 
@@ -332,7 +339,7 @@ def parse_teeitup(text, course, date):
     rows = []
     for day in json.loads(text):
         for t in day.get("teetimes", []):
-            when = sydney_time(dt.datetime.fromisoformat(t["teetime"].replace("Z", "+00:00")))
+            when = local_time(dt.datetime.fromisoformat(t["teetime"].replace("Z", "+00:00")), region_of(course))
             if when.date().isoformat() != date or not t.get("maxPlayers"):
                 continue
             fees = []
@@ -504,7 +511,7 @@ def build(courses, today, first, last):
         print(f"FAIL {cid}: {e}", file=sys.stderr)
     return apply_splits(out, courses), failures, tried
 
-def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS):
+def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS, region="nsw"):
     """Add each failed club's times from the last published feed, so one bad refresh doesn't
     make it vanish. Only times not yet passed are kept, and only for KEEP_HOURS after they were
     last read. Returns {course id: when its times were read} for the clubs carried over."""
@@ -519,7 +526,8 @@ def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS):
             pass
     if prev is None:
         return {}
-    today, clock = now.date().isoformat(), now.strftime("%H:%M")
+    here = local_time(now.astimezone(dt.timezone.utc), region)  # "passed" means passed at the course
+    today, clock = here.date().isoformat(), here.strftime("%H:%M")
     kept = {}
     for cid in failed:
         read_at = prev.get("kept", {}).get(cid, prev.get("generated_at"))
@@ -609,7 +617,7 @@ def write_regions(rows, failed, courses, far=False):
         name = feed_name(r, far)
         kept = carry_over([name, FAR_FEED if far else NEAR_FEED], mine,
                           [cid for cid in failed if region.get(cid, "nsw") == r],
-                          keep_hours=FAR_KEEP_HOURS if far else KEEP_HOURS)
+                          keep_hours=FAR_KEEP_HOURS if far else KEEP_HOURS, region=r)
         write_feed(name, mine, kept)
         print(f"  {name}: {len(mine)} times")
 
