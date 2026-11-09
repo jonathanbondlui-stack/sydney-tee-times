@@ -36,8 +36,15 @@ FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far fe
 FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
 KEEP_HOURS = 12  # how long a club's last good times stand in when its refresh fails
 FAR_KEEP_HOURS = 36  # the same for dates more than a week ahead, which change slowly and are only rebuilt every few hours
+# Time allowed for the far rebuild. Clubs not finished by then keep their last far times (for FAR_KEEP_HOURS),
+# so a slow queue (GolfNow is read one request at a time) can't push the whole run past the job's time limit.
+FAR_MINUTES = float(os.environ.get("TEE_FAR_MINUTES", "30"))
+
+class OutOfTime(Exception):
+    pass
 
 _robots, _last = {}, {}
+_stop_at = None  # set during the far rebuild: no new requests after this time
 
 def load_robots(host):
     """Fetch robots.txt with our own identifying user agent. Returns (parser or None, reason, text)."""
@@ -73,6 +80,8 @@ def allowed(url):
 def fetch(url, headers=None, data=None):
     if "@" not in UA or "YOUR_EMAIL_HERE" in UA:
         raise PermissionError("TEE_UA has no contact email, so not fetching")
+    if _stop_at and time.time() > _stop_at:
+        raise OutOfTime("out of time for this run; keeping the last times read")
     ok, reason = allowed(url)
     if not ok:
         raise PermissionError(f"{reason}")
@@ -481,12 +490,13 @@ def build(courses, today, first, last):
     out, failures, tried = [], [], 0
     # A course split off another club's site is read with that club, not on its own.
     live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
-    # TeeItUp's API cuts us off partway through a long run, so a different TeeItUp club goes first each hour.
-    tee = [c for c in live if c["platform"] == "teeitup"]
-    if tee:
-        k = int(time.time() // 3600) % len(tee)
-        tee = tee[k:] + tee[:k]
-        live = [c for c in live if c["platform"] != "teeitup"] + tee
+    # TeeItUp's API cuts us off partway through a long run, and the far rebuild can run out of time
+    # before the GolfNow queue is done, so a different club on each of those goes first each hour.
+    for p in ("teeitup", "golfnow"):
+        q = [c for c in live if c["platform"] == p]
+        if q:
+            k = int(time.time() // 3600) % len(q)
+            live = [c for c in live if c["platform"] != p] + q[k:] + q[:k]
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
     assert len({(c["host"], c.get("facility_id"), c.get("resource_id")) for c in live}) == len(live), "two courses share a booking sheet"
@@ -692,7 +702,13 @@ def main():
     write_regions(out, [cid for cid, _ in failures], courses)
     split_old_far(courses)
     if far_due():
+        global _stop_at
+        _stop_at = time.time() + FAR_MINUTES * 60
         out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS)
+        _stop_at = None
+        late = [cid for cid, e in failures if isinstance(e, OutOfTime)]
+        if late:
+            print(f"Ran out of time for {len(late)} clubs' later dates; their last times stay up: {', '.join(late)}", file=sys.stderr)
         if not out or len(failures) > tried * 0.5:
             print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
         else:
