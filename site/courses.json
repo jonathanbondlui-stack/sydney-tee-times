@@ -5495,7 +5495,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-09",
-  "note": "Call the club to book."
+  "note": "Call the club to book.",
+  "phone": "(07) 3633 6500"
  },
  {
   "id": "ashgrove",
@@ -5828,7 +5829,8 @@
   "region": "qld",
   "website": "https://macleayislandgolfclub.com.au",
   "checked": "2026-11-09",
-  "note": "Call the club to book."
+  "note": "Call the club to book.",
+  "phone": "(07) 3409 5299"
  },
  {
   "id": "ipswich",
@@ -5871,7 +5873,8 @@
   "region": "qld",
   "website": "https://www.sandygallop.com.au/",
   "checked": "2026-11-09",
-  "note": "Call the club to book."
+  "note": "Call the club to book.",
+  "phone": "(07) 3281 8544"
  },
  {
   "id": "meadowbrook",
@@ -6048,7 +6051,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-09",
-  "note": "Call the club to book."
+  "note": "Call the club to book.",
+  "phone": "(07) 5573 1278"
  },
  {
   "id": "lakeside",
@@ -6225,7 +6229,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-09",
-  "note": "Call the club to book."
+  "note": "Call the club to book.",
+  "phone": "0472 574 075"
  },
  {
   "id": "lakelands",
