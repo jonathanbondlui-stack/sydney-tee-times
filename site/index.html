@@ -70,6 +70,7 @@ button.more.seeall{width:100%;margin:10px 0 0;background:var(--accent);border-co
 .favonly{flex-direction:row!important;align-items:center;gap:6px;color:var(--ink);cursor:pointer}.favonly input{width:16px;height:16px;margin:0;accent-color:var(--accent)}.favonly span[aria-hidden]{color:#E8B931}
 .share{display:inline-flex;align-items:center;gap:6px;font:600 14px "Hanken Grotesk",sans-serif;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;white-space:nowrap}.share:hover{border-color:var(--accent)}
 .copied{font-size:13px;color:var(--accent)}
+#alertDlg{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:20px;max-width:28rem;width:calc(100% - 32px)}#alertDlg::backdrop{background:rgb(0 0 0/.35)}#alertDlg h2{font:700 20px/1.2 "Bricolage Grotesque",sans-serif;margin:0 32px 8px 0}#alertDlg p{margin:0 0 12px}.ax{position:absolute;right:12px;top:10px}.ax button{border:0;background:none;font-size:24px;color:var(--mute);cursor:pointer}.as{font-size:14px;color:var(--mute)}.topic{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.topic code{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:14px;word-break:break-all}#alertDlg .go{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:10px 16px;cursor:pointer;font:600 15px "Hanken Grotesk",sans-serif}#alertDlg .go:disabled{opacity:.5;cursor:default}.am{font-size:14px;color:var(--accent);margin-top:10px!important}.al{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding:10px 0;font-size:14px}.al button{flex:none}
 .fav{flex:none;background:none;border:0;padding:0 6px 0 0;margin:0;font-size:20px;line-height:1;color:var(--mute);cursor:pointer}.fav[aria-pressed=true]{color:#E8B931}.fav:hover{color:#E8B931}
 .cg .head{display:flex;align-items:flex-start}
 .cg header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
@@ -148,7 +149,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
     <div class="end"><label id="sortl" style="flex-direction:row;align-items:center;gap:8px">Sort by<select id="sort" style="width:auto"><option value="d" selected>Nearest</option><option value="t">Earliest</option><option value="p">Cheapest</option></select></label>
-    <span class="copied" id="copied" role="status" hidden></span><button type="button" class="share" id="share" title="Share this search" aria-label="Share this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Share</button></div></div>
+    <span class="copied" id="copied" role="status" hidden></span><button type="button" class="share" id="share" title="Share this search" aria-label="Share this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Share</button><button type="button" class="share" id="alertBtn" hidden title="Get a message when new times match this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Alert me</button></div></div>
   <div class="tools" id="favWrap" hidden><label class="favonly"><input type="checkbox" id="favOnly"> <span aria-hidden="true">★</span> Favourites only <span id="favN"></span></label></div>
   <p class="unrel" id="unrel" hidden></p>
   <div id="map" hidden></div>
@@ -159,6 +160,20 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
     <label class="dq">Find a course<input type="search" id="dirq" placeholder="Name or suburb"></label><div id="dirlist"></div></section>
 </main>
+<dialog id="alertDlg" aria-labelledby="alertH">
+  <form method="dialog" class="ax"><button aria-label="Close">×</button></form>
+  <h2 id="alertH">Alert me about new times</h2>
+  <p class="as" id="alertWhat"></p>
+  <div id="alertSetup" hidden>
+    <p>Alerts come through <b>ntfy</b>, a free app with no sign-up. Install it from the App Store or Google Play, tap <b>+</b>, and subscribe to this channel:</p>
+    <p class="topic"><code id="alertTopic"></code><button type="button" class="share" id="alertCopy">Copy</button></p>
+    <label class="multi"><input type="checkbox" id="alertReady"> I’ve subscribed in the app</label>
+  </div>
+  <p class="as">You’ll get one message when new times appear that match these filters, never between 10pm and 6am. It stops by itself after this date, and every message has a Stop button.</p>
+  <button type="button" class="go" id="alertOn">Turn on alert</button>
+  <p class="am" id="alertMsg" role="status"></p>
+  <div id="alertList"></div>
+</dialog>
 <button type="button" id="backMap" hidden>← Back to map</button>
 <div id="pick-panel" role="dialog" aria-labelledby="pkName" hidden>
   <div class="pk-top"><span id="pkTime"></span><button type="button" id="pkX" aria-label="Close">×</button></div>
@@ -293,6 +308,32 @@ const flash=t=>{const c=$("copied");c.textContent=t;c.hidden=false;clearTimeout(
 const share=async()=>{const url=shareLink();
   if(navigator.share&&matchMedia("(pointer:coarse)").matches){try{await navigator.share({title:"Tee times",url});return}catch(e){if(e.name=="AbortError")return}}
   try{await navigator.clipboard.writeText(url);flash("Link copied")}catch(e){prompt("Copy this link:",url)}};
+// Alerts: a saved search is checked after each refresh, and new matching times come to your phone through
+// the free ntfy app. The search lives with the alert service until its date passes or you stop it.
+const ALERTS_API="https://tee-time-alerts.teetimefinder.workers.dev";  // the alert service (alerts/ in this repo, on Cloudflare)
+const TOPICK="tee-ntfy",ALERTSK="tee-alerts";
+const lsGet=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k)||"null");return v??d}catch(e){return d}},lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const alertTopic=()=>{let t=lsGet(TOPICK,"");if(!/^tee-[a-z0-9]{16,40}$/.test(t)){t="tee-"+[...crypto.getRandomValues(new Uint8Array(12))].map(b=>b.toString(36).padStart(2,"0")).join("").slice(0,20);lsSet(TOPICK,t)}return t};
+const alertQuery=()=>{const q=new URL(shareLink()).searchParams;q.delete("view");q.delete("sort");
+  if(!q.get("at")){const p=HOME;q.set("at",[p.n,(+p.la).toFixed(3),(+p.lo).toFixed(3)].join("|"))}return q};
+const alertLabel=q=>{const d=(q.get("d")||"").split(",").map(x=>new Date(x+"T12:00").toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})).join(", "),
+  n=+q.get("players"),h=q.get("holes"),pr=+q.get("price"),dist=+q.get("dist");
+  return [d,n+(n==1?" player":" players"),h=="18"?"18 holes":h=="9"?"under 18 holes":"any length",hl(+q.get("from"))+"–"+hl(+q.get("to")),
+    "within "+(dist>=999?"any distance":dist+" km")+" of "+q.get("at").split("|")[0],...(pr<200?["up to $"+pr+" each"]:[])].join(" · ")};
+const drawAlerts=()=>{const a=lsGet(ALERTSK,[]);$("alertList").innerHTML=a.length?`<p class="as" style="margin:12px 0 0">Your alerts</p>`+a.map(x=>`<div class="al"><span>${x.label.replace(/</g,"&lt;")}</span><button type="button" class="share" data-stop="${x.id}">Stop</button></div>`).join(""):""};
+async function openAlert(){const q=alertQuery(),first=!lsGet(TOPICK+"-ok",false);
+  $("alertWhat").textContent=alertLabel(q);$("alertMsg").textContent="";$("alertSetup").hidden=!first;$("alertTopic").textContent=alertTopic();
+  $("alertOn").disabled=first&&!$("alertReady").checked;drawAlerts();$("alertDlg").showModal();
+  const a=lsGet(ALERTSK,[]),still=[];for(const x of a){try{const r=await fetch(`${ALERTS_API}/watch/${x.id}`);const j=await r.json();if(j.active)still.push(x)}catch(e){still.push(x)}}
+  if(still.length!=a.length){lsSet(ALERTSK,still);drawAlerts()}}
+async function alertOn(){const q=alertQuery(),b=$("alertOn");b.disabled=true;$("alertMsg").textContent="Turning on…";
+  try{const r=await fetch(`${ALERTS_API}/watch`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:q.toString(),region:REG,topic:alertTopic()})});
+    const j=await r.json();if(!r.ok)throw new Error(j.error||"Couldn’t turn on the alert.");
+    lsSet(ALERTSK,[...lsGet(ALERTSK,[]),{id:j.id,label:j.label}]);lsSet(TOPICK+"-ok",true);$("alertSetup").hidden=true;
+    $("alertMsg").textContent="Alert on. Your phone should get a message saying so in a moment.";drawAlerts()}
+  catch(e){$("alertMsg").textContent=e.message||"Couldn’t turn on the alert. Please try again.";b.disabled=false}}
+async function alertStop(id){try{await fetch(`${ALERTS_API}/watch/${id}`,{method:"DELETE"})}catch(e){}
+  lsSet(ALERTSK,lsGet(ALERTSK,[]).filter(x=>x.id!=id));drawAlerts();$("alertMsg").textContent="Alert stopped."}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...Object.fromEntries(SAVED.map(id=>[id,$(id).value])),v:2}))}catch(e){}};
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(id=="sort"&&s.v!==2)return;if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
@@ -404,6 +445,10 @@ function setup(){
   if(!START)locate();
   $("list").addEventListener("click",e=>{const f=e.target.closest(".fav");if(f)toggleFav(f.dataset.fav)});
   $("favOnly").onchange=()=>{shown=12;render()};$("share").onclick=share;
+  if(ALERTS_API){$("alertBtn").hidden=false;$("alertBtn").onclick=openAlert;$("alertOn").onclick=alertOn;
+    $("alertReady").onchange=()=>$("alertOn").disabled=!$("alertReady").checked;
+    $("alertCopy").onclick=async()=>{try{await navigator.clipboard.writeText(alertTopic());$("alertCopy").textContent="Copied"}catch(e){}};
+    $("alertList").onclick=e=>{const b=e.target.closest("[data-stop]");if(b)alertStop(b.dataset.stop)}}
   $("pick").min=iso(days[0]);$("pick").max=iso(addDays(28));$("pick").onchange=pickDate;
   $("vList").onclick=()=>setView("list");$("vMap").onclick=()=>setView("map");
   $("more").onclick=()=>{shown+=12;render()};let cols=colsNow();
