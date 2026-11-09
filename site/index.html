@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tee Time Finder</title>
-<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane and beyond, in one search.">
+<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane, Perth and beyond, in one search.">
 <meta name="application-name" content="Tee Time Finder"><meta name="apple-mobile-web-app-title" content="Tee Time Finder">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -176,7 +176,8 @@ const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "
 // cbd is the city's centre, offered as a starting place, and tz its time zone when it isn't Sydney's.
 const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down the South Coast to Eden",la:-33.87,lo:151.21,cbd:{n:"Sydney CBD",la:-33.8688,lo:151.2093}},
   vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96,cbd:{n:"Melbourne CBD",la:-37.8136,lo:144.9631}},
-  qld:{city:"Brisbane",span:"across Brisbane, the Gold Coast, the Sunshine Coast and Ipswich",la:-27.47,lo:153.03,tz:"Australia/Brisbane",cbd:{n:"Brisbane CBD",la:-27.4698,lo:153.0251}}};
+  qld:{city:"Brisbane",span:"across Brisbane, the Gold Coast, the Sunshine Coast and Ipswich",la:-27.47,lo:153.03,tz:"Australia/Brisbane",cbd:{n:"Brisbane CBD",la:-27.4698,lo:153.0251}},
+  wa:{city:"Perth",span:"across Perth, Rottnest, Mandurah and the Perth Hills",la:-31.95,lo:115.86,tz:"Australia/Perth",cbd:{n:"Perth CBD",la:-31.9523,lo:115.8613}}};
 // The cities with live times, A to Z, so no city comes first by choice.
 const CITIES=Object.values(REGIONS).map(r=>r.cbd).sort((a,b)=>a.n.localeCompare(b.n));
 // Where to start before anyone picks a place: the covered city nearest the browser's time zone city,

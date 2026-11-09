@@ -27,7 +27,7 @@ FAR_FEED = "tee-times-far.json"  # before the split by region; read once for car
 NEAR_FEED = "tee-times.json"
 # Each region gets its own pair of feeds, so a visitor only downloads the times near them.
 # A course without a "region" is in NSW & ACT.
-REGIONS = ("nsw", "vic", "qld")
+REGIONS = ("nsw", "vic", "qld", "wa")
 def region_of(c):
     return c.get("region", "nsw")
 def feed_name(region, far=False):
@@ -331,10 +331,11 @@ def sydney_time(utc):
     return (utc + dt.timedelta(hours=10 if standard else 11)).replace(tzinfo=None)
 
 def local_time(utc, region="nsw"):
-    """A course's local time for a UTC datetime. Queensland stays on UTC+10 all year; NSW, the ACT
-    and Victoria share Sydney's daylight saving."""
-    if region == "qld":
-        return (utc + dt.timedelta(hours=10)).replace(tzinfo=None)
+    """A course's local time for a UTC datetime. Queensland stays on UTC+10 and Western Australia on
+    UTC+8 all year; NSW, the ACT and Victoria share Sydney's daylight saving."""
+    fixed = {"qld": 10, "wa": 8}
+    if region in fixed:
+        return (utc + dt.timedelta(hours=fixed[region])).replace(tzinfo=None)
     return sydney_time(utc)
 
 def parse_teeitup(text, course, date):
