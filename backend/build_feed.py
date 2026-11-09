@@ -9,7 +9,7 @@ Usage:
   python backend/build_feed.py --calendar page.html     # test the calendar parser on a saved page
   python backend/build_feed.py --timesheet page.html --course moore-park --date 2026-11-07
 """
-import argparse, json, os, sys, threading, time, datetime as dt
+import argparse, collections, json, os, sys, threading, time, datetime as dt
 import urllib.request, urllib.robotparser, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from html import unescape
@@ -489,12 +489,18 @@ def build(courses, today, first, last):
         live = [c for c in live if c["platform"] != "teeitup"] + tee
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
-    assert len({(c["host"], c.get("facility_id")) for c in live}) == len(live), "two courses share a host"
+    assert len({(c["host"], c.get("facility_id"), c.get("resource_id")) for c in live}) == len(live), "two courses share a booking sheet"
     # GolfNow and TeeItUp clubs share one host each, so they queue on a worker of their own and
-    # don't hold up the pool while they wait their turn.
-    shared = {p: ThreadPoolExecutor(max_workers=1) for p in ("golfnow", "teeitup")}
+    # don't hold up the pool while they wait their turn. Courses that share any other host (two
+    # courses on one MiClub site) also queue together, so that host still gets one request at a time.
+    hosts = collections.Counter(c["host"] for c in live)
+    def queue(c):
+        if c["platform"] in ("golfnow", "teeitup"):
+            return c["platform"]
+        return c["host"] if hosts[c["host"]] > 1 else None
+    shared = {q: ThreadPoolExecutor(max_workers=1) for q in {queue(c) for c in live} if q}
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        jobs = [(c, shared.get(c["platform"], pool).submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
+        jobs = [(c, shared.get(queue(c), pool).submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
         for c, job in jobs:
             job.exception()  # wait for every club, shared queues included
     for p in shared.values():

@@ -5048,12 +5048,14 @@
   "suburb": "Tewantin",
   "lat": -26.3929,
   "lon": 153.019,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
   "website": "https://www.noosagolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.noosagolf.com.au",
+  "resource_id": 3000000
  },
  {
   "id": "noosa-springs",
@@ -5071,29 +5073,19 @@
   "checked": "2026-11-09"
  },
  {
-  "id": "imbil",
-  "name": "Imbil Golf Course",
-  "suburb": "Imbil",
-  "lat": -26.426,
-  "lon": 152.6865,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "qld",
-  "checked": "2026-11-09"
- },
- {
   "id": "cooroy",
   "name": "Cooroy Golf Course",
   "suburb": "Cooroy",
   "lat": -26.427,
   "lon": 152.9145,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.cooroygolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5447 6258"
  },
  {
   "id": "noosa-valley",
@@ -5101,11 +5093,14 @@
   "suburb": "Eumundi",
   "lat": -26.4424,
   "lon": 152.9935,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Nine-hole course behind Noosa. Call the golf shop.",
+  "holes": 9,
+  "phone": "(07) 5449 1411"
  },
  {
   "id": "peregian-springs",
@@ -5127,12 +5122,14 @@
   "suburb": "Mount Coolum",
   "lat": -26.5528,
   "lon": 153.0906,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://palmercoolumresort.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5440 2222"
  },
  {
   "id": "mount-coolum",
@@ -5140,12 +5137,14 @@
   "suburb": "Mount Coolum",
   "lat": -26.5698,
   "lon": 153.0848,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
   "website": "https://www.mtcoolumgolf.com/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.mtcoolumgolf.com",
+  "resource_id": 3000000
  },
  {
   "id": "nambour",
@@ -5168,12 +5167,14 @@
   "suburb": "Pacific Paradise",
   "lat": -26.6209,
   "lon": 153.0613,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://maroochyrivergolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Phone the pro shop to book, for groups of up to 8 players.",
+  "phone": "(07) 5457 0900"
  },
  {
   "id": "twin-waters",
@@ -5225,11 +5226,12 @@
   "suburb": "Corbould Park",
   "lat": -26.7816,
   "lon": 153.0148,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "No bookings, walk-ins only."
  },
  {
   "id": "caloundra",
@@ -5282,12 +5284,14 @@
   "suburb": "Kilcoy",
   "lat": -26.9353,
   "lon": 152.5583,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.kilcoygolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5405 5705"
  },
  {
   "id": "woodford",
@@ -5325,11 +5329,13 @@
   "suburb": "Bellmere",
   "lat": -27.0785,
   "lon": 152.9216,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "caboolture.miclub.com.au",
+  "resource_id": 3000000
  },
  {
   "id": "bribie-island",
@@ -5344,18 +5350,6 @@
   "enabled": true,
   "region": "qld",
   "website": "http://www.bribieislandgolfclub.com.au/",
-  "checked": "2026-11-09"
- },
- {
-  "id": "north-lakes",
-  "name": "North Lakes Golf Club",
-  "suburb": "North Lakes",
-  "lat": -27.22,
-  "lon": 153.017,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "qld",
   "checked": "2026-11-09"
  },
  {
@@ -5378,12 +5372,14 @@
   "suburb": "Esk",
   "lat": -27.2463,
   "lon": 152.4155,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.eskgolfclub.com/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "0493 565 095"
  },
  {
   "id": "redcliffe",
@@ -5406,11 +5402,13 @@
   "suburb": "Petrie",
   "lat": -27.275,
   "lon": 152.9558,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Nine-hole course, now called North Pine Golf Club, in Joyner. Walk-ins welcome.",
+  "holes": 9
  },
  {
   "id": "sandgate",
@@ -5438,18 +5436,6 @@
   "host": "wantima.miclub.com.au",
   "resource_id": 3000000,
   "enabled": true,
-  "region": "qld",
-  "checked": "2026-11-09"
- },
- {
-  "id": "samford-valley",
-  "name": "Samford Valley Golf and Country Club",
-  "suburb": "Highvale",
-  "lat": -27.3606,
-  "lon": 152.8298,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
   "region": "qld",
   "checked": "2026-11-09"
  },
@@ -5504,11 +5490,12 @@
   "suburb": "Eagle Farm",
   "lat": -27.4411,
   "lon": 153.0954,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book."
  },
  {
   "id": "ashgrove",
@@ -5590,12 +5577,17 @@
   "suburb": "Dunwich",
   "lat": -27.4983,
   "lon": 153.4404,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
   "website": "https://www.northstradbrokeislandgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16228,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16228-north-stradbroke-island-golf-club/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "howeston",
@@ -5603,11 +5595,12 @@
   "suburb": "Ransome",
   "lat": -27.5011,
   "lon": 153.1913,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "No bookings, walk-ins only."
  },
  {
   "id": "st-lucia",
@@ -5615,11 +5608,14 @@
   "suburb": "St Lucia",
   "lat": -27.5054,
   "lon": 152.9943,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "stlucia.quick18.com",
+  "cta": "Book online at St Lucia",
+  "book_url": "https://stlucia.quick18.com/teetimes/searchmatrix?teedate={date}"
  },
  {
   "id": "indooroopilly",
@@ -5627,12 +5623,15 @@
   "suburb": "Tennyson",
   "lat": -27.5142,
   "lon": 152.9951,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.indooroopillygolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "cta": "Club website",
+  "book_url": "https://www.indooroopillygolf.com.au/",
+  "note": "Visitors enquire through the form on the club's website."
  },
  {
   "id": "pacific",
@@ -5655,11 +5654,12 @@
   "suburb": "Tennyson",
   "lat": -27.5313,
   "lon": 153.0084,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "jindalee",
@@ -5681,15 +5681,18 @@
  },
  {
   "id": "karana-downs",
-  "name": "Karana Downs Golf Course",
+  "name": "Brisbane River Golf Club (Karana Downs)",
   "suburb": "Karana Downs",
   "lat": -27.5426,
   "lon": 152.8299,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "brisbaneriver.miclub.com.au",
+  "resource_id": 3000000,
+  "par": 66
  },
  {
   "id": "mcleod",
@@ -5712,12 +5715,16 @@
   "suburb": "Oxley",
   "lat": -27.5542,
   "lon": 152.9858,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://oxleygolfcomplex.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Nine-hole public course with a pitch 'n' putt, part of the Oxley Golf Complex. Call to check times.",
+  "holes": 9,
+  "par": 31,
+  "phone": "(07) 3379 7836"
  },
  {
   "id": "hattonvale",
@@ -5725,11 +5732,13 @@
   "suburb": "Hatton Vale",
   "lat": -27.567,
   "lon": 152.461,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5465 6822"
  },
  {
   "id": "isle-of-coochie",
@@ -5737,12 +5746,13 @@
   "suburb": "Coochiemudlo Island",
   "lat": -27.5725,
   "lon": 153.3211,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.isleofcoochiegolfclub.net.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book. Saturdays 7 to 11am are kept for club competitions."
  },
  {
   "id": "oxley",
@@ -5795,11 +5805,16 @@
   "suburb": "Gailes",
   "lat": -27.6039,
   "lon": 152.9067,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16238,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16238-wolston-park-golf-club/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "bay-islands",
@@ -5807,12 +5822,13 @@
   "suburb": "Lamb Island",
   "lat": -27.6198,
   "lon": 153.3692,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://macleayislandgolfclub.com.au",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book."
  },
  {
   "id": "ipswich",
@@ -5835,11 +5851,13 @@
   "suburb": "Rosewood",
   "lat": -27.6306,
   "lon": 152.6059,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5464 1201"
  },
  {
   "id": "sandy-gallop",
@@ -5847,12 +5865,13 @@
   "suburb": "Churchill",
   "lat": -27.6316,
   "lon": 152.7508,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.sandygallop.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book."
  },
  {
   "id": "meadowbrook",
@@ -5890,11 +5909,16 @@
   "suburb": "Cornubia",
   "lat": -27.6764,
   "lon": 153.2144,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 17225,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/17225-riverlakes-golf-course/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "carbrook",
@@ -5917,11 +5941,16 @@
   "suburb": "Mount Warren Park",
   "lat": -27.732,
   "lon": 153.2149,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 15337,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/15337-mount-warren-park-golf-club/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "windaroo",
@@ -5929,23 +5958,16 @@
   "suburb": "Windaroo",
   "lat": -27.7432,
   "lon": 153.1966,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
- },
- {
-  "id": "village",
-  "name": "Village Links",
-  "suburb": "Yarrabilba",
-  "lat": -27.7863,
-  "lon": 153.1416,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 17214,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/17214-windaroo-lakes-golf-club/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "gainsborough-greens",
@@ -5953,11 +5975,13 @@
   "suburb": "Pimpama",
   "lat": -27.8198,
   "lon": 153.3212,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the pro shop to check times and book.",
+  "phone": "(07) 5546 6003"
  },
  {
   "id": "hills",
@@ -5977,11 +6001,12 @@
   "suburb": "Hope Island",
   "lat": -27.8584,
   "lon": 153.3626,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "sanctuary-cove-pines",
@@ -5989,12 +6014,13 @@
   "suburb": "Hope Island",
   "lat": -27.8638,
   "lon": 153.3646,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.sanctuarycovegolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "hope-island",
@@ -6017,11 +6043,12 @@
   "suburb": "Helensvale",
   "lat": -27.908,
   "lon": 153.3315,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book."
  },
  {
   "id": "lakeside",
@@ -6029,11 +6056,16 @@
   "suburb": "Arundel",
   "lat": -27.9209,
   "lon": 153.3558,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16241,
+  "cta": "Book on GolfNow",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16241-lakeside-country-club/search#date={gn_date}",
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
  },
  {
   "id": "parkwood",
@@ -6056,11 +6088,13 @@
   "suburb": "Guanaba",
   "lat": -27.9714,
   "lon": 153.2111,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5545 1788"
  },
  {
   "id": "southport",
@@ -6068,12 +6102,13 @@
   "suburb": "Southport",
   "lat": -27.9957,
   "lon": 153.4095,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.southportgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "beaudesert",
@@ -6111,12 +6146,14 @@
   "suburb": "Boonah",
   "lat": -28.0087,
   "lon": 152.6943,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.boonahgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5463 1470"
  },
  {
   "id": "emerald-lakes",
@@ -6139,12 +6176,13 @@
   "suburb": "Highland Park",
   "lat": -28.0168,
   "lon": 153.3058,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.thegrandgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "palm-meadows",
@@ -6182,11 +6220,12 @@
   "suburb": "Canungra",
   "lat": -28.0389,
   "lon": 153.1864,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book."
  },
  {
   "id": "lakelands",
@@ -6209,11 +6248,13 @@
   "suburb": "Robina",
   "lat": -28.0593,
   "lon": 153.3906,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "www.palmergolf.com.au",
+  "resource_id": 3000000
  },
  {
   "id": "gold-coast-burleigh",
@@ -6221,12 +6262,13 @@
   "suburb": "Miami",
   "lat": -28.0677,
   "lon": 153.4294,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.burleighgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the pro shop or email proshop@burleighgolfclub.com.au to check availability."
  },
  {
   "id": "kooralbyn-valley",
@@ -6260,16 +6302,19 @@
  },
  {
   "id": "palmer-gold-coast",
-  "name": "Palmer Gold Coast (Robina Woods)",
+  "name": "Palmer Gold Coast Golf Course",
   "suburb": "Robina",
   "lat": -28.0769,
   "lon": 153.4003,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
-  "website": "http://robinawoods.au-golf.net/",
-  "checked": "2026-11-09"
+  "website": "https://www.palmergolf.com.au/",
+  "checked": "2026-11-09",
+  "host": "www.palmergolf.com.au",
+  "resource_id": 3000001,
+  "note": "Formerly Robina Woods. Books on the same Palmer Golf site as Palmer Colonial."
  },
  {
   "id": "boomerang-hills",
@@ -6277,12 +6322,14 @@
   "suburb": "Bonogin",
   "lat": -28.1069,
   "lon": 153.3197,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "qld",
   "website": "https://boomeranghills.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "host": "boomerangfarm.miclub.com.au",
+  "resource_id": 3000000
  },
  {
   "id": "cliff-douglas-tally-valley",
@@ -6290,11 +6337,12 @@
   "suburb": "Tallebudgera",
   "lat": -28.132,
   "lon": 153.4368,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "No bookings, walk-ins only."
  },
  {
   "id": "tallebudgera",
@@ -6302,12 +6350,14 @@
   "suburb": "Tallebudgera",
   "lat": -28.1353,
   "lon": 153.4297,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.tallebudgeragolfcourse.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Walk-ins only, outside club competition times (mostly early mornings).",
+  "phone": "(07) 5534 8484"
  },
  {
   "id": "meadow-park",
@@ -6315,12 +6365,15 @@
   "suburb": "Tallebudgera",
   "lat": -28.1482,
   "lon": 153.43,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://www.meadowpark.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "cta": "Book online",
+  "book_url": "https://visitors.brsgolf.com/meadowpark#/course/1",
+  "note": "Book online through the club's booking page. Times aren't shown here yet."
  },
  {
   "id": "coolangatta-tweed-heads",
@@ -6343,12 +6396,14 @@
   "suburb": "Banora Point",
   "lat": -28.2202,
   "lon": 153.5374,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
   "website": "https://clubbanoragolfclub.com.au",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "Call the club to book.",
+  "phone": "(07) 5524 6666"
  },
  {
   "id": "chinderah",
@@ -6356,11 +6411,12 @@
   "suburb": "Cudgen",
   "lat": -28.2504,
   "lon": 153.5531,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "note": "No bookings, walk-ins only."
  },
  {
   "id": "murwillumbah",
