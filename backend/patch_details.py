@@ -44,12 +44,12 @@ UPDATES = {
  "macarthur-grange": dict(status="online", cta=GOLFNOW, book_url="https://www.golfnow.com/courses/-5003-macarthur-grange-golf-course-details", suburb="Varroville",
      address="Lot 18 Raby Rd, Varroville", holes=18, source="directory", note=GN_NOTE + " We couldn't confirm the club's phone number."),
  # Visitors at set times
- "st-michaels": dict(status="set_times", phone="(02) 9326 8000", address="Jennifer St, Little Bay", website="https://www.stmichaelsgolfclub.com.au/", source="club",
+ "st-michaels": dict(status="phone", phone="(02) 9326 8000", address="Jennifer St, Little Bay", website="https://www.stmichaelsgolfclub.com.au/", source="club",
      cta="Visitor information", book_url="https://www.stmichaelsgolfclub.com.au/visitors", email="golfbookings@stmichaelsgolf.com.au",
      note="No online booking. Visitors are welcome 7 days during the hours below. Times open 8 days ahead at 4pm: call the Golf Shop (ext 1) or email. No handicap needed for social play.",
      visitor_hours={"Summer": ["6am–7pm", "10am–7pm", "7am–7pm", "3pm–7pm", "7am–7pm", "3pm–7pm", "12pm–7pm"],
                     "Winter": ["9am–6pm", "10am–6pm", "7am–6pm", "3pm–6pm", "7am–6pm", "3pm–6pm", "12pm–6pm"]}),
- "the-lakes": dict(status="set_times", source="directory"),
+ "the-lakes": dict(status="phone", source="directory"),
  # Call to book
  "richmond": dict(status="phone", phone="(02) 4578 1739", address="34 Bourke St, Richmond", website="https://www.richmondgolfclub.com.au/", source="directory", note="Directories say visitors are welcome every day."),
  "canterbury": dict(status="phone", phone="(02) 9759 5444", address="Moorefields Rd, Beverly Hills", holes=9, source="club", cta="Council course page", book_url="https://www.cbcity.nsw.gov.au/canterbury-golf-course",
