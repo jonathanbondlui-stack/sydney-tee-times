@@ -75,3 +75,20 @@ export function matches(s, times, courses, region) {
   }
   return [...best.values()].sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time) || a.d - b.d);
 }
+
+// Wording shared by the alert service (labels) and the check that sends messages.
+export const SITE = "https://jonathanbondlui-stack.github.io/sydney-tee-times/";
+export const today = tz => new Date().toLocaleDateString("en-CA", { timeZone: tz });
+export const hourAt = tz => +new Date().toLocaleString("en-GB", { timeZone: tz, hour: "2-digit", hourCycle: "h23" });
+export const addDays = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+export const dayName = d => new Date(d + "T12:00:00Z").toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+export const clock = t => { let [h, m] = t.split(":").map(Number); const ap = h < 12 ? "am" : "pm"; h = h % 12 || 12; return `${h}:${String(m).padStart(2, "0")}${ap}`; };
+const hourLabel = h => clock(`${Math.floor(h)}:${h % 1 ? "30" : "00"}`);
+export function describe(s) {
+  const bits = [s.dates.map(dayName).join(", "), `${s.players} ${s.players == 1 ? "player" : "players"}`,
+    s.holes === "18" ? "18 holes" : s.holes === "9" ? "under 18 holes" : "any length",
+    `${hourLabel(s.from)}–${hourLabel(s.to)}`, `within ${s.dist >= 999 ? "any distance" : s.dist + " km"} of ${s.place}`];
+  if (s.price < 200) bits.push(`up to $${s.price} each`);
+  return bits.join(" · ");
+}
+export const line = (m, many) => `${m.course.replace(/ (Public )?Golf( Club| Course)?$/, "")} · ${many ? dayName(m.date).split(" ").slice(0, 2).join(" ").replace(",", "") + " " : ""}${clock(m.time)}${m.each != null ? " · $" + (Number.isInteger(m.each) ? m.each : m.each.toFixed(2)) + " each" : ""}`;

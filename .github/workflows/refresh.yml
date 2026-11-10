@@ -75,6 +75,20 @@ jobs:
       - id: deploy-again
         if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
+      # Tee time alerts: once the new times are live, check the saved searches and send any
+      # messages. ntfy.sh doesn't accept connections from Cloudflare, where the searches are kept,
+      # so the sending happens here. ALERTS_KEY is the alert service's password (CHECK_KEY there).
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: alerts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Send tee time alerts
+        continue-on-error: true
+        env:
+          ALERTS_KEY: ${{ secrets.ALERTS_KEY }}
+        run: node alerts/check.mjs
       # Publish first, then fail the run so a failed refresh still shows up and emails you.
       - name: Report a failed refresh
         if: needs.build.outputs.feed != 'success'

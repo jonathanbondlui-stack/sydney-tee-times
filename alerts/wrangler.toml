@@ -2,11 +2,16 @@
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 
-# Check every 15 minutes, a few minutes after the site's refreshes usually finish.
+# No schedule: the site's refresh runs alerts/check.mjs after each publish and sends the messages.
+# Its password is the CHECK_KEY secret (npx wrangler secret put CHECK_KEY), and ALERTS_KEY on GitHub.
 [triggers]
-crons = ["7,22,37,52 * * * *"]
+crons = []
 
 # Saved searches (KV namespace WATCHES).
 [[kv_namespaces]]
 binding = "WATCHES"
 id = "50b345d27b0f4870880719d50fab9a59"
+
+# Keep logs so problems can be looked at afterwards.
+[observability]
+enabled = true

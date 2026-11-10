@@ -152,7 +152,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
     <div class="end"><label id="sortl" style="flex-direction:row;align-items:center;gap:6px">Sort<select id="sort"><option value="d" selected>Nearest</option><option value="t">Earliest</option><option value="p">Cheapest</option></select></label>
-    <span class="copied" id="copied" role="status" hidden></span><button type="button" class="share" id="share" title="Share this search" aria-label="Share this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Share</button><button type="button" class="share" id="alertBtn" hidden title="Get a message when new times match this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Alert me</button></div></div>
+    <button type="button" class="share" id="alertBtn" hidden title="Get a message when new times match this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Alert me</button></div></div>
   <div class="tools" id="favWrap" hidden><label class="favonly"><input type="checkbox" id="favOnly"> <span aria-hidden="true">★</span> Favourites only <span id="favN"></span></label></div>
   <p class="unrel" id="unrel" hidden></p>
   <div id="map" hidden></div>
@@ -172,6 +172,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <p class="topic"><code id="alertTopic"></code><button type="button" class="share" id="alertCopy">Copy</button></p>
     <label class="multi"><input type="checkbox" id="alertReady"> I’ve subscribed in the app</label>
   </div>
+  <p class="as" id="alertChan" hidden></p>
   <p class="as">You’ll get one message when new times appear that match these filters, never between 10pm and 6am. It stops by itself after this date, and every message has a Stop button.</p>
   <button type="button" class="go" id="alertOn">Turn on alert</button>
   <p class="am" id="alertMsg" role="status"></p>
@@ -299,7 +300,7 @@ function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
 // Favourite courses are kept on this device and pinned to the top of the list.
 const FAVK="tee-favs";let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem(FAVK)||"[]"))}catch(e){}
 const toggleFav=id=>{FAVS.has(id)?FAVS.delete(id):FAVS.add(id);try{localStorage.setItem(FAVK,JSON.stringify([...FAVS]))}catch(e){}render()};
-// A shared link carries the days, the area and the filters. "Near me" is shared as the nearest suburb, never as exact coordinates.
+// A link to a search (used by alerts, and still opened if someone has one) carries the days, the area and the filters. "Near me" is shared as the nearest suburb, never as exact coordinates.
 const SHARE_IDS=["players","holes","from","to","dist","price","sort"];
 const shareLink=()=>{const q=new URLSearchParams(),dts=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i]));
   if(dts.length)q.set("d",dts.join(","));
@@ -307,10 +308,6 @@ const shareLink=()=>{const q=new URLSearchParams(),dts=picked?[iso(picked)]:[...
   if(p)q.set("at",[p.n,(+p.la).toFixed(3),(+p.lo).toFixed(3)].join("|"));
   SHARE_IDS.forEach(id=>q.set(id,$(id).value));if(view=="map")q.set("view","map");
   return location.origin+location.pathname+"?"+q};
-const flash=t=>{const c=$("copied");c.textContent=t;c.hidden=false;clearTimeout(flash.t);flash.t=setTimeout(()=>c.hidden=true,2500)};
-const share=async()=>{const url=shareLink();
-  if(navigator.share&&matchMedia("(pointer:coarse)").matches){try{await navigator.share({title:"Tee times",url});return}catch(e){if(e.name=="AbortError")return}}
-  try{await navigator.clipboard.writeText(url);flash("Link copied")}catch(e){prompt("Copy this link:",url)}};
 // Alerts: a saved search is checked after each refresh, and new matching times come to your phone through
 // the free ntfy app. The search lives with the alert service until its date passes or you stop it.
 const ALERTS_API="https://tee-time-alerts.teetimefinder.workers.dev";  // the alert service (alerts/ in this repo, on Cloudflare)
@@ -325,15 +322,20 @@ const alertLabel=q=>{const d=(q.get("d")||"").split(",").map(x=>new Date(x+"T12:
     "within "+(dist>=999?"any distance":dist+" km")+" of "+q.get("at").split("|")[0],...(pr<200?["up to $"+pr+" each"]:[])].join(" · ")};
 const drawAlerts=()=>{const a=lsGet(ALERTSK,[]);$("alertList").innerHTML=a.length?`<p class="as" style="margin:12px 0 0">Your alerts</p>`+a.map(x=>`<div class="al"><span>${x.label.replace(/</g,"&lt;")}</span><button type="button" class="share" data-stop="${x.id}">Stop</button></div>`).join(""):""};
 async function openAlert(){const q=alertQuery(),first=!lsGet(TOPICK+"-ok",false);
-  $("alertWhat").textContent=alertLabel(q);$("alertMsg").textContent="";$("alertSetup").hidden=!first;$("alertTopic").textContent=alertTopic();
+  $("alertWhat").textContent=alertLabel(q);$("alertMsg").textContent="";$("alertSetup").hidden=!first;$("alertTopic").textContent=alertTopic();$("alertChan").hidden=first;$("alertChan").textContent="Messages go to your ntfy channel "+alertTopic()+", the same one for all your alerts.";
   $("alertOn").disabled=first&&!$("alertReady").checked;drawAlerts();$("alertDlg").showModal();
   const a=lsGet(ALERTSK,[]),still=[];for(const x of a){try{const r=await fetch(`${ALERTS_API}/watch/${x.id}`);const j=await r.json();if(j.active)still.push(x)}catch(e){still.push(x)}}
   if(still.length!=a.length){lsSet(ALERTSK,still);drawAlerts()}}
 async function alertOn(){const q=alertQuery(),b=$("alertOn");b.disabled=true;$("alertMsg").textContent="Turning on…";
   try{const r=await fetch(`${ALERTS_API}/watch`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:q.toString(),region:REG,topic:alertTopic()})});
     const j=await r.json();if(!r.ok)throw new Error(j.error||"Couldn’t turn on the alert.");
-    lsSet(ALERTSK,[...lsGet(ALERTSK,[]),{id:j.id,label:j.label}]);lsSet(TOPICK+"-ok",true);$("alertSetup").hidden=true;
-    $("alertMsg").textContent="Alert on. Your phone should get a message saying so in a moment.";drawAlerts()}
+    lsSet(ALERTSK,[...lsGet(ALERTSK,[]),{id:j.id,label:j.label}]);lsSet(TOPICK+"-ok",true);$("alertSetup").hidden=true;drawAlerts();
+    // The "alert is on" message comes from this browser; ntfy doesn't accept messages from the alert service's host.
+    const site=location.origin+location.pathname+"?"+j.q;let sent=false;
+    try{sent=(await fetch("https://ntfy.sh/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({topic:alertTopic(),title:"Tee time alert is on",
+      message:j.label+"\n"+(j.now?`${j.now} times match now. You’ll hear about new ones.`:"Nothing matches yet. You’ll hear when times appear."),tags:["golf"],priority:2,click:site,
+      actions:[{action:"view",label:"See times",url:site,clear:true},{action:"http",label:"Stop this alert",url:j.stop,method:"POST",clear:true}]})})).ok}catch(e){}
+    $("alertMsg").textContent=sent?"Alert on. Your phone should get a message saying so in a moment.":"Alert on, but the confirmation message didn’t send. Alerts will still come through."}
   catch(e){$("alertMsg").textContent=e.message||"Couldn’t turn on the alert. Please try again.";b.disabled=false}}
 async function alertStop(id){try{await fetch(`${ALERTS_API}/watch/${id}`,{method:"DELETE"})}catch(e){}
   lsSet(ALERTSK,lsGet(ALERTSK,[]).filter(x=>x.id!=id));drawAlerts();$("alertMsg").textContent="Alert stopped."}
@@ -447,7 +449,7 @@ function setup(){
   $("nearMe").onclick=nearMe;
   if(!START)locate();
   $("list").addEventListener("click",e=>{const f=e.target.closest(".fav");if(f)toggleFav(f.dataset.fav)});
-  $("favOnly").onchange=()=>{shown=12;render()};$("share").onclick=share;
+  $("favOnly").onchange=()=>{shown=12;render()};
   if(ALERTS_API){$("alertBtn").hidden=false;$("alertBtn").onclick=openAlert;$("alertOn").onclick=alertOn;
     $("alertReady").onchange=()=>$("alertOn").disabled=!$("alertReady").checked;
     $("alertCopy").onclick=async()=>{try{await navigator.clipboard.writeText(alertTopic());$("alertCopy").textContent="Copied"}catch(e){}};
