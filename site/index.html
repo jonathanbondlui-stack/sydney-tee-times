@@ -335,7 +335,8 @@ async function alertOn(){const q=alertQuery(),b=$("alertOn");b.disabled=true;$("
     try{sent=(await fetch("https://ntfy.sh/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({topic:alertTopic(),title:"Tee time alert is on",
       message:j.label+"\n"+(j.now?`${j.now} times match now. You’ll hear about new ones.`:"Nothing matches yet. You’ll hear when times appear."),tags:["golf"],priority:2,click:site,
       actions:[{action:"view",label:"See times",url:site,clear:true},{action:"http",label:"Stop this alert",url:j.stop,method:"POST",clear:true}]})})).ok}catch(e){}
-    $("alertMsg").textContent=sent?"Alert on. Your phone should get a message saying so in a moment.":"Alert on, but the confirmation message didn’t send. Alerts will still come through."}
+    if(sent)fetch(`${ALERTS_API}/confirmed/${j.id}`,{method:"POST"}).catch(()=>{});
+    $("alertMsg").textContent=sent?"Alert on. Your phone should get a message saying so in a moment.":"Alert on. Your phone will get a message saying so within 15 minutes."}
   catch(e){$("alertMsg").textContent=e.message||"Couldn’t turn on the alert. Please try again.";b.disabled=false}}
 async function alertStop(id){try{await fetch(`${ALERTS_API}/watch/${id}`,{method:"DELETE"})}catch(e){}
   lsSet(ALERTSK,lsGet(ALERTSK,[]).filter(x=>x.id!=id));drawAlerts();$("alertMsg").textContent="Alert stopped."}

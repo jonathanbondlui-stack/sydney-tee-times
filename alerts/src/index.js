@@ -63,7 +63,9 @@ async function create(req, env) {
   if (!times || !cs) return json({ error: "Couldn't read tee times right now. Try again soon." }, 503);
   // What matches now is what you can already see, so only times after this count as new.
   const found = matches(s, times, cs, region), base = new URL(req.url).origin;
-  const w = { id: newId(), topic, region, q: p.toString(), base, seen: found.map(m => m.key), created: new Date().toISOString(), sent: 0 };
+  // confirmed: whether the "alert is on" message got through. The page sends it and reports back;
+  // if it couldn't (some phone browsers block ntfy.sh), the next refresh sends it instead.
+  const w = { id: newId(), topic, region, q: p.toString(), base, seen: found.map(m => m.key), created: new Date().toISOString(), sent: 0, now: found.length, confirmed: false };
   await save(env, w, s);
   return json({ id: w.id, label: describe(s), now: found.length, q: w.q, stop: `${base}/stop/${w.id}` });
 }
@@ -81,6 +83,11 @@ export default {
       await env.WATCHES.delete("w:" + id);
       return a === "stop" ? html("Alert stopped", "<p>You won't get any more messages for that search.</p>") : json({ stopped: true });
     }
+    if (a === "confirmed" && id && req.method === "POST") {
+      const w = await env.WATCHES.get("w:" + id, "json");
+      if (w && !w.confirmed) await save(env, { ...w, confirmed: true }, parseSearch(w.q));
+      return json({ ok: true });
+    }
     if (a === "stop" && id) { // a link opened in a browser asks first, so a link preview can't stop it by accident
       const w = await env.WATCHES.get("w:" + id, "json");
       if (!w) return html("Alert already off", "<p>That alert has ended or was stopped.</p>");
@@ -96,7 +103,7 @@ export default {
       const w = await env.WATCHES.get("w:" + id, "json");
       if (!w) return json({ gone: true });
       const b = await req.json(), s = parseSearch(w.q);
-      await save(env, { ...w, seen: Array.isArray(b.seen) ? b.seen.slice(0, 20000) : w.seen, sent: +b.sent || w.sent || 0, last: b.last || w.last }, s);
+      await save(env, { ...w, seen: Array.isArray(b.seen) ? b.seen.slice(0, 20000) : w.seen, sent: +b.sent || w.sent || 0, last: b.last || w.last, confirmed: b.confirmed ?? w.confirmed }, s);
       return json({ saved: true });
     }
     return json({ error: "Not found" }, 404);

@@ -32,15 +32,27 @@ async function notify(w, title, lines) {
   if (!r.ok) console.log(`ntfy ${r.status} for ${w.id}: ${(await r.text()).slice(0, 200)}`);
   return r.ok;
 }
-const record = (w, body) => fetch(`${API}/seen/${w.id}`, { method: "POST", headers: { ...auth, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+const record = (w, body) => fetch(`${API}/seen/${w.id}`, { method: "POST", headers: { ...auth, "Content-Type": "application/json" }, body: JSON.stringify(w.confirmed === undefined ? body : { confirmed: w.confirmed, ...body }) });
 
 const r = await fetch(`${API}/all`, { headers: auth });
 if (!r.ok) { console.log(`Couldn't read saved searches (${r.status}).`); process.exit(0); }
-const watches = await r.json(), courses = await get("courses.json"), results = {};
+const watches = await r.json(), courses = await get("courses.json"), results = {}, confirmedNow = [];
 for (const w of watches) {
   try {
     const R = REGIONS[w.region], s = parseSearch(w.q), now = today(R.tz);
     if (!s || s.dates.every(d => d < now)) { results[w.id] = "ended"; continue; }
+    // The page couldn't send the "alert is on" message (some phone browsers block ntfy.sh), so send it here.
+    // It answers something you just did, so it isn't held back for quiet hours.
+    if (w.confirmed === false) {
+      const site = SITE + "?" + w.q, body = {
+        topic: w.topic, title: "Tee time alert is on", tags: ["golf"], priority: 2, click: site,
+        message: describe(s) + "\n" + (w.now ? `${w.now} times match now. You’ll hear about new ones.` : "Nothing matches yet. You’ll hear when times appear."),
+        actions: [{ action: "view", label: "See times", url: site, clear: true },
+                  { action: "http", label: "Stop this alert", url: `${w.base}/stop/${w.id}`, method: "POST", clear: true }],
+      };
+      const ok = (await fetch("https://ntfy.sh/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })).ok;
+      if (ok) { await record(w, { seen: w.seen, confirmed: true }); w.confirmed = true; confirmedNow.push(w.id); }
+    }
     const h = hourAt(R.tz);
     if (QUIET[0] !== QUIET[1] && (h >= QUIET[0] || h < QUIET[1])) { results[w.id] = "quiet"; continue; }
     const times = await timesFor(w.region, s.dates);
@@ -63,3 +75,4 @@ for (const w of watches) {
   } catch (e) { results[w.id] = "error " + e.message; }
 }
 console.log(`${watches.length} saved searches:`, JSON.stringify(results));
+if (confirmedNow.length) console.log(`Sent "alert is on" for ${confirmedNow.length}: ${confirmedNow.join(", ")}`);
