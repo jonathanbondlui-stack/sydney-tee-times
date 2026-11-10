@@ -6490,12 +6490,13 @@
   "suburb": "Waroona",
   "lat": -32.849,
   "lon": 115.9335,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "http://www.waroonagolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "pinjarra",
@@ -6533,11 +6534,12 @@
   "suburb": "Halls Head",
   "lat": -32.5375,
   "lon": 115.7003,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9581 2968"
  },
  {
   "id": "meadow-springs",
@@ -6590,11 +6592,12 @@
   "suburb": "Serpentine",
   "lat": -32.3642,
   "lon": 115.9723,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "rockingham",
@@ -6632,11 +6635,12 @@
   "suburb": "Casuarina",
   "lat": -32.2327,
   "lon": 115.8695,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9419 3037"
  },
  {
   "id": "the-springs-armadale",
@@ -6660,11 +6664,12 @@
   "suburb": "Roleystone",
   "lat": -32.1345,
   "lon": 116.0908,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9397 9033"
  },
  {
   "id": "gosnells",
@@ -6672,12 +6677,15 @@
   "suburb": "Canning Vale",
   "lat": -32.0931,
   "lon": 115.9318,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "wa",
   "website": "https://www.gosnellsgc.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "host": "www.gosnellsgc.com.au",
+  "resource_id": 3000000,
+  "note": "Visitors play on Mondays, timesheet permitting."
  },
  {
   "id": "melville-glades",
@@ -6685,12 +6693,14 @@
   "suburb": "Leeming",
   "lat": -32.0764,
   "lon": 115.8713,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.melvilleglades.com/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9332 7333",
+  "note": "Limited visitor times. Social groups Tuesday and Thursday afternoons only, subject to club bookings and competitions."
  },
  {
   "id": "royal-fremantle",
@@ -6698,12 +6708,13 @@
   "suburb": "White Gum Valley",
   "lat": -32.0541,
   "lon": 115.7732,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.royalfremantlegc.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "fremantle-public",
@@ -6741,11 +6752,11 @@
   "suburb": "Carmel",
   "lat": -32.037,
   "lon": 116.1098,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11"
  },
  {
   "id": "mosman-park",
@@ -6798,11 +6809,12 @@
   "suburb": "Cottesloe",
   "lat": -31.9991,
   "lon": 115.7543,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9384 8879"
  },
  {
   "id": "hartfield",
@@ -6824,12 +6836,12 @@
   "suburb": "Rottnest Island",
   "lat": -31.9935,
   "lon": 115.5339,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.rottnestgolf.org/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11"
  },
  {
   "id": "nedlands",
@@ -6837,12 +6849,13 @@
   "suburb": "Dalkeith",
   "lat": -31.9903,
   "lon": 115.8053,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.nedlandsgolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "royal-perth",
@@ -6850,12 +6863,13 @@
   "suburb": "South Perth",
   "lat": -31.9828,
   "lon": 115.8524,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.rpgc.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "claremont",
@@ -6863,11 +6877,14 @@
   "suburb": "Claremont",
   "lat": -31.9774,
   "lon": 115.7796,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "host": "lakeclaremont.quick18.com",
+  "cta": "Book online",
+  "book_url": "https://lakeclaremont.quick18.com/teetimes/searchmatrix?teedate={date}"
  },
  {
   "id": "cottesloe",
@@ -6875,11 +6892,12 @@
   "suburb": "Swanbourne",
   "lat": -31.9683,
   "lon": 115.7679,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "maylands",
@@ -6902,11 +6920,12 @@
   "suburb": "High Wycombe",
   "lat": -31.9378,
   "lon": 116.0206,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9454 5554"
  },
  {
   "id": "wembley",
@@ -6929,12 +6948,13 @@
   "suburb": "Inglewood",
   "lat": -31.9147,
   "lon": 115.8733,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.mlgc.org/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "mundaring",
@@ -6942,11 +6962,11 @@
   "suburb": "Mundaring",
   "lat": -31.9147,
   "lon": 116.1696,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11"
  },
  {
   "id": "wa-golf-club",
@@ -6954,12 +6974,13 @@
   "suburb": "Yokine",
   "lat": -31.8972,
   "lon": 115.8565,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.wagolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "altone-park",
@@ -6967,12 +6988,15 @@
   "suburb": "Beechboro",
   "lat": -31.8737,
   "lon": 115.9406,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "http://www.altoneparkgolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "cta": "Book online",
+  "book_url": "https://www.golf-booking.com/en/club/altone-park-golf-course,nc",
+  "note": "Book online through golf-booking.com. Times aren't shown here yet."
  },
  {
   "id": "hamersley",
@@ -6980,11 +7004,14 @@
   "suburb": "Karrinyup",
   "lat": -31.868,
   "lon": 115.7674,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "host": "hamersley.quick18.com",
+  "cta": "Book online",
+  "book_url": "https://hamersley.quick18.com/teetimes/searchmatrix?teedate={date}"
  },
  {
   "id": "lake-karrinyup",
@@ -6992,12 +7019,13 @@
   "suburb": "Karrinyup",
   "lat": -31.8652,
   "lon": 115.785,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://www.lkcc.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "marangaroo",
@@ -7019,11 +7047,12 @@
   "suburb": "Gnangara",
   "lat": -31.7735,
   "lon": 115.8566,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "the-vines",
@@ -7078,12 +7107,14 @@
   "suburb": "Banksia Grove",
   "lat": -31.6816,
   "lon": 115.8162,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://wanneroogolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9405 3677",
+  "note": "Public tee times through the pro shop."
  },
  {
   "id": "chequers",
@@ -7121,23 +7152,14 @@
   "suburb": "Yanchep",
   "lat": -31.5374,
   "lon": 115.6842,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
- },
- {
-  "id": "glen-iris",
-  "name": "Glen Iris Golf Course",
-  "suburb": "Jandakot",
-  "lat": -32.103,
-  "lon": 115.853,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "cta": "Book online",
+  "book_url": "https://yanchepnationalparkau.rezdy.com/610137/golf-18-holes",
+  "note": "Book a round online for the day, not a set time, then turn up and play. Times aren't shown here."
  },
  {
   "id": "sanctuary",
@@ -7145,11 +7167,14 @@
   "suburb": "Bouvard",
   "lat": -32.597,
   "lon": 115.651,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "cta": "Book online",
+  "book_url": "https://www.golf-booking.com/en/club/sanctuary-golf-resort",
+  "note": "Book online through golf-booking.com. Times aren't shown here yet."
  },
  {
   "id": "embleton",
@@ -7157,11 +7182,12 @@
   "suburb": "Embleton",
   "lat": -31.905,
   "lon": 115.907,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
   "website": "https://embletongolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-11",
+  "phone": "(08) 9271 5190"
  }
 ]
