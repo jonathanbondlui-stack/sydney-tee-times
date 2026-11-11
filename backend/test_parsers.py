@@ -163,6 +163,7 @@ assert local_time(utc(2026, 11, 5, 20, 0), "vic") == dt.datetime(2026, 11, 6, 7,
 assert local_time(utc(2026, 11, 5, 22, 0), "wa") == dt.datetime(2026, 11, 6, 6, 0)  # Perth is UTC+8 all year
 assert local_time(utc(2026, 11, 5, 20, 0), "sa") == dt.datetime(2026, 11, 6, 6, 30)  # Adelaide in summer is UTC+10:30
 assert local_time(utc(2026, 6, 5, 20, 0), "sa") == dt.datetime(2026, 6, 6, 5, 30)  # and UTC+9:30 in winter
+assert local_time(utc(2026, 11, 5, 20, 0), "tas") == dt.datetime(2026, 11, 6, 7, 0)  # Hobart keeps Sydney's time
 print("local time tests passed")
 
 # Chronogolf: one answer per party size; full, restricted and frozen times are left out, and the

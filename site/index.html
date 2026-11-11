@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tee Time Finder</title>
-<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane, Perth, Adelaide and beyond, in one search.">
+<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart and beyond, in one search.">
 <meta name="application-name" content="Tee Time Finder"><meta name="apple-mobile-web-app-title" content="Tee Time Finder">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,7 +204,8 @@ const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down 
   vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96,cbd:{n:"Melbourne CBD",la:-37.8136,lo:144.9631}},
   qld:{city:"Brisbane",span:"across Brisbane, the Gold Coast, the Sunshine Coast and Ipswich",la:-27.47,lo:153.03,tz:"Australia/Brisbane",cbd:{n:"Brisbane CBD",la:-27.4698,lo:153.0251}},
   wa:{city:"Perth",span:"across Perth, Rottnest, Mandurah and the Perth Hills",la:-31.95,lo:115.86,tz:"Australia/Perth",cbd:{n:"Perth CBD",la:-31.9523,lo:115.8613}},
-  sa:{city:"Adelaide",span:"across Adelaide, the Barossa, the Adelaide Hills and the Fleurieu Peninsula",la:-34.93,lo:138.6,tz:"Australia/Adelaide",cbd:{n:"Adelaide CBD",la:-34.9285,lo:138.6007}}};
+  sa:{city:"Adelaide",span:"across Adelaide, the Barossa, the Adelaide Hills and the Fleurieu Peninsula",la:-34.93,lo:138.6,tz:"Australia/Adelaide",cbd:{n:"Adelaide CBD",la:-34.9285,lo:138.6007}},
+  tas:{city:"Hobart",span:"across Hobart, the Huon Valley, the Derwent Valley and the Tasman Peninsula",la:-42.88,lo:147.33,tz:"Australia/Hobart",cbd:{n:"Hobart CBD",la:-42.8821,lo:147.3272}}};
 // The cities with live times, A to Z, so no city comes first by choice.
 const CITIES=Object.values(REGIONS).map(r=>r.cbd).sort((a,b)=>a.n.localeCompare(b.n));
 // Where to start before anyone picks a place: the covered city nearest the browser's time zone city,
