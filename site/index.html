@@ -90,6 +90,9 @@ a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Gro
 .chip span{font-size:12px;color:var(--mute)}.chip .hs{color:var(--ink);font-weight:600}.combo{position:relative}#where{padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23808a82' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 #placeList{position:absolute;z-index:1100;top:calc(100% + 4px);left:0;right:0;min-width:180px;max-height:260px;overflow-y:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 #placeList li{padding:8px 10px;border-radius:6px;font-size:14px;font-weight:400;color:var(--ink);cursor:pointer}#placeList li:hover,#placeList li.on{background:var(--bg)}#placeList li.find{color:var(--accent);font-weight:600}
+#placeList li.mine{display:flex;align-items:center;gap:8px;padding-right:4px}#placeList li.mine span{flex:1}
+#placeList .rm{flex:none;width:28px;height:28px;margin:-6px 0;padding:0;border:0;border-radius:6px;background:none;color:var(--ink);opacity:.55;font:inherit;font-size:18px;line-height:1;cursor:pointer}
+#placeList .rm:hover{opacity:1;background:var(--line)}
 .wm{font-size:12px;font-weight:400;color:var(--mute);margin-top:4px}.chip.low .sp{color:#B45309;font-weight:600}.chip .only{align-self:flex-start;background:var(--warn);color:var(--warn-ink);border-radius:4px;padding:0 5px;margin:1px 0;font-size:11px;font-weight:600}a.chip.off{opacity:.55;pointer-events:none}
 .rates{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0 1px}.chip a.rate,.chip span.rate{border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap}.chip a.rate:hover{border-color:var(--accent);color:var(--accent)}.chip span.rate{opacity:.55}
 .cg details{margin-top:10px}.cg summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);margin-bottom:8px}
@@ -221,6 +224,7 @@ const HOME=(()=>{const TZ={Sydney:[-33.87,151.21],ACT:[-35.28,149.13],Canberra:[
 const RECENTK="tee-recent",RECENT_MAX=5;
 const recent=()=>{try{const a=JSON.parse(localStorage.getItem(RECENTK)||"[]");return Array.isArray(a)?a.filter(p=>p&&p.n&&Number.isFinite(p.la)&&Number.isFinite(p.lo)):[]}catch(e){return[]}};
 const remember=p=>{try{localStorage.setItem(RECENTK,JSON.stringify([p,...recent().filter(q=>q.n.toLowerCase()!=p.n.toLowerCase())].slice(0,RECENT_MAX)))}catch(e){}};
+const forget=n=>{try{localStorage.setItem(RECENTK,JSON.stringify(recent().filter(q=>q.n.toLowerCase()!=n.toLowerCase())))}catch(e){}};
 const regionOf=c=>c.region||"nsw";
 const $=id=>document.getElementById(id);
 let ALL=EMBED_COURSES,COURSES=ALL,REG=null,TIMES=[],demo=false,day=0,shown=12,rows=[],ME=null,START=null,view="list",M=null,LY=null,fitKey="";
@@ -286,14 +290,19 @@ function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
   const close=()=>{ul.hidden=true;w.setAttribute("aria-expanded","false");w.removeAttribute("aria-activedescendant");active=-1};
   const mark=()=>{[...ul.children].forEach((li,i)=>{li.classList.toggle("on",i==active);li.setAttribute("aria-selected",i==active)});
     if(active>=0){w.setAttribute("aria-activedescendant","place"+active);ul.children[active].scrollIntoView({block:"nearest"})}else w.removeAttribute("aria-activedescendant")};
-  const draw=narrow=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"",mine=recent().map(p=>p.n);
+  const draw=(narrow,keep)=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"",mine=recent().map(p=>p.n);
     const all=q?[...new Set([...mine,...CITIES.map(c=>c.n)])]:mine.length?mine:CITIES.map(c=>c.n);
-    items=all.filter(n=>n.toLowerCase().includes(q)).map(n=>({text:n,pick:n}));
+    items=all.filter(n=>n.toLowerCase().includes(q)).map(n=>({text:n,pick:n,mine:mine.includes(n)}));
     if(q.length>=2){const have=new Set(items.map(it=>it.pick.toLowerCase())),at=n=>{const l=n.toLowerCase();return l.startsWith(q)?0:l.includes(" "+q)?1:-1};
       items=items.concat(SUBURBS.filter(p=>!have.has(p.n.toLowerCase())&&at(p.n)>=0).sort((a,b)=>at(a.n)-at(b.n)||a.n.length-b.n.length||a.n.localeCompare(b.n)).slice(0,Math.max(0,8-items.length)).map(p=>({text:p.n,pick:p.n})))}
     if(q&&!items.some(it=>it.pick.toLowerCase()==q))items.push({text:`Search for “${typed}”`,pick:typed,find:true});
-    ul.replaceChildren(...items.map((it,i)=>{const li=document.createElement("li");li.id="place"+i;li.setAttribute("role","option");li.dataset.i=i;li.textContent=it.text;if(it.find)li.className="find";return li}));
-    active=-1;mark();ul.hidden=!items.length;w.setAttribute("aria-expanded",String(!!items.length))};
+    ul.replaceChildren(...items.map((it,i)=>{const li=document.createElement("li");li.id="place"+i;li.setAttribute("role","option");li.dataset.i=i;
+      if(it.mine){// a recent place can be taken off the list: the × button, or Delete while it's highlighted
+        const s=document.createElement("span"),x=document.createElement("button");s.textContent=it.text;x.type="button";x.className="rm";x.tabIndex=-1;x.textContent="×";
+        x.title=`Remove ${it.text} from recent places`;x.setAttribute("aria-label",x.title);li.className="mine";li.append(s,x)}
+      else li.textContent=it.text;
+      if(it.find)li.className="find";return li}));
+    active=keep!=null&&items.length?Math.min(keep,items.length-1):-1;mark();ul.hidden=!items.length;w.setAttribute("aria-expanded",String(!!items.length))};
   const pick=it=>{w.value=it.pick;close();findPlace();w.blur()};
   w.onfocus=()=>{whereMsg("");w.select();draw(false)};
   w.onclick=()=>{if(ul.hidden)draw(false)};
@@ -303,9 +312,11 @@ function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
   w.onkeydown=e=>{
     if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();if(ul.hidden){draw(false);if(ul.hidden)return}const n=items.length;active=e.key=="ArrowDown"?(active+1)%n:(active<=0?n:active)-1;mark()}
     else if(e.key=="Enter"){e.preventDefault();const typed=w.value.trim().toLowerCase(),match=active>=0?items[active]:typed&&!ul.hidden&&items.find(it=>!it.find&&it.pick.toLowerCase().startsWith(typed));if(match)pick(match);else{close();w.blur()}}
-    else if(e.key=="Escape"&&!ul.hidden){e.preventDefault();close();w.value=placeName()}};
+    else if(e.key=="Escape"&&!ul.hidden){e.preventDefault();close();w.value=placeName()}
+    else if(e.key=="Delete"&&!ul.hidden&&items[active]?.mine){e.preventDefault();drop(active)}};
+  const drop=i=>{forget(items[i].pick);draw(!!w.value.trim()&&w.value.trim()!=placeName(),i)};
   ul.onpointerdown=e=>e.preventDefault();
-  ul.onclick=e=>{e.preventDefault();const li=e.target.closest("li");if(li)pick(items[+li.dataset.i])}}
+  ul.onclick=e=>{e.preventDefault();const li=e.target.closest("li");if(!li)return;if(e.target.closest(".rm"))drop(+li.dataset.i);else pick(items[+li.dataset.i])}}
 // Favourite courses are kept on this device and pinned to the top of the list.
 const FAVK="tee-favs";let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem(FAVK)||"[]"))}catch(e){}
 const toggleFav=id=>{FAVS.has(id)?FAVS.delete(id):FAVS.add(id);try{localStorage.setItem(FAVK,JSON.stringify([...FAVS]))}catch(e){}render()};
