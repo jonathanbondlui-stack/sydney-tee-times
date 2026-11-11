@@ -7936,11 +7936,12 @@
   "suburb": "Belair",
   "lat": -35.006,
   "lon": 138.645,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "note": "Book by calling the course."
  },
  {
   "id": "stirling-sa",
@@ -8007,11 +8008,13 @@
   "suburb": "Meadows",
   "lat": -35.18,
   "lon": 138.75,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8388 3019",
+  "note": "Book by calling the club."
  },
  {
   "id": "strathalbyn",
