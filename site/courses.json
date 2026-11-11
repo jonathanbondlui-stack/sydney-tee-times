@@ -7322,7 +7322,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "par": 72
  },
  {
   "id": "mawson-lakes",
@@ -7338,7 +7339,9 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.mawsonlakesgolfclub.com.au/",
-  "phone": "(08) 8262 1628"
+  "phone": "(08) 8262 1628",
+  "par": 35,
+  "holes": 9
  },
  {
   "id": "mount-compass",
@@ -7354,7 +7357,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://mcgc.com.au/",
-  "phone": "(08) 8556 8500"
+  "phone": "(08) 8556 8500",
+  "par": 72
  },
  {
   "id": "north-adelaide-north",
@@ -7407,7 +7411,9 @@
   "checked": "2026-11-11",
   "part_of": "north-adelaide-north",
   "website": "https://northadelaidegolf.com.au/",
-  "phone": "(08) 8203 7888"
+  "phone": "(08) 8203 7888",
+  "par": 54,
+  "holes": 18
  },
  {
   "id": "sandy-creek",
@@ -7423,7 +7429,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.sandycreekgolf.com.au/",
-  "phone": "(08) 8524 4231"
+  "phone": "(08) 8524 4231",
+  "par": 72
  },
  {
   "id": "south-lakes",
@@ -7439,7 +7446,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.southlakesgolf.com.au/",
-  "phone": "(08) 8555 2299"
+  "phone": "(08) 8555 2299",
+  "par": 70
  },
  {
   "id": "tanunda-pines",
@@ -7455,7 +7463,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.tanundapines.com.au/",
-  "phone": "(08) 8563 1200"
+  "phone": "(08) 8563 1200",
+  "par": 72
  },
  {
   "id": "victor-harbor",
@@ -7471,7 +7480,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.victorharborgolf.com.au/",
-  "phone": "(08) 8552 1713"
+  "phone": "(08) 8552 1713",
+  "par": 72
  },
  {
   "id": "willunga",
@@ -7502,7 +7512,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.westbeachparksgolf.com.au/",
-  "phone": "(08) 8356 4811"
+  "phone": "(08) 8356 4811",
+  "par": 72
  },
  {
   "id": "seacliff",
@@ -7518,7 +7529,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.seacliffgolfclub.com.au/",
-  "phone": "(08) 8298 7454"
+  "phone": "(08) 8298 7454",
+  "holes": 9
  },
  {
   "id": "mount-osmond",
@@ -7563,7 +7575,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://vinesgc.miclub.com.au/",
-  "phone": "(08) 8381 1822"
+  "phone": "(08) 8381 1822",
+  "par": 71
  },
  {
   "id": "little-para",
@@ -7579,7 +7592,8 @@
   "holes": 9,
   "website": "https://littleparagolf.com.au/",
   "phone": "(08) 8285 9177",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "par": 27
  },
  {
   "id": "highercombe",
