@@ -4522,14 +4522,15 @@
   "status": "online",
   "cta": "Book online",
   "book_url": "https://www.chronogolf.com/en/club/15748/widget?medium=widget&source=club#?course_id=18100&nb_holes=18",
-  "enabled": true,
+  "enabled": false,
   "region": "vic",
   "checked": "2026-11-11",
   "facility_id": 15748,
   "resource_id": 18100,
   "rate_id": 64772,
   "par": 72,
-  "host": "www.chronogolf.com"
+  "host": "www.chronogolf.com",
+  "note": "Books online through Chronogolf. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "brighton",
@@ -5021,7 +5022,7 @@
   "lon": 144.8704,
   "status": "online",
   "platform": "chronogolf",
-  "enabled": true,
+  "enabled": false,
   "region": "vic",
   "website": "https://www.eagleridge.com.au/",
   "checked": "2026-11-11",
@@ -5031,7 +5032,8 @@
   "par": 72,
   "host": "www.chronogolf.com",
   "cta": "Book online",
-  "book_url": "https://www.chronogolf.com/en/club/15574/widget?medium=widget&source=club#?course_id=17916&nb_holes=18"
+  "book_url": "https://www.chronogolf.com/en/club/15574/widget?medium=widget&source=club#?course_id=17916&nb_holes=18",
+  "note": "Books online through Chronogolf. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "mornington",
@@ -5599,7 +5601,7 @@
   "lon": 153.052,
   "status": "online",
   "platform": "chronogolf",
-  "enabled": true,
+  "enabled": false,
   "cta": "Book online",
   "book_url": "https://www.chronogolf.com/en/club/16370/widget?medium=widget&source=club#?course_id=23233&nb_holes=18",
   "region": "qld",
@@ -5609,7 +5611,8 @@
   "resource_id": 23233,
   "rate_id": 67260,
   "rate_label": "Adults",
-  "host": "www.chronogolf.com"
+  "host": "www.chronogolf.com",
+  "note": "Books online through Chronogolf. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "wynnum",

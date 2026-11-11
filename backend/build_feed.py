@@ -459,6 +459,9 @@ def collect_golfnow(c, today, first=0, last=DAYS):
     return rows
 
 CHRONOGOLF = "https://www.chronogolf.com"
+# NOT IN USE: Chronogolf's terms (chronogolf.com/page/terms_and_conditions, section IV) limit its services to
+# personal, non-commercial use and forbid building them into a product for others. Its courses stay
+# enabled=false, as booking links, unless Lightspeed (legal@lightspeedhq.com) gives written permission.
 
 def chronogolf_url(c, date, players, holes):
     """The tee times Chronogolf's booking widget shows for a party of this size at the public rate.
