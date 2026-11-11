@@ -1538,7 +1538,8 @@
   "checked": "2026-11-05",
   "note": "Call to book. It looks to be based at Colonial Golf and Footgolf Course, so try (02) 9673 3639.",
   "par": 35,
-  "holes": 9
+  "holes": 9,
+  "phone": "(02) 4736 1266"
  },
  {
   "id": "shortees",
@@ -1566,7 +1567,8 @@
   "platform": "miclub",
   "host": "gosford.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "magenta-shores",
@@ -1592,7 +1594,8 @@
   "platform": "miclub",
   "host": "shellybeach.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "wyong",
@@ -1604,7 +1607,8 @@
   "platform": "miclub",
   "host": "www.wyonggolfclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "kooindah-waters",
@@ -1616,7 +1620,8 @@
   "platform": "miclub",
   "host": "kooindahwatersgolf.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "toukley",
@@ -1629,7 +1634,8 @@
   "host": "toukley-golf-club.book.teeitup.com",
   "facility_id": 20705,
   "enabled": true,
-  "book_url": "https://toukley-golf-club.book.teeitup.com/"
+  "book_url": "https://toukley-golf-club.book.teeitup.com/",
+  "par": 72
  },
  {
   "id": "newcastle",
@@ -1641,7 +1647,8 @@
   "platform": "miclub",
   "host": "www.newcastlegolfclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "merewether",
@@ -1653,7 +1660,8 @@
   "platform": "miclub",
   "host": "merewethergolf.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 70
  },
  {
   "id": "waratah",
@@ -1665,7 +1673,8 @@
   "platform": "miclub",
   "host": "waratah.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "belmont",
@@ -1677,7 +1686,8 @@
   "platform": "miclub",
   "host": "belmontgolf.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "toronto",
@@ -1689,7 +1699,8 @@
   "platform": "miclub",
   "host": "toronto.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "shortland-waters",
@@ -1701,7 +1712,8 @@
   "platform": "miclub",
   "host": "shortlandwaters.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "kurri-kurri",
@@ -1713,7 +1725,8 @@
   "platform": "miclub",
   "host": "kurri.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "maitland",
@@ -1725,7 +1738,8 @@
   "platform": "miclub",
   "host": "embc.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 69
  },
  {
   "id": "cypress-lakes",
@@ -1737,7 +1751,8 @@
   "platform": "miclub",
   "host": "www.cypresslakes.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "the-vintage",
@@ -1749,7 +1764,8 @@
   "platform": "miclub",
   "host": "vintage.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "nelson-bay",
@@ -1761,7 +1777,8 @@
   "platform": "miclub",
   "host": "nelsonbay.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "pacific-dunes",
@@ -1773,7 +1790,8 @@
   "platform": "miclub",
   "host": "pacificdunes.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "horizons",
@@ -1785,7 +1803,8 @@
   "platform": "miclub",
   "host": "horizons.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "hawks-nest",
@@ -1797,7 +1816,8 @@
   "platform": "miclub",
   "host": "hawksnest.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 72
  },
  {
   "id": "muree",
@@ -1810,7 +1830,8 @@
   "host": "www.golfnow.com.au",
   "facility_id": 17234,
   "book_url": "https://www.golfnow.com.au/tee-times/facility/17234-muree-golf-club/search#date={gn_date}",
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "wollongong",
@@ -1822,7 +1843,8 @@
   "platform": "miclub",
   "host": "wollongong.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 70
  },
  {
   "id": "links-shell-cove",
@@ -1834,7 +1856,8 @@
   "platform": "miclub",
   "host": "linksshellcove.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 70
  },
  {
   "id": "kiama",
@@ -1846,7 +1869,8 @@
   "platform": "miclub",
   "host": "kiama.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 66
  },
  {
   "id": "bowral",
@@ -1858,7 +1882,8 @@
   "platform": "miclub",
   "host": "bowral.miclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 69
  },
  {
   "id": "moss-vale",
@@ -1870,7 +1895,8 @@
   "platform": "miclub",
   "host": "www.mossvalegolfclub.com.au",
   "resource_id": 3000000,
-  "enabled": true
+  "enabled": true,
+  "par": 71
  },
  {
   "id": "leura",
@@ -1883,7 +1909,8 @@
   "host": "leura-golf-club.book.teeitup.com",
   "facility_id": 16132,
   "enabled": true,
-  "book_url": "https://leura-golf-club.book.teeitup.com/"
+  "book_url": "https://leura-golf-club.book.teeitup.com/",
+  "par": 70
  },
  {
   "id": "wentworth-falls",
@@ -2651,7 +2678,8 @@
   "facility_id": 15915,
   "book_url": "https://www.golfnow.com.au/tee-times/facility/15915-bega-country-club/search#date={gn_date}",
   "enabled": true,
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72
  },
  {
   "id": "pambula-merimbula",
@@ -2665,7 +2693,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "website": "https://pmgcgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71
  },
  {
   "id": "canberra-public",
@@ -2695,7 +2724,8 @@
   "checked": "2026-11-08",
   "source": "club",
   "cta": "Request a tee time",
-  "book_url": "https://queanbeyangolf.com.au/request-a-tee-time/"
+  "book_url": "https://queanbeyangolf.com.au/request-a-tee-time/",
+  "phone": "(02) 6297 2542"
  },
  {
   "id": "yowani",
@@ -3537,7 +3567,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72
  },
  {
   "id": "rosebud",
@@ -3744,7 +3775,9 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.springparkgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 34,
+  "holes": 9
  },
  {
   "id": "mount-martha",
@@ -3821,7 +3854,8 @@
   "enabled": true,
   "region": "vic",
   "website": "http://www.13thbeach.net/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 72
  },
  {
   "id": "werribee-park",
@@ -3926,7 +3960,8 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.chirnsideparkcc.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70
  },
  {
   "id": "marysville",
@@ -3977,7 +4012,8 @@
   "enabled": true,
   "region": "vic",
   "website": "http://www.freewaygc.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 67
  },
  {
   "id": "bacchus-marsh",
@@ -4482,14 +4518,18 @@
   "suburb": "Middle Park",
   "lat": -37.8428,
   "lon": 144.9733,
-  "platform": "none",
+  "platform": "chronogolf",
   "status": "online",
   "cta": "Book online",
-  "note": "Books through Chronogolf, which the site doesn't read yet.",
   "book_url": "https://www.chronogolf.com/en/club/15748/widget?medium=widget&source=club#?course_id=18100&nb_holes=18",
-  "enabled": false,
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-11",
+  "facility_id": 15748,
+  "resource_id": 18100,
+  "rate_id": 64772,
+  "par": 72,
+  "host": "www.chronogolf.com"
  },
  {
   "id": "brighton",
@@ -4582,7 +4622,8 @@
   "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "phone": "(03) 9753 3200"
  },
  {
   "id": "centenary-park",
@@ -4663,7 +4704,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "st-leonards",
@@ -4677,7 +4719,8 @@
   "enabled": false,
   "region": "vic",
   "website": "https://www.stleonards.golf/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "phone": "(03) 5257 2343"
  },
  {
   "id": "elcho-park",
@@ -4706,7 +4749,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 66
  },
  {
   "id": "saint-andrews-beach",
@@ -4720,7 +4764,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 70
  },
  {
   "id": "safety-beach",
@@ -4734,7 +4779,8 @@
   "enabled": false,
   "region": "vic",
   "website": "https://safetybeachcountryclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "phone": "(03) 5981 0100"
  },
  {
   "id": "whittlesea",
@@ -4886,7 +4932,8 @@
   "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "phone": "(03) 9399 1029"
  },
  {
   "id": "northcote",
@@ -4972,13 +5019,19 @@
   "suburb": "Fingal",
   "lat": -38.4033,
   "lon": 144.8704,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "chronogolf",
+  "enabled": true,
   "region": "vic",
-  "note": "Books through Chronogolf, which the site doesn't read yet.",
   "website": "https://www.eagleridge.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-11",
+  "facility_id": 15574,
+  "resource_id": 17916,
+  "rate_id": 64076,
+  "par": 72,
+  "host": "www.chronogolf.com",
+  "cta": "Book online",
+  "book_url": "https://www.chronogolf.com/en/club/15574/widget?medium=widget&source=club#?course_id=17916&nb_holes=18"
  },
  {
   "id": "mornington",
@@ -5072,7 +5125,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.noosasprings.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "cooroy",
@@ -5116,7 +5170,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "palmer-coolum-beachside",
@@ -5211,7 +5266,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "maleny",
@@ -5256,7 +5312,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.caloundragolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "pelican-waters",
@@ -5271,7 +5328,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.pelicanwatersgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "beerwah",
@@ -5318,7 +5376,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.woodfordgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "pacific-harbour",
@@ -5333,7 +5392,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.pacificharbourgolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "caboolture",
@@ -5347,7 +5407,8 @@
   "region": "qld",
   "checked": "2026-11-09",
   "host": "caboolture.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "bribie-island",
@@ -5378,7 +5439,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 70
  },
  {
   "id": "esk",
@@ -5453,7 +5515,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 70
  },
  {
   "id": "virginia",
@@ -5535,14 +5598,18 @@
   "lat": -27.4447,
   "lon": 153.052,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
+  "platform": "chronogolf",
+  "enabled": true,
   "cta": "Book online",
-  "book_url": "https://www.chronogolf.com/club/16370",
-  "note": "Books through Chronogolf, which the site doesn't read yet.",
+  "book_url": "https://www.chronogolf.com/en/club/16370/widget?medium=widget&source=club#?course_id=23233&nb_holes=18",
   "region": "qld",
   "website": "https://www.bulimbagolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-11",
+  "facility_id": 16370,
+  "resource_id": 23233,
+  "rate_id": 67260,
+  "rate_label": "Adults",
+  "host": "www.chronogolf.com"
  },
  {
   "id": "wynnum",
@@ -5557,7 +5624,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.wynnumgolf.com.au/cms/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 70
  },
  {
   "id": "lowood-district",
@@ -5634,7 +5702,8 @@
   "checked": "2026-11-09",
   "host": "stlucia.quick18.com",
   "cta": "Book online at St Lucia",
-  "book_url": "https://stlucia.quick18.com/teetimes/searchmatrix?teedate={date}"
+  "book_url": "https://stlucia.quick18.com/teetimes/searchmatrix?teedate={date}",
+  "par": 69
  },
  {
   "id": "indooroopilly",
@@ -5650,7 +5719,8 @@
   "checked": "2026-11-09",
   "cta": "Club website",
   "book_url": "https://www.indooroopillygolf.com.au/",
-  "note": "Visitors enquire through the form on the club's website."
+  "note": "Visitors enquire through the form on the club's website.",
+  "phone": "(07) 3721 2122"
  },
  {
   "id": "pacific",
@@ -5698,7 +5768,9 @@
   "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
   "region": "qld",
   "website": "https://www.jindaleegolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 33,
+  "holes": 9
  },
  {
   "id": "karana-downs",
@@ -5790,7 +5862,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.oxleygolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "gailes",
@@ -5805,7 +5878,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.gailesgolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 73
  },
  {
   "id": "redland-bay",
@@ -5820,7 +5894,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.redlandbaygolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "wolston-park",
@@ -5837,7 +5912,8 @@
   "facility_id": 16238,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16238-wolston-park-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 67
  },
  {
   "id": "bay-islands",
@@ -5867,7 +5943,8 @@
   "enabled": true,
   "region": "qld",
   "website": "http://www.ipswichgolf.org.au",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "rosewood",
@@ -5946,7 +6023,8 @@
   "facility_id": 17225,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/17225-riverlakes-golf-course/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 70
  },
  {
   "id": "carbrook",
@@ -5961,7 +6039,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://carbrookgolfclub.com.au/home.php",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "mount-warren-park",
@@ -5978,7 +6057,8 @@
   "facility_id": 15337,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/15337-mount-warren-park-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 72
  },
  {
   "id": "windaroo",
@@ -5995,7 +6075,8 @@
   "facility_id": 17214,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/17214-windaroo-lakes-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 72
  },
  {
   "id": "gainsborough-greens",
@@ -6051,7 +6132,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.linkshopeisland.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "helensvale",
@@ -6142,7 +6224,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.beaudesertgolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "racv-royal-pines",
@@ -6267,7 +6350,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.lakelandsgolfclub.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "palmer-colonial",
@@ -6281,7 +6365,8 @@
   "region": "qld",
   "checked": "2026-11-09",
   "host": "www.palmergolf.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "gold-coast-burleigh",
@@ -6295,7 +6380,8 @@
   "region": "qld",
   "website": "https://www.burleighgolfclub.com.au/",
   "checked": "2026-11-09",
-  "note": "Call the pro shop or email proshop@burleighgolfclub.com.au to check availability."
+  "note": "Call the pro shop or email proshop@burleighgolfclub.com.au to check availability.",
+  "phone": "(07) 5572 8972"
  },
  {
   "id": "kooralbyn-valley",
@@ -6309,7 +6395,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "glades",
@@ -6341,7 +6428,8 @@
   "checked": "2026-11-09",
   "host": "www.palmergolf.com.au",
   "resource_id": 3000001,
-  "note": "Formerly Robina Woods. Books on the same Palmer Golf site as Palmer Colonial."
+  "note": "Formerly Robina Woods. Books on the same Palmer Golf site as Palmer Colonial.",
+  "par": 71
  },
  {
   "id": "boomerang-hills",
@@ -6421,7 +6509,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.cooltweedgolf.com.au",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "coolangatta-tweed-heads-river",
@@ -6511,7 +6600,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.pinjarragolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "the-cut",
@@ -6526,7 +6616,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://the-cut.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "mandurah",
@@ -6554,7 +6645,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.msgcc.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "secret-harbour",
@@ -6569,7 +6661,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.secretsgolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "kennedy-bay",
@@ -6584,7 +6677,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.kennedybay.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "serpentine",
@@ -6612,7 +6706,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.rockinghamgolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "kwinana",
@@ -6627,7 +6722,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.kwinanagolfclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "marri-park",
@@ -6656,7 +6752,9 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.armadalegolf.club/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 34,
+  "holes": 9
  },
  {
   "id": "araluen",
@@ -6685,7 +6783,8 @@
   "checked": "2026-11-11",
   "host": "www.gosnellsgc.com.au",
   "resource_id": 3000000,
-  "note": "Visitors play on Mondays, timesheet permitting."
+  "note": "Visitors play on Mondays, timesheet permitting.",
+  "par": 70
  },
  {
   "id": "melville-glades",
@@ -6729,7 +6828,9 @@
   "enabled": true,
   "region": "wa",
   "website": "https://fremantlegolfcourse.com/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 34,
+  "holes": 9
  },
  {
   "id": "whaleback",
@@ -6744,7 +6845,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.whalebackgolfcourse.com.au/cms/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 71
  },
  {
   "id": "pickering-brook",
@@ -6756,7 +6858,8 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 9293 8263"
  },
  {
   "id": "mosman-park",
@@ -6770,7 +6873,9 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 36,
+  "holes": 9
  },
  {
   "id": "point-walter",
@@ -6785,7 +6890,9 @@
   "enabled": true,
   "region": "wa",
   "website": "https://pointwaltergolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 35,
+  "holes": 9
  },
  {
   "id": "collier-park",
@@ -6828,7 +6935,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "rottnest",
@@ -6884,7 +6992,9 @@
   "checked": "2026-11-11",
   "host": "lakeclaremont.quick18.com",
   "cta": "Book online",
-  "book_url": "https://lakeclaremont.quick18.com/teetimes/searchmatrix?teedate={date}"
+  "book_url": "https://lakeclaremont.quick18.com/teetimes/searchmatrix?teedate={date}",
+  "par": 27,
+  "holes": 9
  },
  {
   "id": "cottesloe",
@@ -6912,7 +7022,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.maylandsgolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 71
  },
  {
   "id": "hillview",
@@ -7011,7 +7122,8 @@
   "checked": "2026-11-11",
   "host": "hamersley.quick18.com",
   "cta": "Book online",
-  "book_url": "https://hamersley.quick18.com/teetimes/searchmatrix?teedate={date}"
+  "book_url": "https://hamersley.quick18.com/teetimes/searchmatrix?teedate={date}",
+  "par": 72
  },
  {
   "id": "lake-karrinyup",
@@ -7039,7 +7151,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "wa",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "lakelands-wa",
@@ -7068,7 +7181,8 @@
   "note": "Visitor times shown are for the Championship Course. Ask the club about the Lakes Course.",
   "region": "wa",
   "website": "https://www.vines.com.au/golf",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "joondalup",
@@ -7099,7 +7213,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.carramargolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "wanneroo",
@@ -7129,7 +7244,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://chequersgolf.org/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 71
  },
  {
   "id": "sun-city",
@@ -7144,7 +7260,8 @@
   "enabled": true,
   "region": "wa",
   "website": "https://www.suncitycountryclub.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "yanchep",

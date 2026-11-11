@@ -458,7 +458,55 @@ def collect_golfnow(c, today, first=0, last=DAYS):
                     rows.append(r)
     return rows
 
-COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup, "golfnow": collect_golfnow}
+CHRONOGOLF = "https://www.chronogolf.com"
+
+def chronogolf_url(c, date, players, holes):
+    """The tee times Chronogolf's booking widget shows for a party of this size at the public rate.
+    The rate is sent once for each player, as the widget does."""
+    q = [("date", date), ("course_id", c["resource_id"])] + [("affiliation_type_ids[]", c["rate_id"])] * players + [("nb_holes", holes)]
+    return f"{CHRONOGOLF}/marketplace/clubs/{c['facility_id']}/teetimes?{urlencode(q)}"
+
+def parse_chronogolf(text, date):
+    """The bookable times in one Chronogolf answer, as {"HH:MM": price per player}. Left out: times
+    already full for this party, times this rate can't book (restrictions), and frozen times."""
+    open_times = {}
+    for t in json.loads(text):
+        fees = t.get("green_fees") or []
+        if t.get("date") != date or t.get("out_of_capacity") or t.get("restrictions") or t.get("frozen") or not fees:
+            continue
+        open_times[t["start_time"][:5]] = float(fees[0]["green_fee"])
+    return open_times
+
+def collect_chronogolf(c, today, first=0, last=DAYS):
+    """Collect tee times from first to last days ahead. Chronogolf answers for one party size at a time,
+    so each date asks for 1 player, then 4, and only asks for 2 and 3 when some times take fewer than 4."""
+    rows = []
+    label = c.get("rate_label", "Public")
+    for ahead in range(first, last + 1):
+        d = (today + dt.timedelta(days=ahead)).isoformat()
+        for holes in c.get("holes_options", [18]):
+            one = parse_chronogolf(fetch(chronogolf_url(c, d, 1, holes)), d)
+            if not one:
+                continue
+            spots = dict.fromkeys(one, 1)
+            for n in (4, 2, 3):
+                if all(s == 4 for s in spots.values()):
+                    break
+                if n == 3 and not any(s == 2 for s in spots.values()):
+                    continue
+                for tm in parse_chronogolf(fetch(chronogolf_url(c, d, n, holes)), d):
+                    if tm in spots:
+                        spots[tm] = max(spots[tm], n)
+            url = (f"{CHRONOGOLF}/en/club/{c['facility_id']}/widget?medium=widget&source=club"
+                   f"#?course_id={c['resource_id']}&nb_holes={holes}&date={d}")
+            for tm, price in sorted(one.items()):
+                rows.append({"course": c["id"], "date": d, "time": tm, "holes": holes, "price": price, "spots": spots[tm],
+                             "label": label, "only": "", "group": "", "tee": "", "min_players": 1, "url": url,
+                             "fees": [{"price": price, "label": label}]})
+    return rows
+
+COLLECTORS = {"miclub": collect_miclub, "quick18": collect_quick18, "teeitup": collect_teeitup, "golfnow": collect_golfnow,
+              "chronogolf": collect_chronogolf}
 
 def apply_splits(rows, courses):
     """Some clubs book more than one course on one site. Such a club lists "split" rules,

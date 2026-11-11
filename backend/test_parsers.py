@@ -162,3 +162,26 @@ assert local_time(utc(2026, 11, 5, 20, 0), "qld") == dt.datetime(2026, 11, 6, 6,
 assert local_time(utc(2026, 11, 5, 20, 0), "vic") == dt.datetime(2026, 11, 6, 7, 0)
 assert local_time(utc(2026, 11, 5, 22, 0), "wa") == dt.datetime(2026, 11, 6, 6, 0)  # Perth is UTC+8 all year
 print("local time tests passed")
+
+# Chronogolf: one answer per party size; full, restricted and frozen times are left out, and the
+# reader works out each time's open spots from which party sizes can still book it.
+import json, build_feed as bf
+def cg(tm, full=False, restr=(), frozen=False, fee=43.0, date="2026-11-14"):
+    t = {"start_time": tm, "date": date, "out_of_capacity": full, "restrictions": list(restr), "frozen": frozen}
+    if fee is not None: t["green_fees"] = [{"green_fee": fee}]
+    return t
+one = [cg("05:30"), cg("05:37"), cg("05:45"), cg("06:00", full=True), cg("06:07", restr=["no adults"]), cg("06:15", frozen=True), cg("06:22", fee=None), cg("06:30", date="2026-11-15")]
+assert bf.parse_chronogolf(json.dumps(one), "2026-11-14") == {"05:30": 43.0, "05:37": 43.0, "05:45": 43.0}
+answers = {1: one, 4: [cg("05:30"), cg("05:37", full=True), cg("05:45", full=True)],
+           2: [cg("05:30"), cg("05:37"), cg("05:45", full=True)], 3: [cg("05:30"), cg("05:37", full=True)]}
+real_fetch = bf.fetch
+bf.fetch = lambda url: json.dumps(answers[url.count("affiliation_type_ids")])
+try:
+    import datetime
+    c = {"id": "albert-park", "facility_id": 15748, "resource_id": 18100, "rate_id": 64772, "book_url": "https://example/#?date={date}"}
+    rows = bf.collect_chronogolf(c, datetime.date(2026, 11, 14), 0, 0)
+finally:
+    bf.fetch = real_fetch
+assert [(r["time"], r["spots"], r["price"], r["holes"]) for r in rows] == [("05:30", 4, 43.0, 18), ("05:37", 2, 43.0, 18), ("05:45", 1, 43.0, 18)], rows
+assert rows[0]["url"].endswith("#?course_id=18100&nb_holes=18&date=2026-11-14"), rows[0]["url"]
+print("chronogolf tests passed")
