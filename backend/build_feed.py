@@ -77,6 +77,8 @@ def allowed(url):
         return True, reason
     return False, "robots.txt disallows this path for our user agent"
 
+_resting = {}  # host -> when its Retry-After ends, for waits longer than a run can sit out
+
 def fetch(url, headers=None, data=None):
     if "@" not in UA or "YOUR_EMAIL_HERE" in UA:
         raise PermissionError("TEE_UA has no contact email, so not fetching")
@@ -86,6 +88,9 @@ def fetch(url, headers=None, data=None):
     if not ok:
         raise PermissionError(f"{reason}")
     host = urlparse(url).netloc
+    if time.time() < _resting.get(host, 0):
+        # The server asked us to stay away for longer than a run can wait, so don't ask again until then.
+        raise urllib.error.HTTPError(url, 429, f"Too Many Requests (asked to wait until {time.strftime('%H:%M UTC', time.gmtime(_resting[host]))})", {}, None)
     wait = HOST_GAP.get(host, MIN_GAP) - (time.time() - _last.get(host, 0))
     if wait > 0:
         time.sleep(wait)
@@ -102,6 +107,9 @@ def fetch(url, headers=None, data=None):
                 pause = float(e.headers.get("Retry-After") or 0)
             except ValueError:
                 pause = 0
+            if pause > 90:
+                _resting[host] = time.time() + pause
+                raise
             time.sleep(min(max(pause, 20 * (attempt + 1)), 90))
         finally:
             _last[host] = time.time()
