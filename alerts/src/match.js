@@ -6,6 +6,7 @@ export const REGIONS = {
   vic: { la: -37.81, lo: 144.96, tz: "Australia/Melbourne" },
   qld: { la: -27.47, lo: 153.03, tz: "Australia/Brisbane" },
   wa: { la: -31.95, lo: 115.86, tz: "Australia/Perth" },
+  sa: { la: -34.93, lo: 138.6, tz: "Australia/Adelaide" },
 };
 
 const HOLES = /(\d+)\s*-?\s*holes?/i, NO_FINISH = /will not finish/i, ROUND_MINS = 255, SHORT_HOLES = /\b(\d+)H\b/i;
