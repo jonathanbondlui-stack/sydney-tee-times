@@ -8064,12 +8064,13 @@
   "suburb": "Normanville",
   "lat": -35.4605,
   "lon": 138.3168,
-  "status": "check",
+  "status": "resort",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://www.linksladybay.com.au/"
+  "website": "https://www.linksladybay.com.au/",
+  "note": "Resort guests only. Ask the resort about a round when you book your stay."
  },
  {
   "id": "wirrina",
