@@ -8089,18 +8089,6 @@
   "website": "https://newterry.com.au/"
  },
  {
-  "id": "stockport",
-  "name": "Stockport Golf Club",
-  "suburb": "Stockport",
-  "lat": -34.3542,
-  "lon": 138.7355,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "sa",
-  "checked": "2026-11-11"
- },
- {
   "id": "kingston-beach",
   "name": "Kingston Beach Golf Club",
   "suburb": "Kingston Beach",
@@ -8340,20 +8328,6 @@
   "phone": "(03) 6254 1110"
  },
  {
-  "id": "rosny-park",
-  "name": "Rosny Park Public Golf Course",
-  "suburb": "Rosny Park",
-  "lat": -42.8655,
-  "lon": 147.3655,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "tas",
-  "checked": "2026-11-11",
-  "phone": "(03) 6244 1297",
-  "holes": 9
- },
- {
   "id": "elderslie",
   "name": "Elderslie Golf Club",
   "suburb": "Broadmarsh",
@@ -8399,11 +8373,12 @@
   "suburb": "Richmond",
   "lat": -42.8163,
   "lon": 147.4466,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "Book by calling the club."
  },
  {
   "id": "richmond-valley-tas",
