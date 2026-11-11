@@ -8354,29 +8354,18 @@
   "holes": 9
  },
  {
-  "id": "new-town-bay",
-  "name": "New Town Bay Golf Club",
-  "suburb": "New Town",
-  "lat": -42.8392,
-  "lon": 147.3164,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "tas",
-  "checked": "2026-11-11"
- },
- {
   "id": "elderslie",
   "name": "Elderslie Golf Club",
   "suburb": "Broadmarsh",
   "lat": -42.6264,
   "lon": 147.117,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11",
-  "website": "https://www.eldersliegolfclub.com.au/"
+  "checked": "2026-11-12",
+  "website": "https://www.eldersliegolfclub.com.au/",
+  "note": "Book by calling the club."
  },
  {
   "id": "bagdad",
@@ -8384,11 +8373,12 @@
   "suburb": "Bagdad",
   "lat": -42.6163,
   "lon": 147.2197,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "colebrook",
@@ -8396,11 +8386,12 @@
   "suburb": "Colebrook",
   "lat": -42.6131,
   "lon": 147.43,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "richmond-tas",
@@ -8420,11 +8411,12 @@
   "suburb": "Campania",
   "lat": -42.7397,
   "lon": 147.4178,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "Book by calling the club."
  },
  {
   "id": "forcett-lakes",
@@ -8432,11 +8424,12 @@
   "suburb": "Forcett",
   "lat": -42.8075,
   "lon": 147.6054,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "Book by calling the club."
  },
  {
   "id": "murraville",
@@ -8444,11 +8437,12 @@
   "suburb": "Dunalley",
   "lat": -42.8856,
   "lon": 147.8048,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "dover-tas",
@@ -8456,11 +8450,12 @@
   "suburb": "Dover",
   "lat": -43.3302,
   "lon": 146.9969,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "Book by calling the club."
  },
  {
   "id": "geeveston",
@@ -8468,11 +8463,12 @@
   "suburb": "Geeveston",
   "lat": -43.1765,
   "lon": 146.9039,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "No bookings, walk-ons only."
  },
  {
   "id": "ouse",
@@ -8480,10 +8476,11 @@
   "suburb": "Ouse",
   "lat": -42.4843,
   "lon": 146.7173,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-11"
+  "checked": "2026-11-12",
+  "note": "Book by calling the club."
  }
 ]
