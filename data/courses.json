@@ -7388,13 +7388,14 @@
   "suburb": "North Adelaide",
   "lat": -34.9115,
   "lon": 138.5866,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://northadelaidegolf.com.au/",
-  "phone": "(08) 8203 7888"
+  "phone": "(08) 8203 7888",
+  "note": "Its online booking isn't showing South Course times at the moment, so call the pro shop."
  },
  {
   "id": "north-adelaide-par-3",
@@ -7619,13 +7620,14 @@
   "suburb": "Seaton",
   "lat": -34.8952,
   "lon": 138.5091,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.royaladelaidegolf.com.au/",
-  "phone": "(08) 8356 5511"
+  "phone": "(08) 8356 5511",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "kooyonga",
@@ -7633,13 +7635,16 @@
   "suburb": "Lockleys",
   "lat": -34.9291,
   "lon": 138.5308,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.kooyongagolf.com.au/",
-  "phone": "(08) 8352 5444"
+  "phone": "(08) 8443 6162",
+  "note": "Visitors with a Golf Australia handicap, by booking enquiry on the club's website. Green fee $425.",
+  "cta": "Request a tee time",
+  "book_url": "https://www.kooyongagolf.com.au/cms/?p=11600"
  },
  {
   "id": "grange",
@@ -7647,13 +7652,14 @@
   "suburb": "Seaton",
   "lat": -34.8883,
   "lon": 138.4973,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.grangegolf.com.au/",
-  "phone": "(08) 8355 7100"
+  "phone": "(08) 8355 7111",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
  },
  {
   "id": "glenelg",
@@ -7661,12 +7667,14 @@
   "suburb": "Novar Gardens",
   "lat": -34.9613,
   "lon": 138.5289,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://www.glenelggolf.com/"
+  "website": "https://www.glenelggolf.com/",
+  "phone": "(08) 8350 3250",
+  "note": "Visitors book through the pro shop. No visitors on Wednesdays or Saturdays."
  },
  {
   "id": "tea-tree-gully",
@@ -7674,13 +7682,14 @@
   "suburb": "Fairview Park",
   "lat": -34.8022,
   "lon": 138.7284,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://ttggolfclub.com.au/",
-  "phone": "(08) 8251 9200"
+  "phone": "(08) 8251 9200",
+  "note": "Visitors need a Golf Australia handicap and must book. Green fee $75."
  },
  {
   "id": "west-lakes",
@@ -7688,12 +7697,14 @@
   "suburb": "West Lakes",
   "lat": -34.8713,
   "lon": 138.4993,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://www.westlakesgolfclub.com.au/"
+  "website": "https://www.westlakesgolfclub.com.au/",
+  "phone": "(08) 8268 3850",
+  "note": "Visitors who are members of a golf club, mostly on weekdays. Book through the pro shop."
  },
  {
   "id": "blackwood",
@@ -7701,13 +7712,14 @@
   "suburb": "Cherry Gardens",
   "lat": -35.0557,
   "lon": 138.6778,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.blackwoodgolf.com.au/",
-  "phone": "(08) 8388 2250"
+  "phone": "(08) 8388 2250",
+  "note": "Visitors Sunday, Monday, Tuesday, Thursday and Friday after 11am. Book through the pro shop."
  },
  {
   "id": "barossa-valley",
@@ -7715,13 +7727,14 @@
   "suburb": "Nuriootpa",
   "lat": -34.4327,
   "lon": 138.9784,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.barossavalleygolf.com.au/",
-  "phone": "(08) 8562 1589"
+  "phone": "(08) 8562 1589",
+  "note": "Visitors welcome. Its TeeItUp booking page shows no public times, so call the club."
  },
  {
   "id": "kapunda",
@@ -7729,13 +7742,15 @@
   "suburb": "Kapunda",
   "lat": -34.3365,
   "lon": 138.904,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://kapundagolf.com.au/",
-  "phone": "(08) 8566 2711"
+  "phone": "(08) 8566 2711",
+  "holes": 9,
+  "note": "Nine-hole course. Visitors welcome."
  },
  {
   "id": "murray-bridge",
@@ -7743,12 +7758,14 @@
   "suburb": "Murray Bridge",
   "lat": -35.1321,
   "lon": 139.2665,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://murraybridgegolfclub.com.au/"
+  "website": "https://murraybridgegolfclub.com.au/",
+  "phone": "(08) 8531 1388",
+  "note": "Its TeeItUp booking page shows no public times, so call the club."
  },
  {
   "id": "mannum",
@@ -7756,12 +7773,15 @@
   "suburb": "Mannum",
   "lat": -34.9255,
   "lon": 139.2994,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://www.mannumgolfclub.com.au/"
+  "website": "https://www.mannumgolfclub.com.au/",
+  "phone": "0411 107 450",
+  "holes": 9,
+  "note": "Nine-hole course. Visitors welcome."
  },
  {
   "id": "echunga",
@@ -7769,13 +7789,14 @@
   "suburb": "Echunga",
   "lat": -35.0922,
   "lon": 138.7898,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "http://www.echungagolf.com.au/",
-  "phone": "(08) 8388 8038"
+  "phone": "(08) 8388 8038",
+  "note": "Visitors welcome every day."
  },
  {
   "id": "thaxted-park",
@@ -7783,11 +7804,13 @@
   "suburb": "Woodcroft",
   "lat": -35.1228,
   "lon": 138.5532,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8325 0046",
+  "note": "Its online booking pages show no public times, so call the club."
  },
  {
   "id": "north-lakes-sa",
@@ -7795,11 +7818,14 @@
   "suburb": "Munno Para",
   "lat": -34.6604,
   "lon": 138.6821,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8284 0655",
+  "holes": 9,
+  "note": "Nine-hole public course."
  },
  {
   "id": "penfield",
@@ -7807,11 +7833,14 @@
   "suburb": "Penfield",
   "lat": -34.7455,
   "lon": 138.6412,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8281 0998",
+  "holes": 9,
+  "note": "Nine-hole course. Visitors welcome."
  },
  {
   "id": "regency-park",
@@ -7819,11 +7848,13 @@
   "suburb": "Regency Park",
   "lat": -34.8639,
   "lon": 138.5675,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "host": "regencypark.quick18.com",
+  "phone": "(08) 8268 5753"
  },
  {
   "id": "north-haven",
@@ -7831,12 +7862,14 @@
   "suburb": "North Haven",
   "lat": -34.7794,
   "lon": 138.486,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
-  "phone": "(08) 8248 3832"
+  "phone": "(08) 8248 3832",
+  "holes": 9,
+  "note": "Nine-hole public course, open 7 days."
  },
  {
   "id": "glanville-hall",
@@ -7844,35 +7877,41 @@
   "suburb": "Semaphore Park",
   "lat": -34.8492,
   "lon": 138.4817,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "host": "glanvillehall.quick18.com",
+  "phone": "(08) 8249 9921"
  },
  {
   "id": "valley-view",
   "name": "Valley View Par 3 Golf Course",
-  "suburb": "Valley View",
+  "suburb": "Holden Hill",
   "lat": -34.8441,
   "lon": 138.6667,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "quick18",
+  "enabled": true,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "host": "valleyview.quick18.com",
+  "phone": "(08) 8263 2189"
  },
  {
   "id": "geoff-heath",
-  "name": "Geoff Heath Par 3 Golf Complex",
+  "name": "Lochiel Park Golf at Geoff Heath Par 3",
   "suburb": "Lochiel Park",
   "lat": -34.8824,
   "lon": 138.6499,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8365 2722",
+  "note": "Par 3 course."
  },
  {
   "id": "west-beach-executive",
@@ -7880,13 +7919,16 @@
   "suburb": "West Beach",
   "lat": -34.952,
   "lon": 138.512,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-11",
   "website": "https://www.westbeachparksgolf.com.au/",
-  "phone": "(08) 8356 4811"
+  "phone": "(08) 8356 4811",
+  "cta": "Book online",
+  "book_url": "https://www.westbeachparksgolf.com.au/",
+  "note": "A 15-hole, par 50 course. Book on the West Beach Parks Golf website or app; its times aren't shown here."
  },
  {
   "id": "belair",
@@ -7902,15 +7944,17 @@
  },
  {
   "id": "stirling-sa",
-  "name": "Stirling Golf Club",
+  "name": "Mount Lofty Golf Club",
   "suburb": "Stirling",
   "lat": -34.9897,
   "lon": 138.7434,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8339 1805",
+  "note": "Formerly The Stirling Golf Club. Its TeeItUp booking page shows no public times, so call the pro shop."
  },
  {
   "id": "oakbank",
@@ -7918,35 +7962,44 @@
   "suburb": "Oakbank",
   "lat": -34.9859,
   "lon": 138.8474,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8388 4510",
+  "holes": 9,
+  "note": "Nine-hole course. Green fee players welcome when there's no club event."
  },
  {
   "id": "kenton-valley",
   "name": "Kenton Valley Golf Club",
-  "suburb": "Kenton Valley",
+  "suburb": "Gumeracha",
   "lat": -34.8474,
   "lon": 138.8907,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8389 1140",
+  "holes": 9,
+  "note": "Nine-hole public course."
  },
  {
   "id": "ashbourne",
-  "name": "Ashbourne Golf Club",
+  "name": "Ashbourne Private Golf Course",
   "suburb": "Ashbourne",
   "lat": -35.293,
   "lon": 138.7666,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8536 6120",
+  "holes": 9,
+  "note": "Private nine-hole course. Call to ask about a round."
  },
  {
   "id": "battunga",
@@ -7966,11 +8019,12 @@
   "suburb": "Strathalbyn",
   "lat": -35.27,
   "lon": 138.885,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8536 2950"
  },
  {
   "id": "goolwa",
@@ -7978,11 +8032,14 @@
   "suburb": "Goolwa",
   "lat": -35.5107,
   "lon": 138.7572,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8555 5252",
+  "holes": 9,
+  "note": "Nine-hole course."
  },
  {
   "id": "mccracken",
@@ -7990,11 +8047,13 @@
   "suburb": "McCracken",
   "lat": -35.5334,
   "lon": 138.6314,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 8551 0299",
+  "note": "Tee times essential. Book through the pro shop."
  },
  {
   "id": "links-lady-bay",
@@ -8015,12 +8074,15 @@
   "suburb": "Wirrina Cove",
   "lat": -35.5045,
   "lon": 138.2507,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "sa",
   "checked": "2026-11-11",
-  "phone": "(08) 8598 2415"
+  "phone": "(08) 8598 2415",
+  "host": "ntwc.miclub.com.au",
+  "resource_id": 3000000,
+  "website": "https://newterry.com.au/"
  },
  {
   "id": "stockport",
