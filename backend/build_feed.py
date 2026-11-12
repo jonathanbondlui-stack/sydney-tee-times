@@ -41,6 +41,13 @@ FAR_KEEP_HOURS = 36  # the same for dates more than a week ahead, which change s
 # (for FAR_KEEP_HOURS). That spreads the work over many runs, so no single run gets near the job's
 # time limit, and a new club or region just goes to the front of the queue.
 FAR_MINUTES = float(os.environ.get("TEE_FAR_MINUTES", "8"))
+# Platforms whose week ahead is read less often than every run, in minutes. TeeItUp's API allows
+# only so many requests an hour, then asks us to stay away for an hour; reading it every 15 minutes
+# kept it cutting us off. Its clubs are read once they're this old, oldest first.
+NEAR_EVERY = {"teeitup": 60}
+# When a host asks us to wait longer than a run can sit out, the wait is saved here and published
+# with the feeds, so the next runs leave that host alone until the wait is over.
+RESTING_FILE = "tee-times-resting.json"
 
 class OutOfTime(Exception):
     pass
@@ -80,6 +87,27 @@ def allowed(url):
     return False, "robots.txt disallows this path for our user agent"
 
 _resting = {}  # host -> when its Retry-After ends, for waits longer than a run can sit out
+
+def load_resting(now=None):
+    """The waits still running from earlier runs (see RESTING_FILE)."""
+    now = now or time.time()
+    try:
+        with open(os.path.join(ROOT, "site", RESTING_FILE)) as fh:
+            saved = json.load(fh).get("until", {})
+    except (OSError, ValueError, AttributeError):
+        return
+    for host, until in saved.items():
+        if isinstance(until, (int, float)) and until > now:
+            _resting[host] = max(_resting.get(host, 0), until)
+            print(f"RESTING {host} until {time.strftime('%H:%M UTC', time.gmtime(until))}, as it asked", file=sys.stderr)
+
+def save_resting(now=None):
+    now = now or time.time()
+    until = {h: t for h, t in _resting.items() if t > now}
+    path = os.path.join(ROOT, "site", RESTING_FILE)
+    with open(path + ".tmp", "w") as fh:
+        json.dump({"until": until}, fh)
+    os.replace(path + ".tmp", path)
 
 def fetch(url, headers=None, data=None):
     if "@" not in UA or "YOUR_EMAIL_HERE" in UA:
@@ -398,11 +426,9 @@ def collect_teeitup(c, today, first=0, last=DAYS):
             with _teeitup_lock:
                 text = fetch(f"{TEEITUP_API}/v2/tee-times?{q}", {"x-be-alias": c["host"].split(".")[0]})
         except urllib.error.HTTPError as e:
-            # TeeItUp's API sometimes stops answering partway ("too many requests"). Keep the days
-            # already read rather than lose the club, and note how long it asked us to wait.
-            if e.code == 429 and rows:
-                print(f"PART {c['id']}: stopped at {d}, Retry-After {e.headers.get('Retry-After')!r}", file=sys.stderr)
-                return rows
+            # TeeItUp's API sometimes stops answering partway ("too many requests"). Fail the club,
+            # so it keeps all its earlier times rather than only the days read so far, and stays at
+            # the front of the queue for when the wait is over.
             if e.code == 429:
                 raise urllib.error.HTTPError(e.url, e.code, f"{e.msg} (Retry-After {e.headers.get('Retry-After')!r})", e.headers, None)
             raise
@@ -556,11 +582,12 @@ def live_clubs(courses):
     club's site (those are read with that club)."""
     return [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
 
-def build(courses, today, first, last, only=None):
-    """Collect every live club for this date range, or just the clubs in `only`, in that order.
+def build(courses, today, first, last, only=None, skip=(), read=None):
+    """Collect every live club for this date range except those in `skip`, or just the clubs in
+    `only`, in that order. With `read` (club -> when last read), TeeItUp clubs go oldest first.
     Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
-    live = live_clubs(courses)
+    live = [c for c in live_clubs(courses) if c["id"] not in set(skip)]
     if only is not None:
         pos = {cid: i for i, cid in enumerate(only)}
         live = sorted((c for c in live if c["id"] in pos), key=lambda c: pos[c["id"]])
@@ -571,6 +598,10 @@ def build(courses, today, first, last, only=None):
             if q:
                 k = int(time.time() // 3600) % len(q)
                 live = [c for c in live if c["platform"] != p] + q[k:] + q[:k]
+        if read is not None:
+            # Oldest first, so the clubs left waiting when TeeItUp last cut us off go first.
+            q = sorted((c for c in live if c["platform"] == "teeitup"), key=lambda c: read.get(c["id"]) or "")
+            live = [c for c in live if c["platform"] != "teeitup"] + q
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
     assert len({(c["host"], c.get("facility_id"), c.get("resource_id")) for c in live}) == len(live), "two courses share a booking sheet"
@@ -684,13 +715,13 @@ def write_feed(name, rows, kept=None, read=None):
         json.dump(feed, fh, separators=(",", ":"))
     os.replace(tmp, path)
 
-def far_read_times():
-    """When each club's later dates were last read, from the published far feeds: the feed's "read"
-    list, or for feeds from before it had one, the time its times were kept from or the feed was made.
-    A club that isn't in any far feed has never been read and isn't in the result."""
+def read_times(far=True):
+    """When each club's times were last read, from the published feeds (the far ones, or with
+    far=False the week ahead): the feed's "read" list, or for feeds from before it had one, the time
+    its times were kept from or the feed was made. A club in no feed isn't in the result."""
     read = {}
     for r in REGIONS:
-        for n in (feed_name(r, True), FAR_FEED):
+        for n in ((feed_name(r, True), FAR_FEED) if far else (feed_name(r), NEAR_FEED)):
             try:
                 with open(os.path.join(ROOT, "site", n)) as fh:
                     prev = json.load(fh)
@@ -703,6 +734,21 @@ def far_read_times():
                     read.setdefault(cid, prev.get("kept", {}).get(cid, prev.get("generated_at")))
             break
     return read
+
+far_read_times = read_times
+
+def near_skip(courses, read, now=None):
+    """The clubs on a NEAR_EVERY platform whose week ahead was read too recently to read again."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    skip = []
+    for c in live_clubs(courses):
+        every = NEAR_EVERY.get(c["platform"])
+        try:
+            if every and (now - dt.datetime.fromisoformat(read[c["id"]])).total_seconds() < every * 60:
+                skip.append(c["id"])
+        except (KeyError, TypeError, ValueError):
+            pass
+    return skip
 
 def far_queue(courses, read, now=None):
     """The clubs whose later dates are due to be read again (never read, or FAR_HOURS old), oldest first."""
@@ -732,6 +778,9 @@ def write_regions(rows, failed, courses, far=False, read=None, today=None):
             # Dates that have come into the near feed's week since they were read are dropped.
             cutoff = (today + dt.timedelta(days=DAYS)).isoformat()
             mine = [x for x in mine if x["date"] > cutoff]
+        if read is None:
+            write_feed(name, mine, kept)
+        else:
             stamp = {}
             for c in courses:
                 cid = c["id"]
@@ -743,13 +792,11 @@ def write_regions(rows, failed, courses, far=False, read=None, today=None):
                     stamp[cid] = kept[cid]
                 elif cid in read:
                     try:
-                        if (now - dt.datetime.fromisoformat(read[cid])).total_seconds() <= FAR_KEEP_HOURS * 3600:
-                            stamp[cid] = read[cid]  # read before with no later times, and not due again yet
+                        if (now - dt.datetime.fromisoformat(read[cid])).total_seconds() <= (FAR_KEEP_HOURS if far else KEEP_HOURS) * 3600:
+                            stamp[cid] = read[cid]  # read before with no times, and not due again yet
                     except (TypeError, ValueError):
                         pass
-            write_feed(name, mine, read=stamp)
-        else:
-            write_feed(name, mine, kept)
+            write_feed(name, mine, kept, read=stamp)
         print(f"  {name}: {len(mine)} times")
 
 def split_old_far(courses):
@@ -809,14 +856,25 @@ def main():
         print(json.dumps(parse_miclub_timesheet(open(a.timesheet, encoding="utf-8").read(), by[a.course], a.date, g), indent=1)); return
 
     today = dt.date.today()
-    out, failures, tried = build(courses, today, 0, DAYS)
+    load_resting()
+    try:
+        run(courses, today)
+    finally:
+        save_resting()
+
+def run(courses, today):
+    near = read_times(far=False)
+    skip = near_skip(courses, near)
+    if skip:
+        print(f"Not due yet (TeeItUp clubs read in the last {NEAR_EVERY['teeitup']} minutes): {', '.join(skip)}", file=sys.stderr)
+    out, failures, tried = build(courses, today, 0, DAYS, skip=skip, read=near)
     if not out or len(failures) > tried * 0.5:
         print("Too little data or too many failures. Keeping the previous feed.", file=sys.stderr)
         sys.exit(1)
     print(f"Writing {len(out)} tee times from {tried - len(failures)} clubs.")
-    write_regions(out, [cid for cid, _ in failures], courses)
+    write_regions(out, [cid for cid, _ in failures] + skip, courses, read=near)
     split_old_far(courses)
-    read = far_read_times()
+    read = read_times(far=True)
     due = far_queue(courses, read)
     if due:
         global _stop_at
