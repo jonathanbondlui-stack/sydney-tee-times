@@ -368,7 +368,8 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...Object.fromEntri
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(id=="sort"&&s.v!==2)return;if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
 const SHORT_HOLES=/\b(\d+)H\b/i;
-const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");return g?+g[1]:null};
+const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");if(g)return +g[1];
+  return x.c&&x.c.holes&&x.c.holes<18?x.c.holes:null}; // nothing says: a course under 18 holes is taken to be one round of it, as fullRound assumes
 // Package rates such as "4 Player + 2 Carts" are a total price for that exact group, and MiClub counts each package as one spot.
 // One box per tee time. A time's rates stay separate only when their holes, price or group size differ.
 const slotsOf=a=>{const m=new Map();a.forEach(x=>{const k=x.date+x.time+"|"+(x.tee||"");if(!m.has(k))m.set(k,[]);m.get(k).push(x)});

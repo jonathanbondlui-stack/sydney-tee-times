@@ -18,7 +18,9 @@ const holesOf = x => {
   if (m) return +m[1];
   if (x.holes != null) return x.holes;
   const g = SHORT_HOLES.exec(x.group || "");
-  return g ? +g[1] : null;
+  if (g) return +g[1];
+  // Nothing says: a course shorter than 18 holes is taken to be one round of it, as fullRound assumes.
+  return x.c && x.c.holes && x.c.holes < 18 ? x.c.holes : null;
 };
 const partyOf = x => { const m = /(\d)\s*(?:players?|persons?)\b/i.exec(rateName(x)); return m && +m[1] > 1 ? +m[1] : 1; };
 const fullRound = (x, latest, need) => {

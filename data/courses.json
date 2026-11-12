@@ -7380,7 +7380,10 @@
    }
   ],
   "website": "https://northadelaidegolf.com.au/",
-  "phone": "(08) 8203 7888"
+  "phone": "(08) 8203 7888",
+  "par": 44,
+  "holes": 13,
+  "note": "A 13-hole course, par 44, 2,540 m."
  },
  {
   "id": "north-adelaide-south",
@@ -7497,7 +7500,8 @@
   "enabled": true,
   "region": "sa",
   "checked": "2026-11-11",
-  "website": "https://www.willungagolf.com.au/"
+  "website": "https://www.willungagolf.com.au/",
+  "par": 70
  },
  {
   "id": "west-beach-parks",
@@ -7531,7 +7535,8 @@
   "checked": "2026-11-11",
   "website": "https://www.seacliffgolfclub.com.au/",
   "phone": "(08) 8298 7454",
-  "holes": 9
+  "holes": 9,
+  "par": 36
  },
  {
   "id": "mount-osmond",
@@ -7545,7 +7550,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "sa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "par": 70
  },
  {
   "id": "aston-hills",
@@ -7560,7 +7566,8 @@
   "enabled": true,
   "region": "sa",
   "checked": "2026-11-11",
-  "note": "Formerly Mt Barker-Hahndorf Golf Club."
+  "note": "Formerly Mt Barker-Hahndorf Golf Club.",
+  "par": 70
  },
  {
   "id": "vines-reynella",
@@ -7612,7 +7619,8 @@
   "region": "sa",
   "website": "https://www.highercombegolf.com.au/",
   "phone": "(08) 8380 5220",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "par": 70
  },
  {
   "id": "royal-adelaide",
