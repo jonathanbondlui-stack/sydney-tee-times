@@ -3,7 +3,7 @@
 // password, sends the ntfy messages, and writes back which times it has already told you about.
 // Sending happens there because ntfy.sh doesn't accept connections from Cloudflare.
 // A search ends by itself after its last date.
-import { REGIONS, SITE, unpackFeed, parseSearch, matches, describe, today, addDays } from "./match.js";
+import { REGIONS, SITE, unpackFeed, parseSearch, matches, describe, today, addDays, regionAt } from "./match.js";
 
 const MAX_PER_TOPIC = 5, MAX_TOTAL = 200;
 const CORS = {
@@ -48,8 +48,10 @@ const authorised = (req, env) => !!env.CHECK_KEY && env.CHECK_KEY.trim().length 
 async function create(req, env) {
   let b;
   try { b = await req.json(); } catch { return json({ error: "Bad request" }, 400); }
-  const s = parseSearch(b.q || ""), region = b.region, topic = b.topic || "";
-  if (!s || !REGIONS[region]) return json({ error: "That search can't be saved." }, 400);
+  const s = parseSearch(b.q || ""), topic = b.topic || "";
+  if (!s || !REGIONS[b.region]) return json({ error: "That search can't be saved." }, 400);
+  const cs = await fetch(SITE + "courses.json", { cf: { cacheTtl: 300 } }).then(r => r.ok ? r.json() : null).catch(() => null);
+  const region = regionAt(s.la, s.lo, cs, b.region);
   if (!/^tee-[a-z0-9]{16,40}$/.test(topic)) return json({ error: "Bad alert channel." }, 400);
   const now = today(REGIONS[region].tz);
   s.dates = s.dates.filter(d => d >= now && d <= addDays(now, 30));
@@ -59,7 +61,6 @@ async function create(req, env) {
   if (existing.length >= MAX_TOTAL) return json({ error: "Alerts are full right now." }, 503);
   if (existing.filter(w => w.topic === topic).length >= MAX_PER_TOPIC) return json({ error: `You can have ${MAX_PER_TOPIC} alerts at once. Stop one first.` }, 409);
   const times = await feeds(region, s.dates);
-  const cs = await fetch(SITE + "courses.json", { cf: { cacheTtl: 300 } }).then(r => r.ok ? r.json() : null).catch(() => null);
   if (!times || !cs) return json({ error: "Couldn't read tee times right now. Try again soon." }, 503);
   // What matches now is what you can already see, so only times after this count as new.
   const found = matches(s, times, cs, region), base = new URL(req.url).origin;

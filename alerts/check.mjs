@@ -1,7 +1,7 @@
 // Runs after each refresh is published (see .github/workflows/refresh.yml). For every saved search
 // it reads the live times, finds the ones that are new since last time, and sends one ntfy message.
 // Needs ALERTS_KEY, the password the alert service knows as CHECK_KEY.
-import { REGIONS, SITE, unpackFeed, parseSearch, matches, describe, today, hourAt, addDays, dayName, line } from "./src/match.js";
+import { REGIONS, SITE, unpackFeed, parseSearch, matches, describe, today, hourAt, addDays, dayName, line, regionAt } from "./src/match.js";
 
 const API = process.env.ALERTS_API || "https://tee-time-alerts.teetimefinder.workers.dev";
 const KEY = (process.env.ALERTS_KEY || "").trim();
@@ -39,8 +39,10 @@ if (!r.ok) { console.log(`Couldn't read saved searches (${r.status}).`); process
 const watches = await r.json(), courses = await get("courses.json"), results = {}, confirmedNow = [];
 for (const w of watches) {
   try {
-    const R = REGIONS[w.region], s = parseSearch(w.q), now = today(R.tz);
-    if (!s || s.dates.every(d => d < now)) { results[w.id] = "ended"; continue; }
+    const s = parseSearch(w.q);
+    if (!s) { results[w.id] = "ended"; continue; }
+    const region = courses ? regionAt(s.la, s.lo, courses, w.region) : w.region, R = REGIONS[region] || REGIONS.nsw, now = today(R.tz);
+    if (s.dates.every(d => d < now)) { results[w.id] = "ended"; continue; }
     // The page couldn't send the "alert is on" message (some phone browsers block ntfy.sh), so send it here.
     // It answers something you just did, so it isn't held back for quiet hours.
     if (w.confirmed === false) {
@@ -55,9 +57,9 @@ for (const w of watches) {
     }
     const h = hourAt(R.tz);
     if (QUIET[0] !== QUIET[1] && (h >= QUIET[0] || h < QUIET[1])) { results[w.id] = "quiet"; continue; }
-    const times = await timesFor(w.region, s.dates);
+    const times = await timesFor(region, s.dates);
     if (!times || !courses) { results[w.id] = "no feed"; continue; }
-    const found = matches(s, times, courses, w.region), seen = new Set(w.seen), fresh = found.filter(m => !seen.has(m.key));
+    const found = matches(s, times, courses, region), seen = new Set(w.seen), fresh = found.filter(m => !seen.has(m.key));
     // Remember everything matching now plus what was seen before, so a time that drops out for one
     // refresh (a club's site having a bad moment) doesn't alert again when it comes back.
     const keep = [...new Set([...w.seen, ...found.map(m => m.key)])].filter(k => k.split("|")[1] >= now);

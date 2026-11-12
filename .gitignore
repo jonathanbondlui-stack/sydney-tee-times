@@ -14,3 +14,5 @@ data/courses.backup.json
 data/courses.before-patch.json
 data/courses.before-details.json
 fixtures/debug-*.html
+# Lists of courses to check by hand, kept locally
+*-check-list.txt

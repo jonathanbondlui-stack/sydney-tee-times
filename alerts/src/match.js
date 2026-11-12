@@ -8,6 +8,8 @@ export const REGIONS = {
   wa: { la: -31.95, lo: 115.86, tz: "Australia/Perth" },
   sa: { la: -34.93, lo: 138.6, tz: "Australia/Adelaide" },
   tas: { la: -42.88, lo: 147.33, tz: "Australia/Hobart" },
+  act: { la: -35.28, lo: 149.13, tz: "Australia/Sydney" },
+  nt: { la: -12.46, lo: 130.84, tz: "Australia/Darwin" },
 };
 
 const HOLES = /(\d+)\s*-?\s*holes?/i, NO_FINISH = /will not finish/i, ROUND_MINS = 255, SHORT_HOLES = /\b(\d+)H\b/i;
@@ -31,6 +33,17 @@ const fullRound = (x, latest, need) => {
 export const km = (a, b, c, d) => {
   const r = Math.PI / 180, x = (d - b) * r * Math.cos((a + c) / 2 * r), y = (c - a) * r;
   return Math.sqrt(x * x + y * y) * 6371;
+};
+// The region of the course nearest a place, as the site picks it. Searches are matched against the
+// region they're in now, so moving courses to a new region (Canberra's, from Sydney's) doesn't break them.
+export const regionAt = (la, lo, courses, fallback = "nsw") => {
+  let best = null, bd = Infinity;
+  for (const c of courses || []) {
+    if (c.lat == null) continue;
+    const d = km(la, lo, c.lat, c.lon);
+    if (d < bd) { bd = d; best = c; }
+  }
+  return best && REGIONS[best.region || "nsw"] ? best.region || "nsw" : fallback;
 };
 // Sunset in minutes after midnight in the region's time zone (NOAA's approximation, as on the site).
 export const sunset = (ds, lat, lon, tz) => {
@@ -64,7 +77,8 @@ export function parseSearch(q) {
 export function matches(s, times, courses, region) {
   const R = REGIONS[region] || REGIONS.nsw, by = {}, late = {}, best = new Map();
   courses.forEach(c => { if ((c.region || "nsw") === region) by[c.id] = c; });
-  s.dates.forEach(d => { late[d] = sunset(d, R.la, R.lo, R.tz) - ROUND_MINS; });
+  // Sunset where the search is, as on the site, not at the region's capital.
+  s.dates.forEach(d => { late[d] = sunset(d, s.la, s.lo, R.tz) - ROUND_MINS; });
   for (const t of times) {
     const c = by[t.course];
     if (!c || late[t.date] == null || t.only) continue;

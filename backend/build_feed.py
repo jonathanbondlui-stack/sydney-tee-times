@@ -27,7 +27,7 @@ FAR_FEED = "tee-times-far.json"  # before the split by region; read once for car
 NEAR_FEED = "tee-times.json"
 # Each region gets its own pair of feeds, so a visitor only downloads the times near them.
 # A course without a "region" is in NSW & ACT.
-REGIONS = ("nsw", "vic", "qld", "wa", "sa", "tas")
+REGIONS = ("nsw", "vic", "qld", "wa", "sa", "tas", "act", "nt")
 def region_of(c):
     return c.get("region", "nsw")
 def feed_name(region, far=False):
@@ -210,6 +210,7 @@ def miclub_fees(body):
     return [{"price": float(p.replace(",", "")) or None, "label": unescape(l).strip()} for p, l in found]
 
 _DISC = re.compile(r"\bdisc golf\b", re.I)
+_NOT_A_ROUND = re.compile(r"\bdriving range\b|\brange balls?\b|\bbuckets?\b", re.I)
 _LIMITED = {"Juniors": re.compile(r"\bjuniors?\b|\bjnr\b|\bunder\s*\d|\bu\d\d\b|\bchild|\bschool\b|\b\d{1,2}\s*-\s*1[0-8]\s*y(?:ea)?rs?\b", re.I),
             "Seniors": re.compile(r"\bseniors?\b|\bpension|\bover\s*(?:5[5-9]|[6-9]\d)'?s?\b", re.I),
             "Students": re.compile(r"\bstudents?\b", re.I),
@@ -290,6 +291,8 @@ def collect_miclub(c, today, first=0, last=DAYS):
     for ahead in range(first, last + 1, CAL_STEP):
         page = (today + dt.timedelta(days=ahead)).isoformat()
         for g in parse_miclub_calendar(fetch(miclub_calendar_url(c, page))):
+            if _NOT_A_ROUND.search(g.get("label") or ""):
+                continue  # range buckets booked on the same sheet, as at Alice Springs
             for d in g["prices"]:
                 if not start <= d <= end or (g["fee_group_id"], d) in seen:
                     continue
@@ -369,11 +372,11 @@ def sydney_time(utc):
     return (utc + dt.timedelta(hours=10 if standard else 11)).replace(tzinfo=None)
 
 def local_time(utc, region="nsw"):
-    """A course's local time for a UTC datetime. Queensland stays on UTC+10 and Western Australia on
-    UTC+8 all year; NSW, the ACT, Victoria and Tasmania share Sydney's daylight saving. South Australia keeps the
+    """A course's local time for a UTC datetime. Queensland stays on UTC+10, Western Australia on
+    UTC+8 and the Northern Territory on UTC+9:30 all year; NSW, the ACT, Victoria and Tasmania share Sydney's daylight saving. South Australia keeps the
     same daylight saving dates half an hour behind Sydney (its clocks change half an hour later in UTC,
     which only matters for that half hour twice a year, in the middle of the night)."""
-    fixed = {"qld": 10, "wa": 8}
+    fixed = {"qld": 10, "wa": 8, "nt": 9.5}
     if region in fixed:
         return (utc + dt.timedelta(hours=fixed[region])).replace(tzinfo=None)
     if region == "sa":

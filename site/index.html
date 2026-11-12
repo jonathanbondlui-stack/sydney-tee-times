@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tee Time Finder</title>
-<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart and beyond, in one search.">
+<meta name="description" content="Live golf tee times from courses across Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart, Canberra, Darwin and beyond, in one search.">
 <meta name="application-name" content="Tee Time Finder"><meta name="apple-mobile-web-app-title" content="Tee Time Finder">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,7 +136,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div class="brand">Tee Time Finder</div>
   <div class="note" id="note" hidden></div>
   <h1>Tee times across <span id="city">Sydney</span> and beyond, in one search</h1>
-  <p class="sub">Live times from <span id="ncourses">80+</span> courses <span id="span">from Port Stephens to Canberra and down the South Coast to Eden</span>. Courses you can’t book online are listed below, with how to play there.</p>
+  <p class="sub">Live times from <span id="ncourses">80+</span> courses <span id="span">from Coffs Harbour and Port Macquarie down the coast to Eden, inland to Goulburn, and around Albury–Wodonga</span>. Courses you can’t book online are listed below, with how to play there.</p>
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
   <div class="dayopts">
   <label class="multi"><input type="checkbox" id="multi"> Search several days at once</label>
@@ -203,12 +203,22 @@ const EMBED_COURSES=[{"id": "moore-park", "name": "Moore Park Golf", "suburb": "
 // Each region has its own times file, so a visit only downloads the times near the chosen place.
 // A course without a "region" is in NSW & ACT. la/lo is where that region's sunset is worked out,
 // cbd is the city's centre, offered as a starting place, and tz its time zone when it isn't Sydney's.
-const REGIONS={nsw:{city:"Sydney",span:"from Port Stephens to Canberra and down the South Coast to Eden",la:-33.87,lo:151.21,cbd:{n:"Sydney CBD",la:-33.8688,lo:151.2093}},
-  vic:{city:"Melbourne",span:"across Melbourne, Geelong, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96,cbd:{n:"Melbourne CBD",la:-37.8136,lo:144.9631}},
-  qld:{city:"Brisbane",span:"across Brisbane, the Gold Coast, the Sunshine Coast and Ipswich",la:-27.47,lo:153.03,tz:"Australia/Brisbane",cbd:{n:"Brisbane CBD",la:-27.4698,lo:153.0251}},
-  wa:{city:"Perth",span:"across Perth, Rottnest, Mandurah and the Perth Hills",la:-31.95,lo:115.86,tz:"Australia/Perth",cbd:{n:"Perth CBD",la:-31.9523,lo:115.8613}},
+const REGIONS={nsw:{city:"Sydney",span:"from Coffs Harbour and Port Macquarie down the coast to Eden, inland to Goulburn, and around Albury–Wodonga",la:-33.87,lo:151.21,cbd:{n:"Sydney CBD",la:-33.8688,lo:151.2093}},
+  vic:{city:"Melbourne",span:"across Melbourne, Geelong, Ballarat, Bendigo, the Mornington Peninsula and the Yarra Valley",la:-37.81,lo:144.96,cbd:{n:"Melbourne CBD",la:-37.8136,lo:144.9631}},
+  qld:{city:"Brisbane",span:"across Brisbane, the Gold Coast, the Sunshine Coast, Toowoomba, Mackay, Townsville and Cairns",la:-27.47,lo:153.03,tz:"Australia/Brisbane",cbd:{n:"Brisbane CBD",la:-27.4698,lo:153.0251}},
+  wa:{city:"Perth",span:"across Perth, Rottnest, Mandurah, the Perth Hills and the South West",la:-31.95,lo:115.86,tz:"Australia/Perth",cbd:{n:"Perth CBD",la:-31.9523,lo:115.8613}},
   sa:{city:"Adelaide",span:"across Adelaide, the Barossa, the Adelaide Hills and the Fleurieu Peninsula",la:-34.93,lo:138.6,tz:"Australia/Adelaide",cbd:{n:"Adelaide CBD",la:-34.9285,lo:138.6007}},
-  tas:{city:"Hobart",span:"across Hobart, the Huon Valley, the Derwent Valley and the Tasman Peninsula",la:-42.88,lo:147.33,tz:"Australia/Hobart",cbd:{n:"Hobart CBD",la:-42.8821,lo:147.3272}}};
+  tas:{city:"Hobart",span:"across Hobart, Launceston, the North West Coast, the Huon Valley and the Tasman Peninsula",la:-42.88,lo:147.33,tz:"Australia/Hobart",cbd:{n:"Hobart CBD",la:-42.8821,lo:147.3272}},
+  act:{city:"Canberra",span:"across Canberra, Queanbeyan, Yass and Braidwood",la:-35.28,lo:149.13,tz:"Australia/Sydney",cbd:{n:"Canberra City",la:-35.2809,lo:149.13}},
+  nt:{city:"Darwin",span:"across Darwin, Palmerston, Katherine and Alice Springs",la:-12.46,lo:130.84,tz:"Australia/Darwin",cbd:{n:"Darwin CBD",la:-12.4634,lo:130.8456}}};
+// Other centres a region covers, so a search in Cairns says "across Cairns", not "across Brisbane".
+const TOWNS={nsw:[["Newcastle",-32.93,151.75],["Wollongong",-34.42,150.89],["Coffs Harbour",-30.3,153.11],["Port Macquarie",-31.43,152.9],["Albury–Wodonga",-36.1,146.9],["the South Coast",-35.7,150.18]],
+  vic:[["Geelong",-38.15,144.36],["Ballarat",-37.56,143.85],["Bendigo",-36.76,144.28]],
+  qld:[["the Gold Coast",-28.0,153.4],["the Sunshine Coast",-26.65,153.07],["Toowoomba",-27.56,151.95],["Mackay",-21.14,149.18],["Townsville",-19.26,146.8],["Cairns",-16.92,145.77]],
+  wa:[["Mandurah",-32.53,115.72],["Bunbury",-33.33,115.64],["the South West",-33.75,115.2]],sa:[["the Fleurieu",-35.5,138.6]],
+  tas:[["Launceston",-41.44,147.14],["the North West Coast",-41.12,146.1]],nt:[["Alice Springs",-23.7,133.88],["Katherine",-14.46,132.26]]};
+// The region's city, or the covered centre nearest the place.
+const cityAt=(p,reg)=>{const R=REGIONS[reg]||REGIONS.nsw,la=p.lat??p.la;let n=R.city,bd=km(la,p.lo,R.la,R.lo);(TOWNS[reg]||[]).forEach(([t,a,o])=>{const d=km(la,p.lo,a,o);if(d<bd){bd=d;n=t}});return n};
 // The cities with live times, A to Z, so no city comes first by choice.
 const CITIES=Object.values(REGIONS).map(r=>r.cbd).sort((a,b)=>a.n.localeCompare(b.n));
 // Where to start before anyone picks a place: the covered city nearest the browser's time zone city,
@@ -439,7 +449,7 @@ async function loadRegion(reg){if(reg==REG)return;REG=reg;COURSES=ALL.filter(c=>
     n.classList.remove("warn");$("ncourses").textContent=new Set(TIMES.map(t=>t.course)).size}
   catch(e){if(REG!=reg)return;demo=true;TIMES=demoFeed();const n=$("note");n.hidden=false;n.classList.add("warn");n.innerHTML="<strong>Demo data.</strong> Live times are not connected yet, so these tee times are made up to show how the site works."}}
 // After the place changes: switch region if the nearest course is in another one, then redraw.
-async function moved(){const w=START||ME||HOME,reg=regionAt(w);
+async function moved(){const w=START||ME||HOME,reg=regionAt(w);$("city").textContent=cityAt(w,reg);
   if(reg!=REG){$("count").textContent="Loading tee times…";await loadRegion(reg);
     if((picked&&iso(picked)>iso(addDays(7)))||[...sel].some(i=>i>7))await loadFar()}
   render()}
@@ -484,13 +494,13 @@ function setup(){
   $("vList").onclick=()=>setView("list");$("vMap").onclick=()=>setView("map");
   $("more").onclick=()=>{shown+=12;render()};let cols=colsNow();
   addEventListener("resize",()=>{const n=colsNow();if(n!=cols&&view=="list"){cols=n;render()}});
-  loadRegion(regionAt(START||ME||HOME)).then(()=>{
+  loadRegion(regionAt(START||ME||HOME)).then(()=>{$("city").textContent=cityAt(START||ME||HOME,REG);
     const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0&&!sq.has("d")){day=first;sel=new Set([day]);markDays()}
     if(view=="map"){view="list";setView("map")}
     if(sharedPick){$("pick").value=sharedPick;pickDate()}else if([...sel].some(i=>i>7))show();else render()})}
 function render(){
   closePick();PICKS.length=0;
-  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,RG.la,RG.lo,RG.tz)-ROUND_MINS);
+  const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,w.lat??w.la,w.lo,RG.tz)-ROUND_MINS);
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
    .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
