@@ -8958,11 +8958,12 @@
   "suburb": "Glenroy",
   "lat": -36.0648,
   "lon": 146.9194,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "barnawartha",
@@ -8970,11 +8971,12 @@
   "suburb": "Barnawartha",
   "lat": -36.1047,
   "lon": 146.6692,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "beechworth",
@@ -8982,12 +8984,14 @@
   "suburb": "Beechworth",
   "lat": -36.3488,
   "lon": 146.6979,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
-  "website": "https://www.beechworthgolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.beechworthgolfclub.com.au/",
+  "phone": "(03) 5728 1056",
+  "note": "Call the club to book."
  },
  {
   "id": "bethanga",
@@ -8995,11 +8999,12 @@
   "suburb": "Bethanga",
   "lat": -36.1539,
   "lon": 147.1254,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "chiltern",
@@ -9007,12 +9012,13 @@
   "suburb": "Chiltern",
   "lat": -36.1456,
   "lon": 146.6142,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
-  "website": "https://www.chilterngolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.chilterngolfclub.com.au/",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "jindera",
@@ -9020,11 +9026,12 @@
   "suburb": "Jindera",
   "lat": -35.9446,
   "lon": 146.9034,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "tallangatta",
@@ -9032,11 +9039,12 @@
   "suburb": "Tallangatta",
   "lat": -36.2157,
   "lon": 147.1682,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "thurgoona",
@@ -9044,11 +9052,12 @@
   "suburb": "Thurgoona",
   "lat": -36.0501,
   "lon": 147.0023,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "wodonga",
@@ -9056,13 +9065,18 @@
   "suburb": "West Wodonga",
   "lat": -36.1253,
   "lon": 146.8429,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.wodongagolf.com.au/",
-  "phone": "(02) 6059 1079"
+  "phone": "(02) 6059 1079",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16389,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16389-wodonga-golf-club/search#date={gn_date}"
  },
  {
   "id": "yackandandah",
@@ -9070,13 +9084,14 @@
   "suburb": "Yackandandah",
   "lat": -36.3146,
   "lon": 146.8506,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://golfclub.yackandandah.com/",
-  "phone": "0404 481 606"
+  "phone": "0404 481 606",
+  "note": "Call the club to book."
  },
  {
   "id": "clunes",
@@ -9084,12 +9099,17 @@
   "suburb": "Clunes",
   "lat": -37.2879,
   "lon": 143.7543,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-12",
-  "phone": "(03) 5345 3499"
+  "checked": "2026-11-13",
+  "phone": "(03) 5345 3499",
+  "host": "www.golfnow.com.au",
+  "facility_id": 21107,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/21107-clunes-golf-club/search#date={gn_date}"
  },
  {
   "id": "mt-xavier",
@@ -9097,13 +9117,18 @@
   "suburb": "Brown Hill",
   "lat": -37.5642,
   "lon": 143.901,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "http://www.mtxavier.com.au/",
-  "phone": "(03) 5331 3691"
+  "phone": "(03) 5331 3691",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16447,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16447-mount-xavier-golf-club/search#date={gn_date}"
  },
  {
   "id": "snake-valley",
@@ -9111,11 +9136,12 @@
   "suburb": "Snake Valley",
   "lat": -37.6015,
   "lon": 143.5528,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "bridgewater",
@@ -9123,11 +9149,12 @@
   "suburb": "Bridgewater on Loddon",
   "lat": -36.6072,
   "lon": 143.9463,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "maldon",
@@ -9135,11 +9162,12 @@
   "suburb": "Maldon",
   "lat": -36.9832,
   "lon": 144.063,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "marong",
@@ -9147,12 +9175,13 @@
   "suburb": "Marong",
   "lat": -36.7404,
   "lon": 144.1281,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-12",
-  "website": "https://www.maronggolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.maronggolfclub.com.au/",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "mount-alexander",
@@ -9160,11 +9189,16 @@
   "suburb": "Castlemaine",
   "lat": -37.0555,
   "lon": 144.2278,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "host": "www.golfnow.com.au",
+  "facility_id": 20768,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/20768-mount-alexander-golf-club/search#date={gn_date}"
  },
  {
   "id": "neangar-park",
@@ -9172,11 +9206,13 @@
   "suburb": "Jackass Flat",
   "lat": -36.7121,
   "lon": 144.2718,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "host": "www.neangarparkgc.com",
+  "resource_id": 3000000
  },
  {
   "id": "quarry-hill",
@@ -9184,11 +9220,12 @@
   "suburb": "Quarry Hill",
   "lat": -36.7809,
   "lon": 144.2746,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "raywood",
@@ -9196,23 +9233,16 @@
   "suburb": "Raywood",
   "lat": -36.5331,
   "lon": 144.2101,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "vic",
-  "checked": "2026-11-12"
- },
- {
-  "id": "binningup",
-  "name": "Binningup Golf Club",
-  "suburb": "Binningup",
-  "lat": -33.158,
-  "lon": 115.6937,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "wa",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "host": "www.golfnow.com.au",
+  "facility_id": 20866,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/20866-raywood-golf-club/search#date={gn_date}"
  },
  {
   "id": "capel",
@@ -9220,13 +9250,15 @@
   "suburb": "Stratham",
   "lat": -33.4556,
   "lon": 115.6,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "wa",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://capelgolfclub.org.au/",
-  "phone": "(08) 9795 7033"
+  "phone": "(08) 9795 7033",
+  "host": "capel.miclub.com.au",
+  "resource_id": 3000000
  },
  {
   "id": "donnybrook",
@@ -9234,13 +9266,14 @@
   "suburb": "Donnybrook",
   "lat": -33.5697,
   "lon": 115.8163,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "http://www.donnybrookcountryclub.myclub.org.au/",
-  "phone": "(08) 9731 1268"
+  "phone": "(08) 9731 1268",
+  "note": "Call the club to book."
  },
  {
   "id": "sanctuary-wa",
@@ -9248,11 +9281,14 @@
   "suburb": "Pelican Point",
   "lat": -33.3226,
   "lon": 115.6937,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "book_url": "https://www.golf-booking.com/en/club/sanctuary-golf-resort",
+  "cta": "Book online",
+  "note": "Book online through golf-booking.com. Its times aren't shown here."
  },
  {
   "id": "burnie",
@@ -9260,11 +9296,12 @@
   "suburb": "Camdale",
   "lat": -41.0481,
   "lon": 145.8407,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "penguin",
@@ -9272,13 +9309,14 @@
   "suburb": "Penguin",
   "lat": -41.1309,
   "lon": 146.0759,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.penguingolfclub.com.au/",
-  "phone": "(03) 6437 2767"
+  "phone": "(03) 6437 2767",
+  "note": "Members and their guests only."
  },
  {
   "id": "seabrook",
@@ -9286,13 +9324,14 @@
   "suburb": "Doctors Rocks",
   "lat": -41.004,
   "lon": 145.7708,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.seabrookgolfclub.com.au/",
-  "phone": "(03) 6442 2173"
+  "phone": "(03) 6442 2173",
+  "note": "Call the club to book."
  },
  {
   "id": "wynyard",
@@ -9300,13 +9339,14 @@
   "suburb": "Wynyard",
   "lat": -40.9846,
   "lon": 145.7346,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.wynyardgolfclub.com.au/",
-  "phone": "(03) 6442 2614"
+  "phone": "(03) 6442 2614",
+  "note": "Members and their guests only."
  },
  {
   "id": "dunsborough-and-districts",
@@ -9314,11 +9354,12 @@
   "suburb": "Dunsborough",
   "lat": -33.5968,
   "lon": 115.0978,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "atherton",
@@ -9326,13 +9367,14 @@
   "suburb": "Atherton",
   "lat": -17.2657,
   "lon": 145.4677,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.athertongolf.com.au/",
-  "phone": "(07) 4091 1283"
+  "phone": "(07) 4091 1283",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "babinda",
@@ -9340,12 +9382,13 @@
   "suburb": "Babinda",
   "lat": -17.3482,
   "lon": 145.9204,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "website": "https://www.babindagolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.babindagolfclub.com.au/",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "millaa-millaa",
@@ -9353,11 +9396,12 @@
   "suburb": "Millaa Millaa",
   "lat": -17.5144,
   "lon": 145.6047,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "mirage",
@@ -9365,13 +9409,18 @@
   "suburb": "Craiglie",
   "lat": -16.5124,
   "lon": 145.4621,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "http://www.sheratonportdouglas.com/miragecountryclub",
-  "phone": "(07) 4099 5537"
+  "phone": "(07) 4099 5537",
+  "host": "www.golfnow.com.au",
+  "facility_id": 21035,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/21035-mirage-country-club/search#date={gn_date}"
  },
  {
   "id": "mossman",
@@ -9379,12 +9428,14 @@
   "suburb": "North Mossman",
   "lat": -16.4284,
   "lon": 145.3915,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "website": "https://www.mossmangolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.mossmangolfclub.com.au/",
+  "phone": "(07) 4098 2089",
+  "note": "Call the club to book."
  },
  {
   "id": "palmer-sea-reef",
@@ -9392,13 +9443,14 @@
   "suburb": "Craiglie",
   "lat": -16.5319,
   "lon": 145.4716,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "http://www.palmerseareef.com.au/",
-  "phone": "(07) 4087 2222"
+  "phone": "(07) 4087 2222",
+  "note": "Call the club to book."
  },
  {
   "id": "bellingen",
@@ -9406,12 +9458,15 @@
   "suburb": "Bellingen",
   "lat": -30.4519,
   "lon": 152.9054,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
-  "website": "https://www.bellingengolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.bellingengolfclub.com.au/",
+  "book_url": "https://teenet.com.au/teenet?clubId=21501",
+  "cta": "Book on TeeNet",
+  "note": "Book online through TeeNet. Its times aren't shown here."
  },
  {
   "id": "dorrigo",
@@ -9419,13 +9474,14 @@
   "suburb": "Dorrigo",
   "lat": -30.3468,
   "lon": 152.6965,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.dorrigorslgolf.com.au",
-  "phone": "(02) 6657 2294"
+  "phone": "(02) 6657 2294",
+  "note": "Call the club to book."
  },
  {
   "id": "pacific-bay",
@@ -9433,11 +9489,12 @@
   "suburb": "Korora",
   "lat": -30.2665,
   "lon": 153.1351,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "sawtell",
@@ -9445,13 +9502,14 @@
   "suburb": "Sawtell",
   "lat": -30.3693,
   "lon": 153.094,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.sawtellgolfclub.com.au",
-  "phone": "(02) 6653 1006"
+  "phone": "(02) 6653 1006",
+  "note": "Call the club to book."
  },
  {
   "id": "urunga",
@@ -9459,11 +9517,12 @@
   "suburb": "Urunga",
   "lat": -30.4913,
   "lon": 153.0193,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "woolgoolga-rsl",
@@ -9471,13 +9530,14 @@
   "suburb": "Safety Beach",
   "lat": -30.09,
   "lon": 153.1925,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.woolgoolgarslgolfclub.com",
-  "phone": "(02) 6654 2111"
+  "phone": "(02) 6654 2111",
+  "note": "Call the club to book."
  },
  {
   "id": "gardens-park",
@@ -9485,13 +9545,14 @@
   "suburb": "The Gardens",
   "lat": -12.4526,
   "lon": 130.8341,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nt",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.gardensparkgolflinks.com.au/",
-  "phone": "(08) 8981 6365"
+  "phone": "(08) 8981 6365",
+  "note": "Call the club to book."
  },
  {
   "id": "raaf",
@@ -9499,11 +9560,12 @@
   "suburb": "Coconut Grove",
   "lat": -12.4109,
   "lon": 130.8578,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nt",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "greens-beach",
@@ -9511,24 +9573,13 @@
   "suburb": "Greens Beach",
   "lat": -41.0869,
   "lon": 146.7461,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://greensbeachgolf.com.au/"
- },
- {
-  "id": "low-head",
-  "name": "Low Head Golf Club",
-  "suburb": "Low Head",
-  "lat": -41.0609,
-  "lon": 146.7976,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "website": "https://greensbeachgolf.com.au/",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "shearwater",
@@ -9536,11 +9587,12 @@
   "suburb": "Shearwater",
   "lat": -41.1616,
   "lon": 146.5421,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "sheffield",
@@ -9548,11 +9600,12 @@
   "suburb": "Sheffield",
   "lat": -41.3587,
   "lon": 146.3502,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "thirlstane",
@@ -9560,13 +9613,14 @@
   "suburb": "Port Sorell",
   "lat": -41.1975,
   "lon": 146.5405,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.thirlstanegolfclub.com.au/",
-  "phone": "(03) 6428 6488"
+  "phone": "(03) 6428 6488",
+  "note": "Call the club to book."
  },
  {
   "id": "ulverstone",
@@ -9574,12 +9628,13 @@
   "suburb": "West Ulverstone",
   "lat": -41.1574,
   "lon": 146.1148,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://www.ulverstonegolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.ulverstonegolfclub.com.au/",
+  "note": "Members and their guests only."
  },
  {
   "id": "barnbougle-dunes",
@@ -9611,13 +9666,16 @@
   "suburb": "Bridport",
   "lat": -40.9975,
   "lon": 147.3808,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.bridportgolfclub.com.au/",
-  "phone": "(03) 6356 1557"
+  "phone": "(03) 6356 1557",
+  "book_url": "https://visitors.brsgolf.com/bridport#/course/1",
+  "cta": "Book on BRS Golf",
+  "note": "Book online through BRS Golf. Its times aren't shown here."
  },
  {
   "id": "country-club-tasmania",
@@ -9625,13 +9683,16 @@
   "suburb": "Prospect Vale",
   "lat": -41.4819,
   "lon": 147.1117,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "miclub",
+  "enabled": true,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.countryclubtasmania.com.au/",
-  "phone": "(03) 6225 7092"
+  "phone": "(03) 6225 7092",
+  "host": "cctasmania.miclub.com.au",
+  "resource_id": 3000000,
+  "note": "Its online tee sheet shows no times before 4 December 2026."
  },
  {
   "id": "deloraine",
@@ -9639,12 +9700,13 @@
   "suburb": "Deloraine",
   "lat": -41.5538,
   "lon": 146.6871,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://www.delorainegolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.delorainegolfclub.com.au/",
+  "note": "Members and their guests only."
  },
  {
   "id": "exeter-tas",
@@ -9652,13 +9714,14 @@
   "suburb": "Exeter",
   "lat": -41.3069,
   "lon": 146.9471,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.exetergolfclub.com.au/",
-  "phone": "(03) 6394 4427"
+  "phone": "(03) 6394 4427",
+  "note": "Call the club to book."
  },
  {
   "id": "george-town",
@@ -9666,13 +9729,14 @@
   "suburb": "George Town",
   "lat": -41.1339,
   "lon": 146.8932,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.georgetowngolfclub.com.au/",
-  "phone": "(03) 6382 1435"
+  "phone": "(03) 6382 1435",
+  "note": "Call the club to book."
  },
  {
   "id": "grindelwald-public",
@@ -9680,11 +9744,12 @@
   "suburb": "Grindelwald",
   "lat": -41.3509,
   "lon": 147.0052,
-  "status": "check",
+  "status": "resort",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "For guests of the resort only."
  },
  {
   "id": "launceston",
@@ -9692,13 +9757,14 @@
   "suburb": "Kings Meadows",
   "lat": -41.4629,
   "lon": 147.1666,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.launcestongolfclub.com.au/",
-  "phone": "(03) 6344 1118"
+  "phone": "(03) 6344 1118",
+  "note": "Call the club to book."
  },
  {
   "id": "longford-tas",
@@ -9706,12 +9772,13 @@
   "suburb": "Longford",
   "lat": -41.6523,
   "lon": 147.11,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://www.longfordgolf.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.longfordgolf.com.au/",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "mowbray",
@@ -9719,11 +9786,12 @@
   "suburb": "Mayfield",
   "lat": -41.3975,
   "lon": 147.1365,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "quamby-estate",
@@ -9731,12 +9799,13 @@
   "suburb": "Westwood",
   "lat": -41.5169,
   "lon": 146.9307,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://www.quambyestate.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.quambyestate.com.au/",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "ringarooma",
@@ -9744,11 +9813,12 @@
   "suburb": "Ringarooma",
   "lat": -41.2423,
   "lon": 147.6942,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "scottsdale",
@@ -9756,11 +9826,12 @@
   "suburb": "Scottsdale",
   "lat": -41.1538,
   "lon": 147.5069,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "tam-o-shanter",
@@ -9768,12 +9839,14 @@
   "suburb": "Lulworth",
   "lat": -41.0015,
   "lon": 147.0911,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "website": "https://www.tamoshantergolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.tamoshantergolfclub.com.au/",
+  "phone": "0413 905 082",
+  "note": "Call the club to book."
  },
  {
   "id": "black-springs",
@@ -9781,11 +9854,12 @@
   "suburb": "Bakers Creek",
   "lat": -21.2094,
   "lon": 149.144,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "melaleuca",
@@ -9793,11 +9867,12 @@
   "suburb": "Andergrove",
   "lat": -21.0947,
   "lon": 149.1921,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "sarina",
@@ -9805,11 +9880,12 @@
   "suburb": "Sarina",
   "lat": -21.437,
   "lon": 149.2319,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "camden-haven",
@@ -9817,11 +9893,13 @@
   "suburb": "Kew",
   "lat": -31.6307,
   "lon": 152.7209,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "phone": "(02) 6559 4596",
+  "note": "Call the club to book."
  },
  {
   "id": "crescent-head",
@@ -9829,13 +9907,14 @@
   "suburb": "Crescent Head",
   "lat": -31.1886,
   "lon": 152.9812,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.chcclub.com.au/",
-  "phone": "(02) 6566 0268"
+  "phone": "(02) 6566 0268",
+  "note": "Call the club to book."
  },
  {
   "id": "emerald-downs",
@@ -9843,11 +9922,12 @@
   "suburb": "Port Macquarie",
   "lat": -31.4794,
   "lon": 152.9039,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "wauchope",
@@ -9855,11 +9935,12 @@
   "suburb": "Wauchope",
   "lat": -31.4627,
   "lon": 152.7297,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "Call the club to book. We don't have its number yet."
  },
  {
   "id": "borneo-barracks",
@@ -9867,12 +9948,13 @@
   "suburb": "Cabarlah",
   "lat": -27.4439,
   "lon": 151.9859,
-  "status": "check",
+  "status": "members",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "phone": "(07) 4696 6396"
+  "checked": "2026-11-13",
+  "phone": "(07) 4696 6396",
+  "note": "Members and their guests only."
  },
  {
   "id": "crows-nest",
@@ -9880,12 +9962,13 @@
   "suburb": "Crows Nest",
   "lat": -27.2632,
   "lon": 152.0467,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "website": "https://www.crowsnestgolfclub.com.au/"
+  "checked": "2026-11-13",
+  "website": "https://www.crowsnestgolfclub.com.au/",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "eustondale",
@@ -9893,12 +9976,13 @@
   "suburb": "Drayton",
   "lat": -27.5846,
   "lon": 151.9016,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "website": "http://www.eustondalegolf.com.au"
+  "checked": "2026-11-13",
+  "website": "http://www.eustondalegolf.com.au",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "gatton-jubilee",
@@ -9906,13 +9990,18 @@
   "suburb": "Gatton",
   "lat": -27.56,
   "lon": 152.2862,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
+  "status": "online",
+  "platform": "golfnow",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.gattongolf.com.au/",
-  "phone": "(07) 5462 1420"
+  "phone": "(07) 5462 1420",
+  "host": "www.golfnow.com.au",
+  "facility_id": 16525,
+  "cta": "Book on GolfNow",
+  "note": "Times and prices come from GolfNow.",
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16525-gatton-jubilee-golf-club/search#date={gn_date}"
  },
  {
   "id": "goombungee",
@@ -9920,24 +10009,13 @@
   "suburb": "Goombungee",
   "lat": -27.3259,
   "lon": 151.8512,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
-  "website": "https://www.goombungeegolfclub.com.au/"
- },
- {
-  "id": "lavarack-qld",
-  "name": "Lavarack Golf Club",
-  "suburb": "Annandale",
-  "lat": -19.3193,
-  "lon": 146.7816,
-  "status": "check",
-  "platform": "none",
-  "enabled": false,
-  "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "website": "https://www.goombungeegolfclub.com.au/",
+  "note": "No bookings. Just turn up and pay."
  },
  {
   "id": "magnetic-island",
@@ -9945,13 +10023,14 @@
   "suburb": "Picnic Bay",
   "lat": -19.1717,
   "lon": 146.8366,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.magneticislandgolf.com.au/",
-  "phone": "(07) 4778 5188"
+  "phone": "(07) 4778 5188",
+  "note": "Call the club to book."
  },
  {
   "id": "rowes-bay",
@@ -9959,13 +10038,14 @@
   "suburb": "Rowes Bay",
   "lat": -19.225,
   "lon": 146.7723,
-  "status": "check",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-13",
   "website": "https://www.rowesbaygolfclub.com.au/",
-  "phone": "(07) 4774 1188"
+  "phone": "(07) 4774 1188",
+  "note": "Call the club to book."
  },
  {
   "id": "the-willows-qld",
@@ -9973,10 +10053,11 @@
   "suburb": "Bohle Plains",
   "lat": -19.306,
   "lon": 146.7085,
-  "status": "check",
+  "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-12"
+  "checked": "2026-11-13",
+  "note": "No bookings. Just turn up and pay."
  }
 ]
