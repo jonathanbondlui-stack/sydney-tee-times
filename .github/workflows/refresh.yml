@@ -24,7 +24,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60  # a normal run takes about 12 minutes; the far feed, rebuilt every 6 hours, adds up to TEE_FAR_MINUTES (30)
+    timeout-minutes: 60  # a run takes about 12 minutes for the next week, plus up to TEE_FAR_MINUTES (8) on later dates for the clubs due
     env:
       TEE_UA: ${{ secrets.TEE_UA }}
       TZ: Australia/Sydney  # build_feed.py uses the local date for "today"

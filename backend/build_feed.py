@@ -33,12 +33,14 @@ def region_of(c):
 def feed_name(region, far=False):
     return f"tee-times-far-{region}.json" if far else f"tee-times-{region}.json"
 FAR_DAYS = int(os.environ.get("TEE_FAR_DAYS", "28"))  # how far ahead the far feed goes
-FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # how often to rebuild the far feed
+FAR_HOURS = float(os.environ.get("TEE_FAR_HOURS", "6"))  # a club's later dates are read again once they're this old
 KEEP_HOURS = 12  # how long a club's last good times stand in when its refresh fails
 FAR_KEEP_HOURS = 36  # the same for dates more than a week ahead, which change slowly and are only rebuilt every few hours
-# Time allowed for the far rebuild. Clubs not finished by then keep their last far times (for FAR_KEEP_HOURS),
-# so a slow queue (GolfNow is read one request at a time) can't push the whole run past the job's time limit.
-FAR_MINUTES = float(os.environ.get("TEE_FAR_MINUTES", "30"))
+# Time each run spends on later dates. The far feeds aren't rebuilt all at once: each run reads the
+# clubs whose later dates are oldest, until this runs out, and the rest keep their last far times
+# (for FAR_KEEP_HOURS). That spreads the work over many runs, so no single run gets near the job's
+# time limit, and a new club or region just goes to the front of the queue.
+FAR_MINUTES = float(os.environ.get("TEE_FAR_MINUTES", "8"))
 
 class OutOfTime(Exception):
     pass
@@ -549,18 +551,26 @@ def with_parts(failed, courses):
             parts.setdefault(c["part_of"], []).append(c["id"])
     return [x for cid in failed for x in [cid, *parts.get(cid, [])]]
 
-def build(courses, today, first, last):
-    """Collect every live club for this date range. Returns (rows, failures, clubs tried)."""
+def live_clubs(courses):
+    """The clubs that are read: enabled, on a platform we collect from, and not split off another
+    club's site (those are read with that club)."""
+    return [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
+
+def build(courses, today, first, last, only=None):
+    """Collect every live club for this date range, or just the clubs in `only`, in that order.
+    Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
-    # A course split off another club's site is read with that club, not on its own.
-    live = [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
-    # TeeItUp's API cuts us off partway through a long run, and the far rebuild can run out of time
-    # before the GolfNow queue is done, so a different club on each of those goes first each hour.
-    for p in ("teeitup", "golfnow"):
-        q = [c for c in live if c["platform"] == p]
-        if q:
-            k = int(time.time() // 3600) % len(q)
-            live = [c for c in live if c["platform"] != p] + q[k:] + q[:k]
+    live = live_clubs(courses)
+    if only is not None:
+        pos = {cid: i for i, cid in enumerate(only)}
+        live = sorted((c for c in live if c["id"] in pos), key=lambda c: pos[c["id"]])
+    else:
+        # TeeItUp's API cuts us off partway through a long run, so a different club goes first each hour.
+        for p in ("teeitup", "golfnow"):
+            q = [c for c in live if c["platform"] == p]
+            if q:
+                k = int(time.time() // 3600) % len(q)
+                live = [c for c in live if c["platform"] != p] + q[k:] + q[:k]
     # Each worker handles one club, so a club still gets at most one request per MIN_GAP.
     # GolfNow clubs do share a host, and take turns through _golfnow_lock instead.
     assert len({(c["host"], c.get("facility_id"), c.get("resource_id")) for c in live}) == len(live), "two courses share a booking sheet"
@@ -610,7 +620,7 @@ def carry_over(name, rows, failed, now=None, keep_hours=KEEP_HOURS, region="nsw"
     today, clock = here.date().isoformat(), here.strftime("%H:%M")
     kept = {}
     for cid in failed:
-        read_at = prev.get("kept", {}).get(cid, prev.get("generated_at"))
+        read_at = prev.get("read", {}).get(cid) or prev.get("kept", {}).get(cid, prev.get("generated_at"))
         try:
             if (now - dt.datetime.fromisoformat(read_at)).total_seconds() > keep_hours * 3600:
                 continue
@@ -662,43 +672,84 @@ def unpack(feed):
         out.append(r)
     return out
 
-def write_feed(name, rows, kept=None):
+def write_feed(name, rows, kept=None, read=None):
     path = os.path.join(ROOT, "site", name)
     feed = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), **pack(rows)}
     if kept:
         feed["kept"] = kept
+    if read is not None:
+        feed["read"] = read
     tmp = path + ".tmp"
     with open(tmp, "w") as fh:
         json.dump(feed, fh, separators=(",", ":"))
     os.replace(tmp, path)
 
-def far_due():
-    """True when any region's far feed is missing or older than FAR_HOURS. Before the split,
-    the single far feed's age stands in, so the switch doesn't trigger an early rebuild."""
-    ages = []
+def far_read_times():
+    """When each club's later dates were last read, from the published far feeds: the feed's "read"
+    list, or for feeds from before it had one, the time its times were kept from or the feed was made.
+    A club that isn't in any far feed has never been read and isn't in the result."""
+    read = {}
     for r in REGIONS:
         for n in (feed_name(r, True), FAR_FEED):
             try:
                 with open(os.path.join(ROOT, "site", n)) as fh:
-                    ages.append(dt.datetime.fromisoformat(json.load(fh)["generated_at"]))
-                break
-            except (OSError, ValueError, KeyError):
-                pass
-        else:
-            return True
-    return (dt.datetime.now(dt.timezone.utc) - min(ages)).total_seconds() >= FAR_HOURS * 3600
+                    prev = json.load(fh)
+            except (OSError, ValueError):
+                continue
+            if "read" in prev:
+                read.update(prev["read"])
+            else:
+                for cid in {x["course"] for x in prev.get("times", [])}:
+                    read.setdefault(cid, prev.get("kept", {}).get(cid, prev.get("generated_at")))
+            break
+    return read
 
-def write_regions(rows, failed, courses, far=False):
-    """Write one feed per region, each carrying over its own clubs' times after a failed read."""
+def far_queue(courses, read, now=None):
+    """The clubs whose later dates are due to be read again (never read, or FAR_HOURS old), oldest first."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    def age(c):
+        try:
+            return (now - dt.datetime.fromisoformat(read[c["id"]])).total_seconds() / 3600
+        except (KeyError, TypeError, ValueError):
+            return float("inf")
+    due = [c for c in live_clubs(courses) if age(c) >= FAR_HOURS]
+    return [c["id"] for c in sorted(due, key=age, reverse=True)]
+
+def write_regions(rows, failed, courses, far=False, read=None, today=None):
+    """Write one feed per region, each carrying over its own clubs' times after a failed read.
+    For the far feeds, `failed` is every club not read this time, and `read` says when each club's
+    later dates were read; the clubs read just now are the ones with rows or not in `failed`."""
     region = {c["id"]: region_of(c) for c in courses}
     failed = with_parts(failed, courses)
+    now = dt.datetime.now(dt.timezone.utc)
     for r in REGIONS:
         mine = [x for x in rows if region.get(x["course"], "nsw") == r]
         name = feed_name(r, far)
-        kept = carry_over([name, FAR_FEED if far else NEAR_FEED], mine,
-                          [cid for cid in failed if region.get(cid, "nsw") == r],
+        missed = [cid for cid in failed if region.get(cid, "nsw") == r]
+        kept = carry_over([name, FAR_FEED if far else NEAR_FEED], mine, missed,
                           keep_hours=FAR_KEEP_HOURS if far else KEEP_HOURS, region=r)
-        write_feed(name, mine, kept)
+        if far:
+            # Dates that have come into the near feed's week since they were read are dropped.
+            cutoff = (today + dt.timedelta(days=DAYS)).isoformat()
+            mine = [x for x in mine if x["date"] > cutoff]
+            stamp = {}
+            for c in courses:
+                cid = c["id"]
+                if region.get(cid, "nsw") != r or not c.get("enabled"):
+                    continue
+                if cid not in failed:
+                    stamp[cid] = now.isoformat()
+                elif cid in kept:
+                    stamp[cid] = kept[cid]
+                elif cid in read:
+                    try:
+                        if (now - dt.datetime.fromisoformat(read[cid])).total_seconds() <= FAR_KEEP_HOURS * 3600:
+                            stamp[cid] = read[cid]  # read before with no later times, and not due again yet
+                    except (TypeError, ValueError):
+                        pass
+            write_feed(name, mine, read=stamp)
+        else:
+            write_feed(name, mine, kept)
         print(f"  {name}: {len(mine)} times")
 
 def split_old_far(courses):
@@ -765,19 +816,20 @@ def main():
     print(f"Writing {len(out)} tee times from {tried - len(failures)} clubs.")
     write_regions(out, [cid for cid, _ in failures], courses)
     split_old_far(courses)
-    if far_due():
+    read = far_read_times()
+    due = far_queue(courses, read)
+    if due:
         global _stop_at
         _stop_at = time.time() + FAR_MINUTES * 60
-        out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS)
+        out, failures, tried = build(courses, today, DAYS + 1, FAR_DAYS, only=due)
         _stop_at = None
         late = [cid for cid, e in failures if isinstance(e, OutOfTime)]
         if late:
-            print(f"Ran out of time for {len(late)} clubs' later dates; their last times stay up: {', '.join(late)}", file=sys.stderr)
-        if not out or len(failures) > tried * 0.5:
-            print("Too little data or too many failures for later dates. Keeping the previous far feed.", file=sys.stderr)
-        else:
-            print(f"Writing {len(out)} later tee times from {tried - len(failures)} clubs.")
-            write_regions(out, [cid for cid, _ in failures], courses, far=True)
+            print(f"Out of time for {len(late)} clubs' later dates; they go first next run: {', '.join(late)}", file=sys.stderr)
+        got = {cid for cid in due} - {cid for cid, _ in failures}
+        print(f"Read later dates for {len(got)} of {len(due)} clubs due ({len(out)} times).")
+        not_read = [c["id"] for c in live_clubs(courses) if c["id"] not in got]
+        write_regions(out, not_read, courses, far=True, read=read, today=today)
     drop_old_feeds()
 
 if __name__ == "__main__":
