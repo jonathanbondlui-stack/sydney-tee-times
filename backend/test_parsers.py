@@ -230,7 +230,7 @@ plan, order = bf.peek_plan(pcs, today, seen, beyond)
 assert plan == {"wakehurst": (29, 31), "rosebud": (30, 32)} and order == ["wakehurst", "rosebud"], (plan, order)
 # A peek that finds a new date is kept; the next run sees more on it and logs that as a release.
 bf.keep_peeks(beyond, [row("wakehurst", "2026-12-14", "06:00")], ["wakehurst"], plan, pcs, today, now=now)
-assert beyond["times"] == {"wakehurst": {"2026-12-14": [["06:00", "", ""]]}} and beyond["read"]["wakehurst"] == ["2026-11-15T09:00+00:00", "2026-12-14", "2026-12-16"], beyond
+assert beyond["times"] == {"wakehurst": {"2026-12-14": "06:00"}} and beyond["read"]["wakehurst"] == ["2026-11-15T09:00+00:00", "2026-12-14", "2026-12-16"], beyond
 later = now + datetime.timedelta(minutes=15)
 prevb = bf.beyond_slots(beyond)
 rows = [row("wakehurst", "2026-12-14", t) for t in ("06:00", "06:08", "06:16", "06:24", "06:32")] + [row("wakehurst", "2026-12-17", t) for t in ("06:00", "06:08", "06:16", "06:24")]

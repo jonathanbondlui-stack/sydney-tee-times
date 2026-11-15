@@ -856,13 +856,14 @@ def find_releases(rows, read_ids, prev, near_read, far_read, courses, peak=None,
     out = []
     for (cid, d), slots in sorted(cur.items()):
         before = prev.get((cid, d), set())
-        n, count = len({s[0] for s in slots - before}), len({s[0] for s in slots})
+        had = {s[0] for s in before}
+        n, count = len({s[0] for s in slots} - had), len({s[0] for s in slots})
         top = peak.setdefault(cid, {}).get(d)
         try:
             fresh = top and (now - dt.datetime.fromisoformat(top[1])).total_seconds() < PEAK_HOURS * 3600
         except (TypeError, ValueError, IndexError):
             fresh = False
-        most = max(len({s[0] for s in before}), top[0] if fresh else 0)
+        most = max(len(had), top[0] if fresh else 0)
         if not fresh or count >= top[0]:
             peak[cid][d] = [count, now.isoformat(timespec="minutes")]
         if n < RELEASE_MIN or count - most < RELEASE_MIN:
@@ -909,11 +910,14 @@ def _save_site(name, d):
 
 def load_beyond():
     b = _load_site(BEYOND_FILE)
-    return {"read": b.get("read") or {}, "times": b.get("times") or {}}
+    times = {k: {d: v if isinstance(v, str) else " ".join(sorted({x[0] for x in v})) for d, v in ds.items()}
+             for k, ds in (b.get("times") or {}).items()}  # the first version kept [time, tee, group] lists
+    return {"read": b.get("read") or {}, "times": times}
 
 def beyond_slots(beyond):
     """What the peeks found, as {(course, date): {(time, tee, group)}}, like previous_times()."""
-    return {(cid, d): {tuple(s) for s in ss} for cid, ds in beyond["times"].items() for d, ss in ds.items()}
+    # Stored as one string of times per date ("06:00 06:08"); only the times matter to find_releases.
+    return {(cid, d): {(t, "", "") for t in ss.split()} for cid, ds in beyond["times"].items() for d, ss in ds.items()}
 
 def peek_plan(courses, today, seen, beyond):
     """The clubs whose times reach the end of the 4 weeks we read (from `seen`, every time we know
@@ -951,7 +955,7 @@ def keep_peeks(beyond, rows, got, plan, courses, today, now=None):
         lo, hi = ((today + dt.timedelta(days=n)).isoformat() for n in plan[cid])
         for k in [cid, *parts[cid]]:
             ds = {d: v for d, v in beyond["times"].get(k, {}).items() if not lo <= d <= hi}
-            ds.update({d: sorted(map(list, v)) for d, v in found[k].items()})
+            ds.update({d: " ".join(sorted({s[0] for s in v})) for d, v in found[k].items()})
             beyond["times"][k] = ds
         beyond["read"][cid] = [now.isoformat(timespec="minutes"), lo, hi]
     live = {c["id"] for c in courses if c.get("enabled")}
