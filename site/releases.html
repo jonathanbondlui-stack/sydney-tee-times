@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>When Times Come Out</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="When each golf course puts up new tee times, so you can be first to book.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3E8;--surface:#fff;--ink:#16291D;--mute:#5B6B5F;--line:#D5DFCC;--accent:#1F6B3A;--accent-ink:#fff;--sun:#F4B400;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A13;--surface:#16261C;--ink:#E7F0E4;--mute:#9DB1A2;--line:#264232;--accent:#5CC27E;--accent-ink:#0E1A13;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1A13;--surface:#16261C;--ink:#E7F0E4;--mute:#9DB1A2;--line:#264232;--accent:#5CC27E;--accent-ink:#0E1A13;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Hanken Grotesk",system-ui,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:20px 16px 64px}
+.brand{display:inline-block;font:700 18px/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.01em;color:var(--accent);margin:4px 0 22px;text-decoration:none}
+h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 20px;max-width:40em}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.tools input,.tools select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0}
+.tools input{flex:1 1 220px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 12px}
+.card h2{font:700 19px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0}
+.card .where{color:var(--mute);font-size:14px}
+.pat{margin:10px 0 0;font-weight:600}
+.pat.none{font-weight:400;color:var(--mute)}
+.ev{list-style:none;margin:10px 0 0;padding:0;font-size:14px;color:var(--mute)}
+.ev li{padding:6px 0;border-top:1px solid var(--line)}
+.ev b{color:var(--ink);font-weight:600}
+.tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--accent);margin-left:6px}
+.empty{color:var(--mute)}
+.fine{color:var(--mute);font-size:13px;margin-top:20px}
+.more{font:inherit;color:var(--accent);background:none;border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="brand" href="./">Tee Time Finder</a>
+  <h1>When times come out</h1>
+  <p class="sub">Every time we read a course, we note any new batch of tee times. Over a few weeks, that shows when each course puts up its times, and how far ahead.</p>
+  <p class="sub" id="since"></p>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Course or suburb" aria-label="Find a course">
+    <select id="reg" aria-label="Region"><option value="">All regions</option></select>
+  </div>
+  <div id="list"><p class="empty">Loading…</p></div>
+  <button class="more" id="more" hidden>Show more</button>
+  <p class="fine">Times are local to each course. We read most courses’ next week about every half hour, and dates further out every 6 hours or so. A release on those later dates is only known to within a few hours, so those aren’t used for the usual time. Courses on TeeItUp are read once an hour. We look 4 weeks ahead, so a course that puts up times further out than that only shows extra blocks of times opening.</p>
+</main>
+<script>
+const REG={nsw:["Sydney & NSW","Australia/Sydney"],act:["Canberra","Australia/Sydney"],vic:["Melbourne & Victoria","Australia/Melbourne"],
+  qld:["Brisbane & Queensland","Australia/Brisbane"],wa:["Perth & WA","Australia/Perth"],sa:["Adelaide & SA","Australia/Adelaide"],
+  tas:["Tasmania","Australia/Hobart"],nt:["Darwin & NT","Australia/Darwin"]};
+const PRECISE=90, $=id=>document.getElementById(id);
+const fmtCache={};
+// The local date, weekday and minutes past midnight of a moment at a course.
+function local(t,tz){
+  const f=fmtCache[tz]||(fmtCache[tz]=new Intl.DateTimeFormat("en-AU",{timeZone:tz,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23",weekday:"short"}));
+  const p=Object.fromEntries(f.formatToParts(t).map(x=>[x.type,x.value]));
+  return {date:`${p.year}-${p.month}-${p.day}`,wd:p.weekday,min:+p.hour*60+ +p.minute};
+}
+const dayN=s=>Date.UTC(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10))/864e5;
+const clock=m=>{m=((Math.round(m)%1440)+1440)%1440;const h=Math.floor(m/60),mm=m%60;return `${h%12||12}:${String(mm).padStart(2,"0")}${h<12?"am":"pm"}`};
+const nice=s=>new Date(s+"T12:00:00Z").toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"});
+const WD={Mon:"Mondays",Tue:"Tuesdays",Wed:"Wednesdays",Thu:"Thursdays",Fri:"Fridays",Sat:"Saturdays",Sun:"Sundays"};
+const median=a=>{a=[...a].sort((x,y)=>x-y);return a.length%2?a[(a.length-1)/2]:(a[a.length/2-1]+a[a.length/2])/2};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function summary(evs){
+  const p=evs.filter(e=>e.win<=PRECISE);
+  const days={};evs.forEach(e=>days[e.ahead]=(days[e.ahead]||0)+1);
+  const [top,cnt]=Object.entries(days).sort((a,b)=>b[1]-a[1])[0];
+  const parts=[];
+  if(evs.length>=2&&cnt/evs.length>=.5) parts.push(`${top} day${top=="1"?"":"s"} ahead`);
+  const tp=p.filter(e=>parts.length?String(e.ahead)===top:true);
+  if(tp.length){
+    const mids=tp.map(e=>e.mid), lo=Math.min(...tp.map(e=>e.from)), hi=Math.max(...tp.map(e=>e.to));
+    if(Math.max(...mids)-Math.min(...mids)<=60) parts.push(tp.length>1?`usually between ${clock(lo)} and ${clock(hi)}`:`once so far, between ${clock(lo)} and ${clock(hi)}`);
+    else parts.push(`at different times of day (median ${clock(median(mids))})`);
+  }
+  if(p.length>=3){const w={};p.forEach(e=>w[e.wd]=(w[e.wd]||0)+1);const [d,n]=Object.entries(w).sort((a,b)=>b[1]-a[1])[0];if(n/p.length>=.8)parts.push(`on ${WD[d]}`)}
+  if(!parts.length) return null;
+  const s=parts.join(", ");return s[0].toUpperCase()+s.slice(1)+".";
+}
+
+let ALL=[],SHOWN=40;
+function render(){
+  const q=$("q").value.trim().toLowerCase(),r=$("reg").value;
+  const rows=ALL.filter(x=>(!r||x.region===r)&&(!q||(x.c.name+" "+(x.c.suburb||"")).toLowerCase().includes(q)));
+  if(!ALL.length){$("list").innerHTML=`<p class="empty">No new batches of times seen yet. Check back in a day or two.</p>`;$("more").hidden=true;return}
+  if(!rows.length){$("list").innerHTML=`<p class="empty">No courses match.</p>`;$("more").hidden=true;return}
+  $("list").innerHTML=rows.slice(0,SHOWN).map(x=>{
+    const s=summary(x.evs), n=x.evs.length;
+    const ev=[...x.evs].sort((a,b)=>b.at-a.at).slice(0,5).map(e=>
+      `<li><b>${nice(e.d)}</b>: ${e.n} new times, put up ${e.fromDate===e.toDate?`${nice(e.toDate)} between ${clock(e.from)} and ${clock(e.to)}`:`between ${e.fromWd} ${clock(e.from)} and ${e.toWd} ${clock(e.to)}`} (${e.ahead} day${e.ahead==1?"":"s"} ahead)${e.new?`<span class="tag">First times for that day</span>`:""}</li>`).join("");
+    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${REG[x.region][0]} · seen ${n} time${n==1?"":"s"}</div>
+      <p class="pat${s?"":" none"}">${s||"Not enough yet to see a pattern."}</p><ul class="ev">${ev}</ul></article>`}).join("");
+  $("more").hidden=rows.length<=SHOWN;
+}
+
+Promise.all([fetch("courses.json").then(r=>r.json()),fetch("tee-times-releases.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{events:[]}).catch(()=>({events:[]}))]).then(([cs,log])=>{
+  const by=Object.fromEntries(cs.map(c=>[c.id,c]));
+  if(log.since) $("since").textContent=`Logging since ${new Date(log.since).toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"})}.`;
+  const g={};
+  for(const e of log.events||[]){
+    const c=by[e.c]; if(!c) continue;
+    const region=REG[c.region]?c.region:"nsw", tz=REG[region][1];
+    const at=new Date(e.at), since=new Date(e.since), A=local(at,tz), S=local(since,tz), win=(at-since)/6e4;
+    const ev={d:e.d,n:e.n,new:e.new,at,win,ahead:dayN(e.d)-dayN(A.date),wd:A.wd,
+      from:S.min,to:A.min,fromDate:S.date,toDate:A.date,fromWd:S.wd,toWd:A.wd,
+      mid:S.date===A.date?(S.min+A.min)/2:A.min-win/2};
+    (g[e.c]||(g[e.c]={c,region,evs:[]})).evs.push(ev);
+  }
+  ALL=Object.values(g).sort((a,b)=>b.evs.length-a.evs.length||a.c.name.localeCompare(b.c.name));
+  const have=new Set(ALL.map(x=>x.region));
+  $("reg").innerHTML=`<option value="">All regions</option>`+Object.entries(REG).filter(([k])=>have.has(k)).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("");
+  render();
+}).catch(()=>{$("list").innerHTML=`<p class="empty">Couldn’t load the log. Try again in a minute.</p>`});
+$("q").addEventListener("input",()=>{SHOWN=40;render()});
+$("reg").addEventListener("change",()=>{SHOWN=40;render()});
+$("more").addEventListener("click",()=>{SHOWN+=40;render()});
+</script>
+</body>
+</html>

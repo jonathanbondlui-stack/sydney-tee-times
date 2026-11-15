@@ -48,6 +48,11 @@ NEAR_EVERY = {"teeitup": 60}
 # When a host asks us to wait longer than a run can sit out, the wait is saved here and published
 # with the feeds, so the next runs leave that host alone until the wait is over.
 RESTING_FILE = "tee-times-resting.json"
+# When clubs put up new times: each batch of RELEASE_MIN or more new times on one date, seen
+# between two reads of that date, is logged here (site/releases.html shows each club's pattern).
+RELEASES_FILE = "tee-times-releases.json"
+RELEASE_MIN = 4  # fewer than this is usually a cancellation, not a release
+RELEASE_KEEP_DAYS = 120
 
 class OutOfTime(Exception):
     pass
@@ -802,6 +807,80 @@ def write_regions(rows, failed, courses, far=False, read=None, today=None):
             write_feed(name, mine, kept, read=stamp)
         print(f"  {name}: {len(mine)} times")
 
+def _slot(x):
+    return (x["time"], x.get("tee", ""), x.get("group", ""))
+
+def previous_times():
+    """Every time in the published feeds, near and far: {(course, date): {(time, tee, group)}}."""
+    seen = collections.defaultdict(set)
+    for r in REGIONS:
+        for far in (False, True):
+            try:
+                with open(os.path.join(ROOT, "site", feed_name(r, far))) as fh:
+                    feed = json.load(fh)
+            except (OSError, ValueError):
+                continue
+            for x in unpack(feed):
+                seen[(x["course"], x["date"])].add(_slot(x))
+    return seen
+
+def find_releases(rows, read_ids, prev, near_read, far_read, courses, now=None):
+    """The dates where a club just read has RELEASE_MIN or more new times since it was last read.
+    `since` is the last read that covered that date, so the release happened between `since` and
+    `at`. A date no earlier read covered (it has just come into the 4 weeks we look at, or the
+    club is new) isn't a release we can time, so it's left out."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    parent = {c["id"]: c["part_of"] for c in courses if c.get("part_of")}
+    read_ids = set(with_parts(list(read_ids), courses))
+    cur = collections.defaultdict(set)
+    for x in rows:
+        if x["course"] in read_ids:
+            cur[(x["course"], x["date"])].add(_slot(x))
+    out = []
+    for (cid, d), slots in sorted(cur.items()):
+        before = prev.get((cid, d), set())
+        n = len({s[0] for s in slots - before})
+        if n < RELEASE_MIN:
+            continue
+        since = None
+        for read, lo, hi in ((near_read, 0, DAYS), (far_read, DAYS + 1, FAR_DAYS)):
+            when = read.get(cid) or read.get(parent.get(cid))
+            try:
+                t = dt.datetime.fromisoformat(when)
+            except (TypeError, ValueError):
+                continue
+            # A run reads dates from the runner's date (UTC on GitHub), as build() is given it.
+            day = t.astimezone(dt.timezone.utc).date()
+            if (day + dt.timedelta(days=lo)).isoformat() <= d <= (day + dt.timedelta(days=hi)).isoformat():
+                if since is None or t > since:
+                    since = t
+        if since is None or since >= now:
+            continue
+        out.append({"c": cid, "d": d, "n": n, "new": not before,
+                    "since": since.astimezone(dt.timezone.utc).isoformat(timespec="minutes"),
+                    "at": now.isoformat(timespec="minutes")})
+    return out
+
+def save_releases(found, now=None):
+    """Add to the release log, dropping entries older than RELEASE_KEEP_DAYS."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    path = os.path.join(ROOT, "site", RELEASES_FILE)
+    try:
+        with open(path) as fh:
+            log = json.load(fh)
+    except (OSError, ValueError):
+        log = {}
+    events = log.get("events", [])
+    if not log.get("since"):
+        log["since"] = now.isoformat(timespec="minutes")
+    for e in found:
+        print(f"RELEASED {e['c']} {e['d']}: {e['n']} new times between {e['since'][11:16]} and {e['at'][11:16]} UTC", file=sys.stderr)
+    cutoff = (now - dt.timedelta(days=RELEASE_KEEP_DAYS)).isoformat()
+    log["events"] = [e for e in events + found if e.get("at", "") >= cutoff]
+    with open(path + ".tmp", "w") as fh:
+        json.dump(log, fh, separators=(",", ":"))
+    os.replace(path + ".tmp", path)
+
 def split_old_far(courses):
     """Once, at the switch: share the single far feed out to the regions, keeping its age,
     so later dates keep showing until the next far rebuild."""
@@ -867,6 +946,7 @@ def main():
 
 def run(courses, today):
     near = read_times(far=False)
+    prev, far_before, released = previous_times(), read_times(far=True), []  # for the release log
     skip = near_skip(courses, near)
     if skip:
         print(f"Not due yet (TeeItUp clubs read in the last {NEAR_EVERY['teeitup']} minutes): {', '.join(skip)}", file=sys.stderr)
@@ -875,6 +955,8 @@ def run(courses, today):
         print("Too little data or too many failures. Keeping the previous feed.", file=sys.stderr)
         sys.exit(1)
     print(f"Writing {len(out)} tee times from {tried - len(failures)} clubs.")
+    read_now = {c["id"] for c in live_clubs(courses)} - set(skip) - {cid for cid, _ in failures}
+    released += find_releases(out, read_now, prev, near, far_before, courses)
     write_regions(out, [cid for cid, _ in failures] + skip, courses, read=near)
     split_old_far(courses)
     read = read_times(far=True)
@@ -889,9 +971,11 @@ def run(courses, today):
             print(f"Out of time for {len(late)} clubs' later dates; they go first next run: {', '.join(late)}", file=sys.stderr)
         got = {cid for cid in due} - {cid for cid, _ in failures}
         print(f"Read later dates for {len(got)} of {len(due)} clubs due ({len(out)} times).")
+        released += find_releases(out, got, prev, near, far_before, courses)
         not_read = [c["id"] for c in live_clubs(courses) if c["id"] not in got]
         write_regions(out, not_read, courses, far=True, read=read, today=today)
     drop_old_feeds()
+    save_releases(released)
 
 if __name__ == "__main__":
     main()

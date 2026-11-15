@@ -190,3 +190,24 @@ finally:
 assert [(r["time"], r["spots"], r["price"], r["holes"]) for r in rows] == [("05:30", 4, 43.0, 18), ("05:37", 2, 43.0, 18), ("05:45", 1, 43.0, 18)], rows
 assert rows[0]["url"].endswith("#?course_id=18100&nb_holes=18&date=2026-11-14"), rows[0]["url"]
 print("chronogolf tests passed")
+
+# Release log: a batch of new times on a date an earlier read covered is a release, timed between
+# that read and now; a few new times (cancellations) or a date that's only just in view are not.
+U = datetime.timezone.utc
+now = datetime.datetime(2026, 11, 15, 9, 0, tzinfo=U)
+cs = [{"id": "wakehurst"}, {"id": "cammeray"}, {"id": "rosebud-north", "part_of": "rosebud"}, {"id": "rosebud"}]
+row = lambda c, d, t: {"course": c, "date": d, "time": t}
+prev = {("wakehurst", "2026-11-20"): {("07:00", "", "")}, ("cammeray", "2026-11-20"): {("07:00", "", "")}}
+near_read = {"wakehurst": "2026-11-15T08:30:00+00:00", "cammeray": "2026-11-15T08:30:00+00:00", "rosebud": "2026-11-15T08:30:00+00:00"}
+far_read = {"wakehurst": "2026-11-15T03:00:00+00:00"}
+rows = [row("wakehurst", "2026-11-20", t) for t in ("07:00", "07:08", "07:16", "07:24", "07:32")]       # 4 new: a release
+rows += [row("cammeray", "2026-11-20", t) for t in ("07:00", "07:08", "07:16")]                          # 2 new: cancellations
+rows += [row("wakehurst", "2026-12-01", t) for t in ("06:00", "06:08", "06:16", "06:24")]                # a new later date
+rows += [row("wakehurst", "2026-12-14", t) for t in ("06:00", "06:08", "06:16", "06:24")]                # only just in view
+rows += [row("rosebud-north", "2026-11-18", t) for t in ("06:00", "06:08", "06:16", "06:24")]            # a split-off course
+got = bf.find_releases(rows, {"wakehurst", "cammeray", "rosebud"}, prev, near_read, far_read, cs, now=now)
+assert [(e["c"], e["d"], e["n"], e["new"], e["since"][11:16]) for e in got] == [
+    ("rosebud-north", "2026-11-18", 4, True, "08:30"), ("wakehurst", "2026-11-20", 4, False, "08:30"),
+    ("wakehurst", "2026-12-01", 4, True, "03:00")], got
+assert bf.find_releases(rows, {"cammeray"}, prev, near_read, far_read, cs, now=now) == []  # only clubs read this run
+print("release log tests passed")
