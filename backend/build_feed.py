@@ -53,6 +53,8 @@ RESTING_FILE = "tee-times-resting.json"
 RELEASES_FILE = "tee-times-releases.json"
 RELEASE_MIN = 4  # fewer than this is usually a cancellation, not a release
 RELEASE_KEEP_DAYS = 120
+PEAKS_FILE = "tee-times-peaks.json"  # the most times each date had lately (see find_releases); losing it is harmless
+PEAK_HOURS = 24  # times back within this long of being seen (a sheet that hid some for a while) aren't a release
 
 class OutOfTime(Exception):
     pass
@@ -824,12 +826,16 @@ def previous_times():
                 seen[(x["course"], x["date"])].add(_slot(x))
     return seen
 
-def find_releases(rows, read_ids, prev, near_read, far_read, courses, now=None):
+def find_releases(rows, read_ids, prev, near_read, far_read, courses, peak=None, now=None):
     """The dates where a club just read has RELEASE_MIN or more new times since it was last read.
     `since` is the last read that covered that date, so the release happened between `since` and
     `at`. A date no earlier read covered (it has just come into the 4 weeks we look at, or the
-    club is new) isn't a release we can time, so it's left out."""
+    club is new) isn't a release we can time, so it's left out.
+    `peak` ({club: {date: [most times seen, when]}}, updated here) is the most times each date had
+    in the last PEAK_HOURS: a date must also have RELEASE_MIN more than that, so times that only
+    come back after a sheet hid them for a while aren't counted as a release."""
     now = now or dt.datetime.now(dt.timezone.utc)
+    peak = {} if peak is None else peak
     parent = {c["id"]: c["part_of"] for c in courses if c.get("part_of")}
     read_ids = set(with_parts(list(read_ids), courses))
     cur = collections.defaultdict(set)
@@ -839,8 +845,16 @@ def find_releases(rows, read_ids, prev, near_read, far_read, courses, now=None):
     out = []
     for (cid, d), slots in sorted(cur.items()):
         before = prev.get((cid, d), set())
-        n = len({s[0] for s in slots - before})
-        if n < RELEASE_MIN:
+        n, count = len({s[0] for s in slots - before}), len({s[0] for s in slots})
+        top = peak.setdefault(cid, {}).get(d)
+        try:
+            fresh = top and (now - dt.datetime.fromisoformat(top[1])).total_seconds() < PEAK_HOURS * 3600
+        except (TypeError, ValueError, IndexError):
+            fresh = False
+        most = max(len({s[0] for s in before}), top[0] if fresh else 0)
+        if not fresh or count >= top[0]:
+            peak[cid][d] = [count, now.isoformat(timespec="minutes")]
+        if n < RELEASE_MIN or count - most < RELEASE_MIN:
             continue
         since = None
         for read, lo, hi in ((near_read, 0, DAYS), (far_read, DAYS + 1, FAR_DAYS)):
@@ -861,15 +875,27 @@ def find_releases(rows, read_ids, prev, near_read, far_read, courses, now=None):
                     "at": now.isoformat(timespec="minutes")})
     return out
 
-def save_releases(found, now=None):
-    """Add to the release log, dropping entries older than RELEASE_KEEP_DAYS."""
-    now = now or dt.datetime.now(dt.timezone.utc)
-    path = os.path.join(ROOT, "site", RELEASES_FILE)
+def _load_site(name):
     try:
-        with open(path) as fh:
-            log = json.load(fh)
+        with open(os.path.join(ROOT, "site", name)) as fh:
+            d = json.load(fh)
+        return d if isinstance(d, dict) else {}
     except (OSError, ValueError):
-        log = {}
+        return {}
+
+def _save_site(name, d):
+    path = os.path.join(ROOT, "site", name)
+    with open(path + ".tmp", "w") as fh:
+        json.dump(d, fh, separators=(",", ":"))
+    os.replace(path + ".tmp", path)
+
+def save_releases(found, peak, now=None):
+    """Add to the release log, dropping entries older than RELEASE_KEEP_DAYS, and save the peaks
+    for dates not yet past."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    old = (now - dt.timedelta(days=1)).date().isoformat()
+    _save_site(PEAKS_FILE, {c: k for c, k in ((c, {d: v for d, v in ds.items() if d >= old}) for c, ds in peak.items()) if k})
+    log = _load_site(RELEASES_FILE)
     events = log.get("events", [])
     if not log.get("since"):
         log["since"] = now.isoformat(timespec="minutes")
@@ -877,9 +903,7 @@ def save_releases(found, now=None):
         print(f"RELEASED {e['c']} {e['d']}: {e['n']} new times between {e['since'][11:16]} and {e['at'][11:16]} UTC", file=sys.stderr)
     cutoff = (now - dt.timedelta(days=RELEASE_KEEP_DAYS)).isoformat()
     log["events"] = [e for e in events + found if e.get("at", "") >= cutoff]
-    with open(path + ".tmp", "w") as fh:
-        json.dump(log, fh, separators=(",", ":"))
-    os.replace(path + ".tmp", path)
+    _save_site(RELEASES_FILE, log)
 
 def split_old_far(courses):
     """Once, at the switch: share the single far feed out to the regions, keeping its age,
@@ -946,7 +970,7 @@ def main():
 
 def run(courses, today):
     near = read_times(far=False)
-    prev, far_before, released = previous_times(), read_times(far=True), []  # for the release log
+    prev, far_before, released, peak = previous_times(), read_times(far=True), [], _load_site(PEAKS_FILE)  # for the release log
     skip = near_skip(courses, near)
     if skip:
         print(f"Not due yet (TeeItUp clubs read in the last {NEAR_EVERY['teeitup']} minutes): {', '.join(skip)}", file=sys.stderr)
@@ -956,7 +980,7 @@ def run(courses, today):
         sys.exit(1)
     print(f"Writing {len(out)} tee times from {tried - len(failures)} clubs.")
     read_now = {c["id"] for c in live_clubs(courses)} - set(skip) - {cid for cid, _ in failures}
-    released += find_releases(out, read_now, prev, near, far_before, courses)
+    released += find_releases(out, read_now, prev, near, far_before, courses, peak)
     write_regions(out, [cid for cid, _ in failures] + skip, courses, read=near)
     split_old_far(courses)
     read = read_times(far=True)
@@ -971,11 +995,11 @@ def run(courses, today):
             print(f"Out of time for {len(late)} clubs' later dates; they go first next run: {', '.join(late)}", file=sys.stderr)
         got = {cid for cid in due} - {cid for cid, _ in failures}
         print(f"Read later dates for {len(got)} of {len(due)} clubs due ({len(out)} times).")
-        released += find_releases(out, got, prev, near, far_before, courses)
+        released += find_releases(out, got, prev, near, far_before, courses, peak)
         not_read = [c["id"] for c in live_clubs(courses) if c["id"] not in got]
         write_regions(out, not_read, courses, far=True, read=read, today=today)
     drop_old_feeds()
-    save_releases(released)
+    save_releases(released, peak)
 
 if __name__ == "__main__":
     main()

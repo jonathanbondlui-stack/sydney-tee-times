@@ -211,3 +211,9 @@ assert [(e["c"], e["d"], e["n"], e["new"], e["since"][11:16]) for e in got] == [
     ("wakehurst", "2026-12-01", 4, True, "03:00")], got
 assert bf.find_releases(rows, {"cammeray"}, prev, near_read, far_read, cs, now=now) == []  # only clubs read this run
 print("release log tests passed")
+# Times that come back within a day of being seen (the sheet hid them for a while) aren't a release.
+peak = {"wakehurst": {"2026-11-20": [5, "2026-11-15T02:00+00:00"]}}
+got = bf.find_releases(rows, {"wakehurst"}, prev, near_read, far_read, cs, peak, now=now)
+assert [(e["c"], e["d"]) for e in got] == [("wakehurst", "2026-12-01")], got
+assert peak["wakehurst"]["2026-11-20"] == [5, "2026-11-15T09:00+00:00"] and peak["wakehurst"]["2026-12-01"][0] == 4, peak
+print("release peak tests passed")
