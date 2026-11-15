@@ -56,7 +56,7 @@ details{margin-top:8px;font-size:14px;color:var(--mute)}summary{cursor:pointer}
   </div>
   <div id="list"><p class="empty">Loading…</p></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="fine">Times are local to each course. We read most courses’ next week about every half hour, and dates further out every 6 hours or so. A release on those later dates is only known to within a few hours, so those aren’t used for the usual time. Courses on TeeItUp are read once an hour. We look 4 weeks ahead, so a course that puts up times further out than that only shows extra blocks of times opening.</p>
+  <p class="fine">Times are local to each course. We read most courses’ next week about every half hour, and dates further out every 6 hours or so. A release on those later dates is only known to within a few hours, so those aren’t used for the usual time. Courses on TeeItUp are read once an hour. We read 4 weeks ahead. For courses whose times already go that far, each run also peeks at the next few days past their last date, up to about 8 weeks out, to catch the day they put up the next one.</p>
 </main>
 <script>
 const REG={nsw:["Sydney & NSW","Australia/Sydney"],act:["Canberra","Australia/Sydney"],vic:["Melbourne & Victoria","Australia/Melbourne"],
@@ -113,10 +113,14 @@ function predict(evs,play){
 const isoN=n=>new Date(n*864e5).toISOString().slice(0,10);
 let LOG={},TODAY="";
 function whenLine(x,play){
-  const out=(LOG.out||{})[x.c.id], edge=TODAY&&LOG.looks?isoN(dayN(TODAY)+LOG.looks-1):"";
+  const L=LOG.looked||{}, out=(LOG.out||{})[x.c.id], looked=L[x.c.id]||L[x.c.part_of];
+  let edge=TODAY&&LOG.looks?isoN(dayN(TODAY)+LOG.looks-1):"";
+  if(looked&&looked>edge) edge=looked;  // we peek further for this course
   if(out&&play<=out) return `<p class="when out">Times for ${nice(play)} are out. <a href="./">Find them</a></p>`;
-  if(edge&&play>edge) return `<p class="when unk">${nice(play)} is more than 4 weeks away, further than we look, so we can’t tell yet.</p>`;
-  if(out&&edge&&out>=isoN(dayN(edge)-1)) return `<p class="when unk">Its times go out as far as we look, so they may come out more than 4 weeks ahead.</p>`;
+  // Past the furthest date we read, we only know it isn't out if we've seen where its times stop.
+  const stops=out&&edge&&out<isoN(dayN(edge)-1);
+  if(edge&&play>edge&&!stops) return `<p class="when unk">${nice(play)} is further ahead than we look for this course (up to ${nice(edge)}), so we can’t tell yet.</p>`;
+  if(out&&!stops) return `<p class="when unk">Its times go out as far as we look (${nice(out)}), so we can’t tell when they’ll come out yet.</p>`;
   const r=predict(x.evs,play);
   if(!r) return `<p class="when unk">Not out yet. Not enough seen yet to say when they’ll come out.</p>`;
   const at=r.lo!==null?(r.lo===r.hi?` at about ${clock(r.lo)}`:`, between about ${clock(r.lo)} and ${clock(r.hi)}`):"";

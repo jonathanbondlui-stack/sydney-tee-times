@@ -217,3 +217,23 @@ got = bf.find_releases(rows, {"wakehurst"}, prev, near_read, far_read, cs, peak,
 assert [(e["c"], e["d"]) for e in got] == [("wakehurst", "2026-12-01")], got
 assert peak["wakehurst"]["2026-11-20"] == [5, "2026-11-15T09:00+00:00"] and peak["wakehurst"]["2026-12-01"][0] == 4, peak
 print("release peak tests passed")
+# Peeking past the 4 weeks: only clubs whose times reach the edge, starting the day after their furthest date.
+today = datetime.date(2026, 11, 15)
+pcs = [{"id": "wakehurst", "platform": "miclub", "enabled": True, "host": "w"}, {"id": "cammeray", "platform": "miclub", "enabled": True, "host": "c"},
+       {"id": "leura", "platform": "teeitup", "enabled": True, "host": "l"}, {"id": "rosebud", "platform": "miclub", "enabled": True, "host": "r"},
+       {"id": "rosebud-north", "platform": "miclub", "enabled": True, "host": "r", "part_of": "rosebud"},
+       {"id": "far-out", "platform": "golfnow", "enabled": True, "host": "g"}]
+seen = {("wakehurst", "2026-12-13"): set(), ("cammeray", "2026-12-01"): set(), ("leura", "2026-12-13"): set(),
+        ("rosebud-north", "2026-12-14"): set(), ("far-out", "2027-01-14"): set()}
+beyond = {"read": {"rosebud": ["2026-11-15T08:00+00:00", "x", "y"]}, "times": {}}
+plan, order = bf.peek_plan(pcs, today, seen, beyond)
+assert plan == {"wakehurst": (29, 31), "rosebud": (30, 32)} and order == ["wakehurst", "rosebud"], (plan, order)
+# A peek that finds a new date is kept; the next run sees more on it and logs that as a release.
+bf.keep_peeks(beyond, [row("wakehurst", "2026-12-14", "06:00")], ["wakehurst"], plan, pcs, today, now=now)
+assert beyond["times"] == {"wakehurst": {"2026-12-14": [["06:00", "", ""]]}} and beyond["read"]["wakehurst"] == ["2026-11-15T09:00+00:00", "2026-12-14", "2026-12-16"], beyond
+later = now + datetime.timedelta(minutes=15)
+prevb = bf.beyond_slots(beyond)
+rows = [row("wakehurst", "2026-12-14", t) for t in ("06:00", "06:08", "06:16", "06:24", "06:32")] + [row("wakehurst", "2026-12-17", t) for t in ("06:00", "06:08", "06:16", "06:24")]
+got = bf.find_releases(rows, {"wakehurst"}, prevb, {}, {}, pcs, now=later, peek_read=beyond["read"])
+assert [(e["d"], e["n"], e["since"][11:16]) for e in got] == [("2026-12-14", 4, "09:00")], got  # 12-17 wasn't peeked before
+print("peek tests passed")

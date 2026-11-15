@@ -55,6 +55,15 @@ RELEASE_MIN = 4  # fewer than this is usually a cancellation, not a release
 RELEASE_KEEP_DAYS = 120
 PEAKS_FILE = "tee-times-peaks.json"  # the most times each date had lately (see find_releases); losing it is harmless
 PEAK_HOURS = 24  # times back within this long of being seen (a sheet that hid some for a while) aren't a release
+# Some clubs' times already reach the end of the 4 weeks we read, so the day they put up a new date
+# is past what we see. For those, each run also peeks at the few days just past their furthest
+# date, up to BEYOND_DAYS ahead, so that day can be timed. What a peek finds isn't shown on the
+# site; it's kept in BEYOND_FILE for the release log.
+BEYOND_FILE = "tee-times-beyond.json"
+BEYOND_DAYS = int(os.environ.get("TEE_BEYOND_DAYS", "60"))
+PEEK_SPAN = 3  # days read past a club's furthest date
+PEEK_MINUTES = float(os.environ.get("TEE_PEEK_MINUTES", "3"))  # time each run spends peeking
+PEEK_PLATFORMS = ("miclub", "quick18", "golfnow")  # not TeeItUp, whose API already limits us
 
 class OutOfTime(Exception):
     pass
@@ -592,9 +601,10 @@ def live_clubs(courses):
     club's site (those are read with that club)."""
     return [c for c in courses if c.get("enabled") and c["platform"] in COLLECTORS and not c.get("part_of")]
 
-def build(courses, today, first, last, only=None, skip=(), read=None):
+def build(courses, today, first, last, only=None, skip=(), read=None, ranges=None):
     """Collect every live club for this date range except those in `skip`, or just the clubs in
     `only`, in that order. With `read` (club -> when last read), TeeItUp clubs go oldest first.
+    `ranges` (club -> (first, last)) gives some clubs a date range of their own.
     Returns (rows, failures, clubs tried)."""
     out, failures, tried = [], [], 0
     live = [c for c in live_clubs(courses) if c["id"] not in set(skip)]
@@ -625,7 +635,7 @@ def build(courses, today, first, last, only=None, skip=(), read=None):
         return c["host"] if hosts[c["host"]] > 1 else None
     shared = {q: ThreadPoolExecutor(max_workers=1) for q in {queue(c) for c in live} if q}
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        jobs = [(c, shared.get(queue(c), pool).submit(COLLECTORS[c["platform"]], c, today, first, last)) for c in live]
+        jobs = [(c, shared.get(queue(c), pool).submit(COLLECTORS[c["platform"]], c, today, *(ranges or {}).get(c["id"], (first, last)))) for c in live]
         for c, job in jobs:
             job.exception()  # wait for every club, shared queues included
     for p in shared.values():
@@ -826,14 +836,15 @@ def previous_times():
                 seen[(x["course"], x["date"])].add(_slot(x))
     return seen
 
-def find_releases(rows, read_ids, prev, near_read, far_read, courses, peak=None, now=None):
+def find_releases(rows, read_ids, prev, near_read, far_read, courses, peak=None, now=None, peek_read=None):
     """The dates where a club just read has RELEASE_MIN or more new times since it was last read.
     `since` is the last read that covered that date, so the release happened between `since` and
     `at`. A date no earlier read covered (it has just come into the 4 weeks we look at, or the
     club is new) isn't a release we can time, so it's left out.
     `peak` ({club: {date: [most times seen, when]}}, updated here) is the most times each date had
     in the last PEAK_HOURS: a date must also have RELEASE_MIN more than that, so times that only
-    come back after a sheet hid them for a while aren't counted as a release."""
+    come back after a sheet hid them for a while aren't counted as a release.
+    `peek_read` ({club: [when, first date, last date]}) is each club's last peek past the 4 weeks."""
     now = now or dt.datetime.now(dt.timezone.utc)
     peak = {} if peak is None else peak
     parent = {c["id"]: c["part_of"] for c in courses if c.get("part_of")}
@@ -868,6 +879,13 @@ def find_releases(rows, read_ids, prev, near_read, far_read, courses, peak=None,
             if (day + dt.timedelta(days=lo)).isoformat() <= d <= (day + dt.timedelta(days=hi)).isoformat():
                 if since is None or t > since:
                     since = t
+        w = (peek_read or {}).get(cid) or (peek_read or {}).get(parent.get(cid))
+        try:
+            t = dt.datetime.fromisoformat(w[0])
+            if w[1] <= d <= w[2] and (since is None or t > since):
+                since = t
+        except (TypeError, ValueError, IndexError):
+            pass
         if since is None or since >= now:
             continue
         out.append({"c": cid, "d": d, "n": n, "new": not before,
@@ -889,7 +907,60 @@ def _save_site(name, d):
         json.dump(d, fh, separators=(",", ":"))
     os.replace(path + ".tmp", path)
 
-def save_releases(found, peak, now=None):
+def load_beyond():
+    b = _load_site(BEYOND_FILE)
+    return {"read": b.get("read") or {}, "times": b.get("times") or {}}
+
+def beyond_slots(beyond):
+    """What the peeks found, as {(course, date): {(time, tee, group)}}, like previous_times()."""
+    return {(cid, d): {tuple(s) for s in ss} for cid, ds in beyond["times"].items() for d, ss in ds.items()}
+
+def peek_plan(courses, today, seen, beyond):
+    """The clubs whose times reach the end of the 4 weeks we read (from `seen`, every time we know
+    of), each with the days past its furthest date to peek at: ({club: (first, last)}, the clubs
+    peeked at longest ago first). A club whose times already go out BEYOND_DAYS is left alone."""
+    parent = {c["id"]: c["part_of"] for c in courses if c.get("part_of")}
+    top = {}
+    for cid, d in seen:
+        p = parent.get(cid, cid)
+        if d > top.get(p, ""):
+            top[p] = d
+    edge = (today + dt.timedelta(days=FAR_DAYS - 1)).isoformat()
+    plan = {}
+    for c in live_clubs(courses):
+        far = top.get(c["id"])
+        if c["platform"] not in PEEK_PLATFORMS or not far or far < edge:
+            continue
+        first = (dt.date.fromisoformat(far) - today).days + 1
+        if first <= BEYOND_DAYS:
+            plan[c["id"]] = (first, min(first + PEEK_SPAN - 1, BEYOND_DAYS))
+    return plan, sorted(plan, key=lambda cid: (beyond["read"].get(cid) or [""])[0])
+
+def keep_peeks(beyond, rows, got, plan, courses, today, now=None):
+    """Put what this run's peeks found into `beyond`, and drop what's no longer needed: dates back
+    inside the 4 weeks (the far feeds have them by then), and clubs no longer read."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    parts = collections.defaultdict(list)
+    for c in courses:
+        if c.get("part_of"):
+            parts[c["part_of"]].append(c["id"])
+    found = collections.defaultdict(lambda: collections.defaultdict(set))
+    for x in rows:
+        found[x["course"]][x["date"]].add(_slot(x))
+    for cid in got:
+        lo, hi = ((today + dt.timedelta(days=n)).isoformat() for n in plan[cid])
+        for k in [cid, *parts[cid]]:
+            ds = {d: v for d, v in beyond["times"].get(k, {}).items() if not lo <= d <= hi}
+            ds.update({d: sorted(map(list, v)) for d, v in found[k].items()})
+            beyond["times"][k] = ds
+        beyond["read"][cid] = [now.isoformat(timespec="minutes"), lo, hi]
+    live = {c["id"] for c in courses if c.get("enabled")}
+    old = (today + dt.timedelta(days=FAR_DAYS - 1)).isoformat()
+    stale = (now - dt.timedelta(days=3)).isoformat()
+    beyond["times"] = {k: v for k, v in ((k, {d: s for d, s in ds.items() if d >= old}) for k, ds in beyond["times"].items()) if v and k in live}
+    beyond["read"] = {k: w for k, w in beyond["read"].items() if k in live and w[0] >= stale}
+
+def save_releases(found, peak, now=None, beyond=None):
     """Add to the release log, dropping entries older than RELEASE_KEEP_DAYS, and save the peaks
     for dates not yet past."""
     now = now or dt.datetime.now(dt.timezone.utc)
@@ -905,11 +976,15 @@ def save_releases(found, peak, now=None):
     log["events"] = [e for e in events + found if e.get("at", "") >= cutoff]
     # The furthest date each club has times for now, so the page can say whether a day is out yet.
     out = {}
-    for cid, d in previous_times():
+    seen = previous_times()
+    seen.update(beyond_slots(beyond or {"times": {}}))
+    for cid, d in seen:
         if d > out.get(cid, ""):
             out[cid] = d
     log["out"] = out
     log["looks"] = FAR_DAYS  # how many days ahead we read
+    # For the clubs we peek past that, the furthest date the last peek covered.
+    log["looked"] = {cid: w[2] for cid, w in (beyond or {}).get("read", {}).items()}
     _save_site(RELEASES_FILE, log)
 
 def split_old_far(courses):
@@ -978,6 +1053,9 @@ def main():
 def run(courses, today):
     near = read_times(far=False)
     prev, far_before, released, peak = previous_times(), read_times(far=True), [], _load_site(PEAKS_FILE)  # for the release log
+    beyond = load_beyond()
+    for k, v in beyond_slots(beyond).items():
+        prev[k] = prev[k] | v  # so a date a peek already saw isn't taken for a release once it's inside the 4 weeks
     skip = near_skip(courses, near)
     if skip:
         print(f"Not due yet (TeeItUp clubs read in the last {NEAR_EVERY['teeitup']} minutes): {', '.join(skip)}", file=sys.stderr)
@@ -1006,7 +1084,30 @@ def run(courses, today):
         not_read = [c["id"] for c in live_clubs(courses) if c["id"] not in got]
         write_regions(out, not_read, courses, far=True, read=read, today=today)
     drop_old_feeds()
-    save_releases(released, peak)
+    released += peek(courses, today, beyond, prev, near, far_before, peak)
+    save_releases(released, peak, beyond=beyond)
+    _save_site(BEYOND_FILE, beyond)
+
+def peek(courses, today, beyond, prev, near, far_before, peak):
+    """Peek past the 4 weeks for the clubs whose times reach that far (see BEYOND_DAYS), and
+    return the releases seen there."""
+    global _stop_at
+    seen = previous_times()
+    seen.update({k: seen[k] | v for k, v in beyond_slots(beyond).items()})
+    plan, order = peek_plan(courses, today, seen, beyond)
+    if not plan:
+        keep_peeks(beyond, [], [], plan, courses, today)
+        return []
+    _stop_at = time.time() + PEEK_MINUTES * 60
+    try:
+        out, failures, tried = build(courses, today, 0, 0, only=order, ranges=plan)
+    finally:
+        _stop_at = None
+    got = set(plan) - {cid for cid, _ in failures}
+    print(f"Peeked past the 4 weeks for {len(got)} of {len(plan)} clubs ({len(out)} times).")
+    found = find_releases(out, got, prev, near, far_before, courses, peak, peek_read=beyond["read"])
+    keep_peeks(beyond, out, got, plan, courses, today)
+    return found
 
 if __name__ == "__main__":
     main()
