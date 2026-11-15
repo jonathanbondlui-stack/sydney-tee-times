@@ -8881,15 +8881,16 @@
   "lat": -16.9844,
   "lon": 145.4129,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
+  "platform": "teeitup",
+  "enabled": true,
   "region": "qld",
-  "checked": "2026-11-12",
+  "checked": "2026-11-15",
   "website": "https://www.mareebagolfclub.com.au/",
   "phone": "(07) 4092 1528",
-  "cta": "Book on TeeItUp",
+  "cta": "Book online (TeeItUp)",
   "book_url": "https://mareeba-golf-club.book.teeitup.com/",
-  "note": "Book on TeeItUp. Its times aren't shown here yet."
+  "host": "mareeba-golf-club.book.teeitup.com",
+  "facility_id": 20709
  },
  {
   "id": "coffs-harbour",
@@ -9642,11 +9643,16 @@
   "suburb": "Bridport",
   "lat": -41.0054,
   "lon": 147.4371,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-15",
+  "phone": "(03) 6310 8400",
+  "website": "https://barnbougle.com.au/",
+  "cta": "Book online",
+  "book_url": "https://book.onagilysys.sg/onecart/golf/courses-v2/1486/barnbougle?date={date}&id=1",
+  "note": "Book online through Barnbougle's booking site. Its times aren't shown here."
  },
  {
   "id": "barnbougle-lost-farm",
@@ -9654,11 +9660,16 @@
   "suburb": "Bridport",
   "lat": -41.0004,
   "lon": 147.457,
-  "status": "check",
+  "status": "online",
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12"
+  "checked": "2026-11-15",
+  "phone": "(03) 6310 8400",
+  "website": "https://barnbougle.com.au/",
+  "cta": "Book online",
+  "book_url": "https://book.onagilysys.sg/onecart/golf/courses-v2/1486/barnbougle?date={date}&id=2",
+  "note": "Book online through Barnbougle's booking site. Its times aren't shown here."
  },
  {
   "id": "bridport",
@@ -9689,7 +9700,7 @@
   "region": "tas",
   "checked": "2026-11-13",
   "website": "https://www.countryclubtasmania.com.au/",
-  "phone": "(03) 6225 7092",
+  "phone": "(03) 6335 5777",
   "host": "cctasmania.miclub.com.au",
   "resource_id": 3000000,
   "note": "Its online tee sheet shows no times before 4 December 2026."
