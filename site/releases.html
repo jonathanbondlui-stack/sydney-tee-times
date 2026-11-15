@@ -23,13 +23,18 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .sub{color:var(--mute);margin:0 0 20px;max-width:40em}
 .tools{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
 .tools input,.tools select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0}
-.tools input{flex:1 1 220px}
+.tools input[type=search]{flex:1 1 220px;align-self:flex-end}.tools select{align-self:flex-end}
+.play{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
+.when{margin:10px 0 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 12%,transparent);font-weight:600}
+.when.out{background:color-mix(in srgb,var(--accent) 22%,transparent)}.when.unk{background:none;border:1px dashed var(--line);font-weight:400;color:var(--mute)}
+.when a{color:var(--accent)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 12px}
 .card h2{font:700 19px/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0}
 .card .where{color:var(--mute);font-size:14px}
 .pat{margin:10px 0 0;font-weight:600}
 .pat.none{font-weight:400;color:var(--mute)}
-.ev{list-style:none;margin:10px 0 0;padding:0;font-size:14px;color:var(--mute)}
+details{margin-top:8px;font-size:14px;color:var(--mute)}summary{cursor:pointer}
+.ev{list-style:none;margin:6px 0 0;padding:0;font-size:14px;color:var(--mute)}
 .ev li{padding:6px 0;border-top:1px solid var(--line)}
 .ev b{color:var(--ink);font-weight:600}
 .tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--accent);margin-left:6px}
@@ -42,9 +47,10 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 <main class="wrap">
   <a class="brand" href="./">Tee Time Finder</a>
   <h1>When times come out</h1>
-  <p class="sub">Every time we read a course, we note any new batch of tee times. Over a few weeks, that shows when each course puts up its times, and how far ahead.</p>
+  <p class="sub">Pick the day you want to play, and each course shows whether its times for that day are out, or when they should come out. We work this out from when we’ve seen each course put up new times before, so it gets better over a few weeks.</p>
   <p class="sub" id="since"></p>
   <div class="tools">
+    <label class="play">Day you want to play<input type="date" id="play"></label>
     <input type="search" id="q" placeholder="Course or suburb" aria-label="Find a course">
     <select id="reg" aria-label="Region"><option value="">All regions</option></select>
   </div>
@@ -80,12 +86,42 @@ function summary(evs){
   const tp=p.filter(e=>parts.length?String(e.ahead)===top:true);
   if(tp.length){
     const mids=tp.map(e=>e.mid), lo=Math.min(...tp.map(e=>e.from)), hi=Math.max(...tp.map(e=>e.to));
-    if(Math.max(...mids)-Math.min(...mids)<=60) parts.push(tp.length>1?`usually between ${clock(lo)} and ${clock(hi)}`:`once so far, between ${clock(lo)} and ${clock(hi)}`);
+    if(Math.max(...mids)-Math.min(...mids)<=60) parts.push(tp.length>1?`between ${clock(lo)} and ${clock(hi)}`:`between ${clock(lo)} and ${clock(hi)} (seen once)`);
     else parts.push(`at different times of day (median ${clock(median(mids))})`);
   }
   if(p.length>=3){const w={};p.forEach(e=>w[e.wd]=(w[e.wd]||0)+1);const [d,n]=Object.entries(w).sort((a,b)=>b[1]-a[1])[0];if(n/p.length>=.8)parts.push(`on ${WD[d]}`)}
   if(!parts.length) return null;
-  const s=parts.join(", ");return s[0].toUpperCase()+s.slice(1)+".";
+  return parts.join(", ")+".";
+}
+
+// When a course should put up times for `play` (a YYYY-MM-DD), from its past releases.
+function predict(evs,play){
+  const p=evs.filter(e=>e.win<=PRECISE), days={};evs.forEach(e=>days[e.ahead]=(days[e.ahead]||0)+1);
+  const [top,cnt]=Object.entries(days).sort((a,b)=>b[1]-a[1])[0]||[];
+  let rel=null,use=p;
+  if(evs.length>=2&&cnt/evs.length>=.5){rel=dayN(play)-(+top);use=p.filter(e=>String(e.ahead)===top)}
+  else if(p.length>=3){
+    const w={};p.forEach(e=>w[e.wd]=(w[e.wd]||0)+1);const [d,n]=Object.entries(w).sort((a,b)=>b[1]-a[1])[0];
+    if(n/p.length>=.8){const lo=Math.min(...p.map(e=>e.ahead)),want=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(d);
+      rel=dayN(play)-lo;while(new Date(rel*864e5).getUTCDay()!==want)rel--;use=p.filter(e=>e.wd===d)}
+  }
+  if(rel===null) return null;
+  const mids=use.map(e=>e.mid);
+  const tight=use.length&&Math.max(...mids)-Math.min(...mids)<=60;
+  return {day:rel,lo:tight?Math.min(...use.map(e=>e.from)):null,hi:tight?Math.max(...use.map(e=>e.to)):null};
+}
+const isoN=n=>new Date(n*864e5).toISOString().slice(0,10);
+let LOG={},TODAY="";
+function whenLine(x,play){
+  const out=(LOG.out||{})[x.c.id], edge=TODAY&&LOG.looks?isoN(dayN(TODAY)+LOG.looks-1):"";
+  if(out&&play<=out) return `<p class="when out">Times for ${nice(play)} are out. <a href="./">Find them</a></p>`;
+  if(edge&&play>edge) return `<p class="when unk">${nice(play)} is more than 4 weeks away, further than we look, so we can’t tell yet.</p>`;
+  if(out&&edge&&out>=isoN(dayN(edge)-1)) return `<p class="when unk">Its times go out as far as we look, so they may come out more than 4 weeks ahead.</p>`;
+  const r=predict(x.evs,play);
+  if(!r) return `<p class="when unk">Not out yet. Not enough seen yet to say when they’ll come out.</p>`;
+  const at=r.lo!==null?(r.lo===r.hi?` at about ${clock(r.lo)}`:`, between about ${clock(r.lo)} and ${clock(r.hi)}`):"";
+  if(isoN(r.day)<TODAY) return `<p class="when">Not out yet, though they’d usually be out by now (expected ${nice(isoN(r.day))}). Check the club’s booking page.</p>`;
+  return `<p class="when">Should come out ${isoN(r.day)===TODAY?"today":nice(isoN(r.day))}${at}.</p>`;
 }
 
 let ALL=[],SHOWN=40;
@@ -93,18 +129,23 @@ function render(){
   const q=$("q").value.trim().toLowerCase(),r=$("reg").value;
   const rows=ALL.filter(x=>(!r||x.region===r)&&(!q||(x.c.name+" "+(x.c.suburb||"")).toLowerCase().includes(q)));
   if(!ALL.length){$("list").innerHTML=`<p class="empty">No new batches of times seen yet. Check back in a day or two.</p>`;$("more").hidden=true;return}
-  if(!rows.length){$("list").innerHTML=`<p class="empty">No courses match.</p>`;$("more").hidden=true;return}
+  if(!rows.length){$("list").innerHTML=`<p class="empty">We haven’t seen ${q?"that course":"any course here"} put up new times yet. Courses show here after their first release.</p>`;$("more").hidden=true;return}
   $("list").innerHTML=rows.slice(0,SHOWN).map(x=>{
     const s=summary(x.evs), n=x.evs.length;
     const ev=[...x.evs].sort((a,b)=>b.at-a.at).slice(0,5).map(e=>
       `<li><b>${nice(e.d)}</b>: ${e.n} new times, put up ${e.fromDate===e.toDate?`${nice(e.toDate)} between ${clock(e.from)} and ${clock(e.to)}`:`between ${e.fromWd} ${clock(e.from)} and ${e.toWd} ${clock(e.to)}`} (${e.ahead} day${e.ahead==1?"":"s"} ahead)${e.new?`<span class="tag">First times for that day</span>`:""}</li>`).join("");
-    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${REG[x.region][0]} · seen ${n} time${n==1?"":"s"}</div>
-      <p class="pat${s?"":" none"}">${s||"Not enough yet to see a pattern."}</p><ul class="ev">${ev}</ul></article>`}).join("");
+    const out=(LOG.out||{})[x.c.id], play=$("play").value;
+    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${REG[x.region][0]}${out?` · times out up to ${nice(out)}`:""}</div>
+      ${play?whenLine(x,play):""}
+      <p class="pat${s?"":" none"}">${s?"Usually puts up times "+s:"Not enough yet to see a pattern."}</p>
+      <details><summary>Seen ${n} time${n==1?"":"s"}</summary><ul class="ev">${ev}</ul></details></article>`}).join("");
   $("more").hidden=rows.length<=SHOWN;
 }
 
 Promise.all([fetch("courses.json").then(r=>r.json()),fetch("tee-times-releases.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{events:[]}).catch(()=>({events:[]}))]).then(([cs,log])=>{
-  const by=Object.fromEntries(cs.map(c=>[c.id,c]));
+  const by=Object.fromEntries(cs.map(c=>[c.id,c]));LOG=log;
+  TODAY=local(new Date(),"Australia/Sydney").date;$("play").min=TODAY;
+  try{const v=new URLSearchParams(location.search).get("d");if(v&&/^\d{4}-\d\d-\d\d$/.test(v))$("play").value=v}catch(e){}
   if(log.since) $("since").textContent=`Logging since ${new Date(log.since).toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"})}.`;
   const g={};
   for(const e of log.events||[]){
@@ -122,6 +163,7 @@ Promise.all([fetch("courses.json").then(r=>r.json()),fetch("tee-times-releases.j
   render();
 }).catch(()=>{$("list").innerHTML=`<p class="empty">Couldn’t load the log. Try again in a minute.</p>`});
 $("q").addEventListener("input",()=>{SHOWN=40;render()});
+$("play").addEventListener("change",()=>{SHOWN=40;render()});
 $("reg").addEventListener("change",()=>{SHOWN=40;render()});
 $("more").addEventListener("click",()=>{SHOWN+=40;render()});
 </script>

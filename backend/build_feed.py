@@ -903,6 +903,13 @@ def save_releases(found, peak, now=None):
         print(f"RELEASED {e['c']} {e['d']}: {e['n']} new times between {e['since'][11:16]} and {e['at'][11:16]} UTC", file=sys.stderr)
     cutoff = (now - dt.timedelta(days=RELEASE_KEEP_DAYS)).isoformat()
     log["events"] = [e for e in events + found if e.get("at", "") >= cutoff]
+    # The furthest date each club has times for now, so the page can say whether a day is out yet.
+    out = {}
+    for cid, d in previous_times():
+        if d > out.get(cid, ""):
+            out[cid] = d
+    log["out"] = out
+    log["looks"] = FAR_DAYS  # how many days ahead we read
     _save_site(RELEASES_FILE, log)
 
 def split_old_far(courses):
