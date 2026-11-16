@@ -7978,19 +7978,6 @@
   "note": "A 15-hole, par 50 course. Book on the West Beach Parks Golf website or app; its times aren't shown here."
  },
  {
-  "id": "belair",
-  "name": "Belair Park Golf Course",
-  "suburb": "Belair",
-  "lat": -35.006,
-  "lon": 138.645,
-  "status": "phone",
-  "platform": "none",
-  "enabled": false,
-  "region": "sa",
-  "checked": "2026-11-11",
-  "note": "Book by calling the course."
- },
- {
   "id": "stirling-sa",
   "name": "Mount Lofty Golf Club",
   "suburb": "Stirling",
