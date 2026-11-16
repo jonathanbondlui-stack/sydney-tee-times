@@ -2341,7 +2341,8 @@
   "website": "https://springwoodcc.com.au/",
   "source": "club",
   "holes": 18,
-  "par": 69
+  "par": 69,
+  "phone": "(02) 4751 1122"
  },
  {
   "id": "katoomba",
@@ -2835,7 +2836,8 @@
   "note": "No online booking for visitors. Call the club to book.",
   "checked": "2026-11-08",
   "source": "club",
-  "website": "http://www.tullyparkgolf.com/"
+  "website": "http://www.tullyparkgolf.com/",
+  "phone": "0459 506 696"
  },
  {
   "id": "braidwood",
@@ -6983,7 +6985,8 @@
   "enabled": false,
   "region": "wa",
   "website": "https://www.rottnestgolf.org/",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "0438 493 325"
  },
  {
   "id": "nedlands",
@@ -7111,7 +7114,8 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11"
+  "checked": "2026-11-11",
+  "phone": "(08) 9298 8847"
  },
  {
   "id": "wa-golf-club",
@@ -8290,7 +8294,8 @@
   "region": "tas",
   "checked": "2026-11-11",
   "website": "https://tasmangolfclub.com.au/",
-  "note": "Visitors welcome, 9 or 18 holes. The course is kept for club competition from 9:30am to 2pm on Sundays."
+  "note": "Visitors welcome, 9 or 18 holes. The course is kept for club competition from 9:30am to 2pm on Sundays.",
+  "phone": "(03) 6250 1113"
  },
  {
   "id": "orford-tas",
@@ -8386,7 +8391,8 @@
   "region": "tas",
   "checked": "2026-11-12",
   "website": "https://www.eldersliegolfclub.com.au/",
-  "note": "Book by calling the club."
+  "note": "Book by calling the club.",
+  "phone": "(03) 6268 5292"
  },
  {
   "id": "bagdad",
@@ -8425,7 +8431,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-12",
-  "note": "Book by calling the club."
+  "note": "Book by calling the club.",
+  "phone": "(03) 6248 5450"
  },
  {
   "id": "richmond-valley-tas",
@@ -8438,7 +8445,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-12",
-  "note": "Book by calling the club."
+  "note": "Book by calling the club.",
+  "phone": "(03) 6260 2644"
  },
  {
   "id": "forcett-lakes",
@@ -8477,7 +8485,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-12",
-  "note": "Book by calling the club."
+  "note": "Book by calling the club.",
+  "phone": "(03) 6298 1562"
  },
  {
   "id": "geeveston",
@@ -8503,7 +8512,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-12",
-  "note": "Book by calling the club."
+  "note": "Book by calling the club.",
+  "phone": "(03) 6287 1206"
  },
  {
   "id": "devonport-tas",
@@ -9022,7 +9032,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6057 2800"
  },
  {
   "id": "barnawartha",
@@ -9090,7 +9101,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6026 3458"
  },
  {
   "id": "tallangatta",
@@ -9116,7 +9128,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6043 1902"
  },
  {
   "id": "wodonga",
@@ -9203,7 +9216,8 @@
   "enabled": false,
   "region": "vic",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 5344 9424"
  },
  {
   "id": "bridgewater",
@@ -9216,7 +9230,8 @@
   "enabled": false,
   "region": "vic",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 5437 3272"
  },
  {
   "id": "maldon",
@@ -9229,7 +9244,8 @@
   "enabled": false,
   "region": "vic",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 5475 2005"
  },
  {
   "id": "marong",
@@ -9368,7 +9384,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6435 1443"
  },
  {
   "id": "penguin",
@@ -9590,7 +9607,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6655 6161"
  },
  {
   "id": "woolgoolga-rsl",
@@ -9633,7 +9651,8 @@
   "enabled": false,
   "region": "nt",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(08) 8924 2535"
  },
  {
   "id": "greens-beach",
@@ -9647,7 +9666,8 @@
   "region": "tas",
   "checked": "2026-11-13",
   "website": "https://greensbeachgolf.com.au/",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6383 9102"
  },
  {
   "id": "shearwater",
@@ -9660,7 +9680,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6428 6555"
  },
  {
   "id": "sheffield",
@@ -9673,7 +9694,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6491 1184"
  },
  {
   "id": "thirlstane",
@@ -9857,7 +9879,8 @@
   "region": "tas",
   "checked": "2026-11-13",
   "website": "https://www.longfordgolf.com.au/",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6391 1938"
  },
  {
   "id": "mowbray",
@@ -9870,7 +9893,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6326 1333"
  },
  {
   "id": "quamby-estate",
@@ -9884,7 +9908,8 @@
   "region": "tas",
   "checked": "2026-11-13",
   "website": "https://www.quambyestate.com.au/",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6392 2135"
  },
  {
   "id": "ringarooma",
@@ -9897,7 +9922,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6353 2216"
  },
  {
   "id": "scottsdale",
@@ -9910,7 +9936,8 @@
   "enabled": false,
   "region": "tas",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(03) 6352 2455"
  },
  {
   "id": "tam-o-shanter",
@@ -9938,7 +9965,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(07) 4952 6446"
  },
  {
   "id": "melaleuca",
@@ -9951,7 +9979,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(07) 4955 0670"
  },
  {
   "id": "sarina",
@@ -9964,7 +9993,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(07) 4956 1761"
  },
  {
   "id": "camden-haven",
@@ -10006,7 +10036,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6582 6120"
  },
  {
   "id": "wauchope",
@@ -10019,7 +10050,8 @@
   "enabled": false,
   "region": "nsw",
   "checked": "2026-11-13",
-  "note": "Call the club to book. We don't have its number yet."
+  "note": "Call the club to book.",
+  "phone": "(02) 6585 3020"
  },
  {
   "id": "borneo-barracks",
