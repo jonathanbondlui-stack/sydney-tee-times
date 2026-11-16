@@ -50,13 +50,9 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .filters label{gap:6px}
 .pricebox .lt{display:flex;justify-content:space-between;gap:8px}.pricebox .lt b{color:var(--ink);font-weight:600}
 .pricebox input{height:38px;margin:0}
-.champbox{grid-column:1/-1;flex-direction:row!important;align-items:center;gap:12px;cursor:pointer;align-self:end;min-height:38px}
-.champbox .ct{display:flex;flex-direction:column;gap:2px}.champbox b{color:var(--ink);font-weight:600;font-size:14px}.champbox small{font-size:12px}
-.champbox input{appearance:none;-webkit-appearance:none;flex:none;width:44px;height:26px;margin:0;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:background .15s}
-.champbox input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
-.champbox input:checked{background:var(--accent)}.champbox input:checked::after{transform:translateX(18px)}
-.champbox input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locbox{grid-column:span 3}.filters .pricebox{grid-column:auto}.champbox{grid-column:span 3}.locrow{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center}.locrow .within select{width:auto}}
+@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locbox{grid-column:span 3}.filters .pricebox{grid-column:auto}.locrow{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center}.locrow .champ{grid-column:1/-1;white-space:nowrap;color:var(--ink)}.locrow .within select{width:auto}}
+/* Wide enough: the Championship tick box sits at the end of the location row, keeping the filters to two rows. */
+@media (min-width:1000px){.locrow{grid-template-columns:auto auto minmax(0,1fr) auto auto}.locrow .champ{grid-column:auto}}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:500}
 select,input[type=range],#where{font:inherit;color:var(--ink)}
 select,#where{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
@@ -162,11 +158,11 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
         <span class="or">or</span>
         <div class="combo"><input type="text" id="where" role="combobox" aria-label="Suburb or postcode" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Suburbs" hidden></ul></div>
         <label class="within">Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any</option></select></label>
+        <label class="multi champ" title="Full 18-hole courses, par 70 or more"><input type="checkbox" id="kind"> Championship courses only</label>
       </div>
       <small class="wm" id="whereMsg" aria-live="polite" hidden></small>
     </div>
     <label class="pricebox"><span class="lt">Max price <b id="pv"></b></span><input type="range" id="price" min="20" max="200" step="5" value="200"></label>
-    <label class="champbox"><input type="checkbox" id="kind" role="switch"><span class="ct"><b>Championship courses only</b><small>Full 18-hole courses, par 70 or more</small></span></label>
   </section>
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
@@ -178,7 +174,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">“Championship only” shows full 18-hole courses of par 70 or more. “18 holes” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset, so you can finish. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“Championship courses only” shows full 18-hole courses of par 70 or more. “18 holes” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset, so you can finish. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
   <p class="sub" style="font-size:13px">Want to be first? See <a href="releases.html">when each course puts up its times</a>.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other courses nearby</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
