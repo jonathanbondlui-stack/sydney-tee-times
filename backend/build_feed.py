@@ -302,11 +302,13 @@ def parse_miclub_timesheet(html, course, date, group=None):
 
 def collect_miclub(c, today, first=0, last=DAYS):
     """Collect tee times from first to last days ahead. A calendar page only shows about CAL_STEP days, so walk several."""
-    rows, seen = [], set()
+    rows, seen, groups = [], set(), 0
     start, end = (today + dt.timedelta(days=first)).isoformat(), (today + dt.timedelta(days=last)).isoformat()
     for ahead in range(first, last + 1, CAL_STEP):
         page = (today + dt.timedelta(days=ahead)).isoformat()
-        for g in parse_miclub_calendar(fetch(miclub_calendar_url(c, page))):
+        cal = parse_miclub_calendar(fetch(miclub_calendar_url(c, page)))
+        groups += len(cal)
+        for g in cal:
             if _NOT_A_ROUND.search(g.get("label") or ""):
                 continue  # range buckets booked on the same sheet, as at Alice Springs
             for d in g["prices"]:
@@ -317,6 +319,10 @@ def collect_miclub(c, today, first=0, last=DAYS):
                 for r in parse_miclub_timesheet(fetch(url), c, d, g):
                     r.setdefault("url", url)
                     rows.append(r)
+    if not groups:
+        # A fully booked club still lists its booking sheets. None at all usually means the club has moved
+        # its bookings, as Bayview did when its old address started showing another club's empty page.
+        print(f"EMPTY {c['id']}: no booking sheets on {c['host']}; has the club moved its bookings?", file=sys.stderr)
     return rows
 
 def quick18_url(c, date):
