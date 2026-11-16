@@ -33,24 +33,23 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .day[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.day[aria-pressed=true] span{color:inherit}
 .dayopts{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;margin:-4px 0 16px}
 .dayopts .pick{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;margin:0;font-size:14px;color:var(--mute)}
-.multi{display:flex!important;flex-direction:row!important;align-items:center;gap:8px;margin:0;font-size:14px;cursor:pointer}.multi input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.multi{display:flex!important;flex-direction:row!important;align-items:center;gap:8px;margin:0;font-size:14px;cursor:pointer}.multi input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--accent)}
 .chip .dl{display:block;font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.03em}
 .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:20px}
 .filters select,.filters input{min-width:0;max-width:100%}
 .filters .wide{grid-column:span 2}
-.filters .champ{align-self:end;min-height:40px;color:var(--ink);line-height:1.25}
+.filters .champ{grid-column:1/-1;align-self:end;min-height:40px;color:var(--ink);line-height:1.25}
 .locbox{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--mute);font-weight:500}
-.locrow{display:grid;grid-template-columns:1fr;gap:8px}
-.locrow .or{text-align:center;font-size:12px;color:var(--mute)}
-.locrow .within{flex-direction:row;align-items:center;gap:8px}.locrow .within select{flex:1}
+.locrow{display:flex;gap:6px}.locrow .combo{flex:1;min-width:0}
 .near{display:flex;align-items:center;justify-content:center;gap:6px;font:600 15px "Hanken Grotesk",sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
 .near:hover{border-color:var(--accent)}
+.locrow .near{flex:none;width:40px;padding:0}
 .near[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .near.busy{opacity:.7;cursor:progress}
 .filters label{gap:6px}
-@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locrow{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center}.locrow .within select{width:auto}.filters .champ{white-space:nowrap}}
-/* Wide enough: Location takes two columns, then Max price and the Championship tick box, so the filters fit in two rows. */
-@media (min-width:1000px){.locbox{grid-column:span 2}}
+@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locbox{grid-column:span 2}.filters .champ{white-space:nowrap}}
+/* Wide enough: Location, Within, Max price and the Championship tick box share the second row. */
+@media (min-width:900px){.filters{grid-template-columns:repeat(16,minmax(0,1fr))}.filters>*{grid-column:span 4}.filters>.locbox{grid-column:span 6}.filters>.within{grid-column:span 2}.filters>.pricef{grid-column:span 3}.filters>.champ{grid-column:span 5}}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:500}
 select,input[type=range],#where{font:inherit;color:var(--ink)}
 select,#where{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
@@ -90,7 +89,7 @@ button.more.seeall{width:100%;margin:10px 0 0;background:var(--accent);border-co
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
 .chip{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;text-decoration:none}
 a.chip:hover{border-color:var(--accent)}.chip b{font:700 18px/1.1 "Bricolage Grotesque",sans-serif}.chip b small{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
-.chip span{font-size:12px;color:var(--mute)}.chip .hs{color:var(--ink);font-weight:600}.combo{position:relative}#where{padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23808a82' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.chip span{font-size:12px;color:var(--mute)}.chip .hs{color:var(--ink);font-weight:600}.combo{position:relative}#where{text-overflow:ellipsis}#where::placeholder{font-size:14px}
 #placeList{position:absolute;z-index:1100;top:calc(100% + 4px);left:0;right:0;min-width:180px;max-height:260px;overflow-y:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 #placeList li{padding:8px 10px;border-radius:6px;font-size:14px;font-weight:400;color:var(--ink);cursor:pointer}#placeList li:hover,#placeList li.on{background:var(--bg)}#placeList li.find{color:var(--accent);font-weight:600}
 #placeList li.mine{display:flex;align-items:center;gap:8px;padding-right:4px}#placeList li.mine span{flex:1}
@@ -152,14 +151,13 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
     <label>Latest<select id="to"></select></label>
     <div class="locbox" role="group" aria-labelledby="locLbl"><span class="lbl" id="locLbl">Location</span>
       <div class="locrow">
-        <button type="button" id="nearMe" class="near" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Near me</button>
-        <span class="or">or</span>
+        <button type="button" id="nearMe" class="near" aria-pressed="false" aria-label="Near me" title="Near me"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></button>
         <div class="combo"><input type="text" id="where" role="combobox" aria-label="Suburb or postcode" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Suburbs" hidden></ul></div>
-        <label class="within">Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any</option></select></label>
       </div>
       <small class="wm" id="whereMsg" aria-live="polite" hidden></small>
     </div>
-    <label>Max price<select id="price"><option value="200" selected>Any price</option><option value="30">Up to $30</option><option value="40">Up to $40</option><option value="50">Up to $50</option><option value="60">Up to $60</option><option value="80">Up to $80</option><option value="100">Up to $100</option><option value="150">Up to $150</option></select></label>
+    <label class="within">Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any</option></select></label>
+    <label class="pricef">Max price<select id="price"><option value="200" selected>Any price</option><option value="50">Under $50</option><option value="75">Under $75</option><option value="100">Under $100</option></select></label>
     <label class="multi champ" title="Full 18-hole courses, par 70 or more"><input type="checkbox" id="kind"> Championship courses only</label>
   </section>
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
