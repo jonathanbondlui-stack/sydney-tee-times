@@ -21,10 +21,17 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Hanken Gr
 .brand{display:inline-block;font:700 18px/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.01em;color:var(--accent);margin:4px 0 22px;text-decoration:none}
 h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 8px}
 .sub{color:var(--mute);margin:0 0 20px;max-width:40em}
-.tools{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
-.tools input,.tools select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0}
-.tools input[type=search]{flex:1 1 220px;align-self:flex-end}.tools select{align-self:flex-end}
-.play{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
+.tools{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 18px}
+.tools input,.tools select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0;width:100%}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);min-width:0}
+.fld.loc{flex:1 1 240px}.fld.find{flex:1 1 180px}
+.locrow{display:flex;gap:6px}.combo{position:relative;flex:1;min-width:0}
+#where{text-overflow:ellipsis}#where::placeholder{font-size:14px}
+.near{flex:none;width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.near:hover{border-color:var(--accent)}.near[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.near.busy{opacity:.7;cursor:progress}
+#placeList{position:absolute;z-index:10;top:calc(100% + 4px);left:0;right:0;min-width:180px;max-height:260px;overflow-y:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+#placeList li{padding:8px 10px;border-radius:6px;font-size:14px;color:var(--ink);cursor:pointer}#placeList li:hover,#placeList li.on{background:var(--bg)}#placeList li.find{color:var(--accent);font-weight:600}
+.wm{display:block;font-size:13px;color:var(--mute);margin:-8px 0 14px}
 .when{margin:10px 0 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 12%,transparent);font-weight:600}
 .when.out{background:color-mix(in srgb,var(--accent) 22%,transparent)}.when.unk{background:none;border:1px dashed var(--line);font-weight:400;color:var(--mute)}
 .when a{color:var(--accent)}
@@ -50,10 +57,17 @@ details{margin-top:8px;font-size:14px;color:var(--mute)}summary{cursor:pointer}
   <p class="sub">Pick the day you want to play, and each course shows whether its times for that day are out, or when they should come out. We work this out from when we’ve seen each course put up new times before, so it gets better over a few weeks.</p>
   <p class="sub" id="since"></p>
   <div class="tools">
-    <label class="play">Day you want to play<input type="date" id="play"></label>
-    <input type="search" id="q" placeholder="Course or suburb" aria-label="Find a course">
-    <select id="reg" aria-label="Region"><option value="">All regions</option></select>
+    <label class="fld">Day you want to play<input type="date" id="play"></label>
+    <div class="fld loc" role="group" aria-labelledby="locLbl"><span id="locLbl">Location</span>
+      <div class="locrow">
+        <button type="button" id="nearMe" class="near" aria-pressed="false" aria-label="Near me" title="Near me"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></button>
+        <div class="combo"><input type="text" id="where" role="combobox" aria-label="Suburb or postcode" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Suburbs" hidden></ul></div>
+      </div>
+    </div>
+    <label class="fld">Within<select id="dist"><option value="10">10 km</option><option value="20">20 km</option><option value="35">35 km</option><option value="50" selected>50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any</option></select></label>
+    <label class="fld find">Find a course<input type="search" id="q" placeholder="Course name"></label>
   </div>
+  <small class="wm" id="whereMsg" aria-live="polite" hidden></small>
   <div id="list"><p class="empty">Loading…</p></div>
   <button class="more" id="more" hidden>Show more</button>
   <p class="fine">Times are local to each course. We read most courses’ next week about every half hour, and dates further out every 6 hours or so. A release on those later dates is only known to within a few hours, so those aren’t used for the usual time. Courses on TeeItUp are read once an hour. We read 4 weeks ahead. For courses whose times already go that far, each run also peeks at the next few days past their last date, up to about 8 weeks out, to catch the day they put up the next one.</p>
@@ -63,6 +77,70 @@ const REG={nsw:["Sydney & NSW","Australia/Sydney"],act:["Canberra","Australia/Sy
   qld:["Brisbane & Queensland","Australia/Brisbane"],wa:["Perth & WA","Australia/Perth"],sa:["Adelaide & SA","Australia/Adelaide"],
   tas:["Tasmania","Australia/Hobart"],nt:["Darwin & NT","Australia/Darwin"]};
 const PRECISE=90, $=id=>document.getElementById(id);
+// Where to measure from: the same place and distance as the main page, kept on this device.
+const CITIES=[["Adelaide CBD",-34.9285,138.6007],["Brisbane CBD",-27.4698,153.0251],["Canberra City",-35.2809,149.13],["Darwin CBD",-12.4634,130.8456],
+  ["Hobart CBD",-42.8821,147.3272],["Melbourne CBD",-37.8136,144.9631],["Perth CBD",-31.9523,115.8613],["Sydney CBD",-33.8688,151.2093]].map(([n,la,lo])=>({n,la,lo}));
+const PLACE="tee-where",RECENTK="tee-recent",KEY="tee-filters";
+let START=null,ME=null,SUBURBS=[];const FOUND=new Map();
+const km=(a,b,c,d)=>{const r=Math.PI/180,x=(d-b)*r*Math.cos((a+c)/2*r),y=(c-a)*r;return Math.sqrt(x*x+y*y)*6371};
+const recent=()=>{try{const a=JSON.parse(localStorage.getItem(RECENTK)||"[]");return Array.isArray(a)?a.filter(p=>p&&p.n&&Number.isFinite(p.la)&&Number.isFinite(p.lo)):[]}catch(e){return[]}};
+const remember=p=>{try{localStorage.setItem(RECENTK,JSON.stringify([p,...recent().filter(q=>q.n.toLowerCase()!=p.n.toLowerCase())].slice(0,5)))}catch(e){}};
+const here=()=>START||ME;
+const markNear=()=>{$("nearMe").setAttribute("aria-pressed",String(!START&&!!ME));$("where").value=START?START.n:""};
+const savePlace=()=>{try{if(START)localStorage.setItem(PLACE,JSON.stringify(START));else localStorage.removeItem(PLACE)}catch(e){}};
+const saveDist=()=>{try{const o=JSON.parse(localStorage.getItem(KEY)||"{}");o.dist=$("dist").value;localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+const whereMsg=t=>{$("whereMsg").textContent=t;$("whereMsg").hidden=!t};
+const moved=()=>{SHOWN=40;render()};
+const startAt=p=>{START=p;remember(p);markNear();whereMsg("");savePlace();moved()};
+const nearMe=()=>{const b=$("nearMe");whereMsg("");
+  const use=()=>{START=null;savePlace();markNear();moved()};
+  if(ME){use();return}
+  if(!navigator.geolocation){whereMsg("Your browser can’t share your location. Type a suburb or postcode instead.");return}
+  b.classList.add("busy");
+  navigator.geolocation.getCurrentPosition(p=>{b.classList.remove("busy");ME={la:p.coords.latitude,lo:p.coords.longitude};use()},
+    ()=>{b.classList.remove("busy");whereMsg("We couldn’t get your location. Type a suburb or postcode instead.")},{timeout:10000,maximumAge:600000})};
+fetch("places.json").then(r=>r.ok?r.json():[]).then(a=>{SUBURBS=a.map(([n,la,lo])=>({n,la,lo}));SUBURBS.forEach(p=>{const k=p.n.toLowerCase();if(!FOUND.has(k))FOUND.set(k,p)})}).catch(()=>{});
+// Looks up what someone typed once they've finished: OpenStreetMap's rules don't allow searching on every keystroke.
+let lookup=0;
+async function findPlace(){const q=$("where").value.trim(),k=q.toLowerCase(),id=++lookup;
+  if(!q){if(START){START=null;savePlace();moved()}whereMsg("");return} // an empty box means anywhere
+  if(k=="near me"){nearMe();return}
+  if(START&&k==START.n.toLowerCase()){whereMsg("");return}
+  const known=[...recent(),...CITIES].find(f=>f.n.toLowerCase()==k)||FOUND.get(k);
+  if(known){startAt(known);return}
+  whereMsg("Finding "+q+"…");
+  try{const postcode=/^\d{4}$/.test(q),ask={format:"jsonv2",q:q+", Australia",countrycodes:"au",limit:5};
+    if(!postcode)ask.featureType="settlement";
+    const r=await fetch("https://nominatim.openstreetmap.org/search?"+new URLSearchParams(ask));if(!r.ok)throw 0;const hits=await r.json();if(id!=lookup)return;
+    const hit=hits.find(h=>/^(suburb|neighbourhood|quarter|town|village|hamlet|locality)$/.test(h.addresstype))||hits[0];
+    if(!hit){whereMsg("We couldn’t find "+q+". Try a nearby suburb or a postcode.");return}
+    const p={n:postcode?q:q.replace(/\b[a-z]/g,c=>c.toUpperCase()),la:+hit.lat,lo:+hit.lon};FOUND.set(k,p);startAt(p)}
+  catch(e){if(id==lookup)whereMsg("We couldn’t look that up just now. Please try again.")}}
+// The place box: your recent places and the cities before typing, then matching suburbs as you type.
+function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
+  const close=()=>{ul.hidden=true;w.setAttribute("aria-expanded","false");w.removeAttribute("aria-activedescendant");active=-1};
+  const mark=()=>{[...ul.children].forEach((li,i)=>{li.classList.toggle("on",i==active);li.setAttribute("aria-selected",i==active)});
+    if(active>=0){w.setAttribute("aria-activedescendant","place"+active);ul.children[active].scrollIntoView({block:"nearest"})}else w.removeAttribute("aria-activedescendant")};
+  const draw=narrow=>{const typed=w.value.trim(),q=narrow?typed.toLowerCase():"",mine=recent().map(p=>p.n);
+    const all=q?[...new Set([...mine,...CITIES.map(c=>c.n)])]:mine.length?mine:CITIES.map(c=>c.n);
+    items=all.filter(n=>n.toLowerCase().includes(q)).map(n=>({text:n,pick:n}));
+    if(q.length>=2){const have=new Set(items.map(it=>it.pick.toLowerCase())),at=n=>{const l=n.toLowerCase();return l.startsWith(q)?0:l.includes(" "+q)?1:-1};
+      items=items.concat(SUBURBS.filter(p=>!have.has(p.n.toLowerCase())&&at(p.n)>=0).sort((a,b)=>at(a.n)-at(b.n)||a.n.length-b.n.length||a.n.localeCompare(b.n)).slice(0,Math.max(0,8-items.length)).map(p=>({text:p.n,pick:p.n})))}
+    if(q&&!items.some(it=>it.pick.toLowerCase()==q))items.push({text:`Search for “${typed}”`,pick:typed,find:true});
+    ul.replaceChildren(...items.map((it,i)=>{const li=document.createElement("li");li.id="place"+i;li.setAttribute("role","option");li.dataset.i=i;li.textContent=it.text;if(it.find)li.className="find";return li}));
+    active=-1;mark();ul.hidden=!items.length;w.setAttribute("aria-expanded",String(!!items.length))};
+  const pick=it=>{w.value=it.pick;close();findPlace();w.blur()};
+  w.onfocus=()=>{whereMsg("");w.select();draw(false)};
+  w.onclick=()=>{if(ul.hidden)draw(false)};
+  w.oninput=()=>draw(true);
+  w.onchange=findPlace;
+  w.onblur=()=>setTimeout(close,150);
+  w.onkeydown=e=>{
+    if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();if(ul.hidden){draw(false);if(ul.hidden)return}const n=items.length;active=e.key=="ArrowDown"?(active+1)%n:(active<=0?n:active)-1;mark()}
+    else if(e.key=="Enter"){e.preventDefault();const typed=w.value.trim().toLowerCase(),match=active>=0?items[active]:typed&&!ul.hidden&&items.find(it=>!it.find&&it.pick.toLowerCase().startsWith(typed));if(match)pick(match);else{close();w.blur()}}
+    else if(e.key=="Escape"&&!ul.hidden){e.preventDefault();close();markNear()}};
+  ul.onpointerdown=e=>e.preventDefault();
+  ul.onclick=e=>{const li=e.target.closest("li");if(li)pick(items[+li.dataset.i])}}
 const fmtCache={};
 // The local date, weekday and minutes past midnight of a moment at a course.
 function local(t,tz){
@@ -130,16 +208,17 @@ function whenLine(x,play){
 
 let ALL=[],SHOWN=40;
 function render(){
-  const q=$("q").value.trim().toLowerCase(),r=$("reg").value;
-  const rows=ALL.filter(x=>(!r||x.region===r)&&(!q||(x.c.name+" "+(x.c.suburb||"")).toLowerCase().includes(q)));
+  const q=$("q").value.trim().toLowerCase(),w=here(),dm=+$("dist").value;
+  let rows=ALL.filter(x=>!q||(x.c.name+" "+(x.c.suburb||"")).toLowerCase().includes(q));
+  if(w)rows=rows.map(x=>({...x,km:km(w.la,w.lo,x.c.lat,x.c.lon)})).filter(x=>dm>=999||x.km<=dm).sort((a,b)=>a.km-b.km);
   if(!ALL.length){$("list").innerHTML=`<p class="empty">No new batches of times seen yet. Check back in a day or two.</p>`;$("more").hidden=true;return}
-  if(!rows.length){$("list").innerHTML=`<p class="empty">We haven’t seen ${q?"that course":"any course here"} put up new times yet. Courses show here after their first release.</p>`;$("more").hidden=true;return}
+  if(!rows.length){$("list").innerHTML=`<p class="empty">We haven’t seen ${q?"that course":w&&dm<999?`any course within ${dm} km`:"any course here"} put up new times yet. Courses show here after their first release.${w&&dm<999?" Try a larger distance.":""}</p>`;$("more").hidden=true;return}
   $("list").innerHTML=rows.slice(0,SHOWN).map(x=>{
     const s=summary(x.evs), n=x.evs.length;
     const ev=[...x.evs].sort((a,b)=>b.at-a.at).slice(0,5).map(e=>
       `<li><b>${nice(e.d)}</b>: ${e.n} new times, put up ${e.fromDate===e.toDate?`${nice(e.toDate)} between ${clock(e.from)} and ${clock(e.to)}`:`between ${e.fromWd} ${clock(e.from)} and ${e.toWd} ${clock(e.to)}`} (${e.ahead} day${e.ahead==1?"":"s"} ahead)${e.new?`<span class="tag">First times for that day</span>`:""}</li>`).join("");
     const out=(LOG.out||{})[x.c.id], play=$("play").value;
-    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${REG[x.region][0]}${out?` · times out up to ${nice(out)}`:""}</div>
+    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${x.km!=null?(x.km<10?x.km.toFixed(1):Math.round(x.km))+" km away":REG[x.region][0]}${out?` · times out up to ${nice(out)}`:""}</div>
       ${play?whenLine(x,play):""}
       <p class="pat${s?"":" none"}">${s?"Usually puts up times "+s:"Not enough yet to see a pattern."}</p>
       <details><summary>Seen ${n} time${n==1?"":"s"}</summary><ul class="ev">${ev}</ul></details></article>`}).join("");
@@ -162,13 +241,18 @@ Promise.all([fetch("courses.json").then(r=>r.json()),fetch("tee-times-releases.j
     (g[e.c]||(g[e.c]={c,region,evs:[]})).evs.push(ev);
   }
   ALL=Object.values(g).sort((a,b)=>b.evs.length-a.evs.length||a.c.name.localeCompare(b.c.name));
-  const have=new Set(ALL.map(x=>x.region));
-  $("reg").innerHTML=`<option value="">All regions</option>`+Object.entries(REG).filter(([k])=>have.has(k)).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("");
   render();
 }).catch(()=>{$("list").innerHTML=`<p class="empty">Couldn’t load the log. Try again in a minute.</p>`});
 $("q").addEventListener("input",()=>{SHOWN=40;render()});
 $("play").addEventListener("change",()=>{SHOWN=40;render()});
-$("reg").addEventListener("change",()=>{SHOWN=40;render()});
+$("dist").addEventListener("change",()=>{saveDist();moved()});
+$("nearMe").addEventListener("click",nearMe);
+placeBox();
+// Start from the place picked on the main page, or your location if you've already allowed it.
+try{const v=JSON.parse(localStorage.getItem(PLACE));if(v&&v.n&&Number.isFinite(v.la)&&Number.isFinite(v.lo))START=v}catch(e){}
+try{const d=JSON.parse(localStorage.getItem(KEY)||"{}").dist;if([...$("dist").options].some(o=>o.value==d))$("dist").value=d}catch(e){}
+markNear();
+if(!START&&navigator.permissions&&navigator.geolocation)navigator.permissions.query({name:"geolocation"}).then(r=>{if(r.state=="granted"&&!START)navigator.geolocation.getCurrentPosition(p=>{if(START)return;ME={la:p.coords.latitude,lo:p.coords.longitude};markNear();if(ALL.length)moved()},()=>{},{timeout:10000,maximumAge:600000})}).catch(()=>{});
 $("more").addEventListener("click",()=>{SHOWN+=40;render()});
 </script>
 </body>
