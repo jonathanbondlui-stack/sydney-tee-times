@@ -38,7 +38,7 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:20px}
 .filters select,.filters input{min-width:0;max-width:100%}
 .filters .wide{grid-column:span 2}
-.filters .pricebox{grid-column:1/-1}
+.filters .champ{align-self:end;min-height:40px;color:var(--ink);line-height:1.25}
 .locbox{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--mute);font-weight:500}
 .locrow{display:grid;grid-template-columns:1fr;gap:8px}
 .locrow .or{text-align:center;font-size:12px;color:var(--mute)}
@@ -48,11 +48,9 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .near[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .near.busy{opacity:.7;cursor:progress}
 .filters label{gap:6px}
-.pricebox .lt{display:flex;justify-content:space-between;gap:8px}.pricebox .lt b{color:var(--ink);font-weight:600}
-.pricebox input{height:38px;margin:0}
-@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locbox{grid-column:span 3}.filters .pricebox{grid-column:auto}.locrow{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center}.locrow .champ{grid-column:1/-1;white-space:nowrap;color:var(--ink)}.locrow .within select{width:auto}}
-/* Wide enough: the Championship tick box sits at the end of the location row, keeping the filters to two rows. */
-@media (min-width:1000px){.locrow{grid-template-columns:auto auto minmax(0,1fr) auto auto}.locrow .champ{grid-column:auto}}
+@media (min-width:640px){.filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px 22px}.locrow{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center}.locrow .within select{width:auto}.filters .champ{white-space:nowrap}}
+/* Wide enough: Location takes two columns, then Max price and the Championship tick box, so the filters fit in two rows. */
+@media (min-width:1000px){.locbox{grid-column:span 2}}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:500}
 select,input[type=range],#where{font:inherit;color:var(--ink)}
 select,#where{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
@@ -158,11 +156,11 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
         <span class="or">or</span>
         <div class="combo"><input type="text" id="where" role="combobox" aria-label="Suburb or postcode" aria-autocomplete="list" aria-expanded="false" aria-controls="placeList" placeholder="Suburb or postcode" autocomplete="off"><ul id="placeList" role="listbox" aria-label="Suburbs" hidden></ul></div>
         <label class="within">Within<select id="dist"><option value="10">10 km</option><option value="20" selected>20 km</option><option value="35">35 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option><option value="999">Any</option></select></label>
-        <label class="multi champ" title="Full 18-hole courses, par 70 or more"><input type="checkbox" id="kind"> Championship courses only</label>
       </div>
       <small class="wm" id="whereMsg" aria-live="polite" hidden></small>
     </div>
-    <label class="pricebox"><span class="lt">Max price <b id="pv"></b></span><input type="range" id="price" min="20" max="200" step="5" value="200"></label>
+    <label>Max price<select id="price"><option value="200" selected>Any price</option><option value="30">Up to $30</option><option value="40">Up to $40</option><option value="50">Up to $50</option><option value="60">Up to $60</option><option value="80">Up to $80</option><option value="100">Up to $100</option><option value="150">Up to $150</option></select></label>
+    <label class="multi champ" title="Full 18-hole courses, par 70 or more"><input type="checkbox" id="kind"> Championship courses only</label>
   </section>
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
@@ -257,7 +255,7 @@ async function pickDate(){const v=$("pick").value;shown=12;if(multi&&v){multi=fa
   render()}
 // A filter's value, and setting one (the Courses switch is "champ" when on, "all" when off). Returns false for a value the control doesn't have.
 const fv=id=>{const e=$(id);return e.type=="checkbox"?(e.checked?"champ":"all"):e.value};
-const fset=(id,v)=>{const e=$(id);if(e.type=="checkbox"){e.checked=v=="champ";return true}if(id=="price"||[...e.options].some(o=>o.value==v)){e.value=v;return true}return false};
+const fset=(id,v)=>{const e=$(id);if(e.type=="checkbox"){e.checked=v=="champ";return true}if(id=="price"){const o=[...e.options].map(o=>+o.value).filter(x=>x>=+v).sort((a,b)=>a-b)[0];e.value=String(o??200);return true}if([...e.options].some(o=>o.value==v)){e.value=v;return true}return false};
 const SAVED=["players","holes","kind","from","to","dist","price","sort"],KEY="tee-filters",PLACE="tee-where";
 // The starting point is only remembered when someone picks a place; otherwise it's their location.
 const MY_PLACE="My location";
@@ -513,7 +511,6 @@ function setup(){
 function render(){
   closePick();PICKS.length=0;
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,w.lat??w.la,w.lo,RG.tz)-ROUND_MINS);
-  $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
    .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(!$("kind").checked||champ(x.c))&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
   $("favWrap").hidden=!FAVS.size;$("favN").textContent=FAVS.size?`(${FAVS.size})`:"";if(!FAVS.size)$("favOnly").checked=false;
