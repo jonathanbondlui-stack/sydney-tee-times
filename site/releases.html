@@ -31,6 +31,9 @@ h1{font:700 clamp(34px,7vw,56px)/1.02 "Bricolage Grotesque",system-ui,sans-serif
 .near:hover{border-color:var(--accent)}.near[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.near.busy{opacity:.7;cursor:progress}
 #placeList{position:absolute;z-index:10;top:calc(100% + 4px);left:0;right:0;min-width:180px;max-height:260px;overflow-y:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 #placeList li{padding:8px 10px;border-radius:6px;font-size:14px;color:var(--ink);cursor:pointer}#placeList li:hover,#placeList li.on{background:var(--bg)}#placeList li.find{color:var(--accent);font-weight:600}
+.fav{flex:none;background:none;border:0;padding:0 6px 0 0;margin:0;font-size:20px;line-height:1;color:var(--mute);cursor:pointer}.fav[aria-pressed=true],.fav:hover{color:#E8B931}
+.card .top{display:flex;align-items:center}
+.favonly{display:flex;align-items:center;gap:8px;margin:-6px 0 16px;font-size:14px;color:var(--ink);cursor:pointer;width:max-content}.favonly input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--accent)}.favonly span[aria-hidden]{color:#E8B931}
 .wm{display:block;font-size:13px;color:var(--mute);margin:-8px 0 14px}
 .when{margin:10px 0 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 12%,transparent);font-weight:600}
 .when.out{background:color-mix(in srgb,var(--accent) 22%,transparent)}.when.unk{background:none;border:1px dashed var(--line);font-weight:400;color:var(--mute)}
@@ -68,6 +71,7 @@ details{margin-top:8px;font-size:14px;color:var(--mute)}summary{cursor:pointer}
     <label class="fld find">Find a course<input type="search" id="q" placeholder="Course name"></label>
   </div>
   <small class="wm" id="whereMsg" aria-live="polite" hidden></small>
+  <label class="favonly" id="favWrap" hidden><input type="checkbox" id="favOnly"> <span aria-hidden="true">★</span> Favourites only <span id="favN"></span></label>
   <div id="list"><p class="empty">Loading…</p></div>
   <button class="more" id="more" hidden>Show more</button>
   <p class="fine">Times are local to each course. We read most courses’ next week about every half hour, and dates further out every 6 hours or so. A release on those later dates is only known to within a few hours, so those aren’t used for the usual time. Courses on TeeItUp are read once an hour. We read 4 weeks ahead. For courses whose times already go that far, each run also peeks at the next few days past their last date, up to about 8 weeks out, to catch the day they put up the next one.</p>
@@ -207,18 +211,25 @@ function whenLine(x,play){
 }
 
 let ALL=[],SHOWN=40;
+// Favourite courses, shared with the main page and kept on this device. They go first.
+const FAVK="tee-favs";let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem(FAVK)||"[]"))}catch(e){}
+const toggleFav=id=>{FAVS.has(id)?FAVS.delete(id):FAVS.add(id);try{localStorage.setItem(FAVK,JSON.stringify([...FAVS]))}catch(e){}render()};
 function render(){
   const q=$("q").value.trim().toLowerCase(),w=here(),dm=+$("dist").value;
   let rows=ALL.filter(x=>!q||(x.c.name+" "+(x.c.suburb||"")).toLowerCase().includes(q));
   if(w)rows=rows.map(x=>({...x,km:km(w.la,w.lo,x.c.lat,x.c.lon)})).filter(x=>dm>=999||x.km<=dm).sort((a,b)=>a.km-b.km);
+  $("favWrap").hidden=!FAVS.size;$("favN").textContent=FAVS.size?`(${FAVS.size})`:"";if(!FAVS.size)$("favOnly").checked=false;
+  if($("favOnly").checked)rows=rows.filter(x=>FAVS.has(x.c.id));
+  rows.sort((a,b)=>FAVS.has(b.c.id)-FAVS.has(a.c.id)); // favourites first, keeping the order within each
   if(!ALL.length){$("list").innerHTML=`<p class="empty">No new batches of times seen yet. Check back in a day or two.</p>`;$("more").hidden=true;return}
-  if(!rows.length){$("list").innerHTML=`<p class="empty">We haven’t seen ${q?"that course":w&&dm<999?`any course within ${dm} km`:"any course here"} put up new times yet. Courses show here after their first release.${w&&dm<999?" Try a larger distance.":""}</p>`;$("more").hidden=true;return}
+  if(!rows.length){$("list").innerHTML=`<p class="empty">We haven’t seen ${$("favOnly").checked?"any of your favourites":q?"that course":w&&dm<999?`any course within ${dm} km`:"any course here"} put up new times yet. Courses show here after their first release.${w&&dm<999?" Try a larger distance.":""}</p>`;$("more").hidden=true;return}
   $("list").innerHTML=rows.slice(0,SHOWN).map(x=>{
     const s=summary(x.evs), n=x.evs.length;
     const ev=[...x.evs].sort((a,b)=>b.at-a.at).slice(0,5).map(e=>
       `<li><b>${nice(e.d)}</b>: ${e.n} new times, put up ${e.fromDate===e.toDate?`${nice(e.toDate)} between ${clock(e.from)} and ${clock(e.to)}`:`between ${e.fromWd} ${clock(e.from)} and ${e.toWd} ${clock(e.to)}`} (${e.ahead} day${e.ahead==1?"":"s"} ahead)${e.new?`<span class="tag">First times for that day</span>`:""}</li>`).join("");
     const out=(LOG.out||{})[x.c.id], play=$("play").value;
-    return `<article class="card"><h2>${esc(x.c.name)}</h2><div class="where">${esc(x.c.suburb||"")} · ${x.km!=null?(x.km<10?x.km.toFixed(1):Math.round(x.km))+" km away":REG[x.region][0]}${out?` · times out up to ${nice(out)}`:""}</div>
+    const fv=FAVS.has(x.c.id);
+    return `<article class="card"><div class="top"><button type="button" class="fav" data-fav="${x.c.id}" aria-pressed="${fv}" aria-label="${fv?"Remove":"Add"} ${esc(x.c.name)} ${fv?"from":"to"} favourites" title="${fv?"Remove from":"Add to"} favourites">${fv?"★":"☆"}</button><h2>${esc(x.c.name)}</h2></div><div class="where">${esc(x.c.suburb||"")} · ${x.km!=null?(x.km<10?x.km.toFixed(1):Math.round(x.km))+" km away":REG[x.region][0]}${out?` · times out up to ${nice(out)}`:""}</div>
       ${play?whenLine(x,play):""}
       <p class="pat${s?"":" none"}">${s?"Usually puts up times "+s:"Not enough yet to see a pattern."}</p>
       <details><summary>Seen ${n} time${n==1?"":"s"}</summary><ul class="ev">${ev}</ul></details></article>`}).join("");
@@ -254,6 +265,8 @@ try{const d=JSON.parse(localStorage.getItem(KEY)||"{}").dist;if([...$("dist").op
 markNear();
 if(!START&&navigator.permissions&&navigator.geolocation)navigator.permissions.query({name:"geolocation"}).then(r=>{if(r.state=="granted"&&!START)navigator.geolocation.getCurrentPosition(p=>{if(START)return;ME={la:p.coords.latitude,lo:p.coords.longitude};markNear();if(ALL.length)moved()},()=>{},{timeout:10000,maximumAge:600000})}).catch(()=>{});
 $("more").addEventListener("click",()=>{SHOWN+=40;render()});
+$("list").addEventListener("click",e=>{const f=e.target.closest(".fav");if(f)toggleFav(f.dataset.fav)});
+$("favOnly").addEventListener("change",()=>{SHOWN=40;render()});
 </script>
 </body>
 </html>

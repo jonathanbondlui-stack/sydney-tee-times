@@ -2337,8 +2337,8 @@
   "platform": "none",
   "enabled": false,
   "note": "No online booking for visitors. Call the club to book.",
-  "checked": "2026-11-07",
-  "website": "https://springwoodcc.com.au/",
+  "checked": "2026-11-17",
+  "website": "https://springwoodgolfclub.com.au/",
   "source": "club",
   "holes": 18,
   "par": 69,
@@ -4414,7 +4414,7 @@
  },
  {
   "id": "long-island",
-  "name": "Long Island Country Club",
+  "name": "The National Golf Club – Long Island",
   "suburb": "Frankston North",
   "lat": -38.1292,
   "lon": 145.1412,
@@ -4423,8 +4423,8 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "website": "https://www.longislandgolf.com.au/",
-  "checked": "2026-11-08"
+  "website": "https://nationalgolf.com.au/",
+  "checked": "2026-11-17"
  },
  {
   "id": "sandhurst",
@@ -4614,8 +4614,8 @@
   "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "website": "http://www.wattleparkgolf.com.au/",
-  "checked": "2026-11-09"
+  "website": "https://www.parks.vic.gov.au/places-to-see/sites/wattle-park-golf-course",
+  "checked": "2026-11-17"
  },
  {
   "id": "oakleigh",
@@ -4790,7 +4790,7 @@
  },
  {
   "id": "safety-beach",
-  "name": "Safety Beach Golf Club",
+  "name": "The Valley Golf Club",
   "suburb": "Safety Beach",
   "lat": -38.3239,
   "lon": 144.9963,
@@ -4799,8 +4799,8 @@
   "note": "Call to book.",
   "enabled": false,
   "region": "vic",
-  "website": "https://safetybeachcountryclub.com.au/",
-  "checked": "2026-11-09",
+  "website": "https://thevalley.golf/",
+  "checked": "2026-11-17",
   "phone": "(03) 5981 0100"
  },
  {
@@ -5031,8 +5031,7 @@
   "note": "Mainly a Defence golf club on the RAAF Williams base. Visitors can join club competitions; call the club first, and ask about getting onto the base.",
   "enabled": false,
   "region": "vic",
-  "website": "https://raafwilliamsgolf.net.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-17"
  },
  {
   "id": "eagle-ridge",
@@ -5875,8 +5874,7 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "website": "https://www.isleofcoochiegolfclub.net.au/",
-  "checked": "2026-11-09",
+  "checked": "2026-11-17",
   "note": "Call the club to book. Saturdays 7 to 11am are kept for club competitions."
  },
  {
@@ -7141,8 +7139,7 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "website": "http://www.altoneparkgolf.com.au/",
-  "checked": "2026-11-11",
+  "checked": "2026-11-17",
   "cta": "Book online",
   "book_url": "https://www.golf-booking.com/en/club/altone-park-golf-course,nc",
   "note": "Book online through golf-booking.com. Times aren't shown here yet."
@@ -8102,8 +8099,7 @@
   "platform": "none",
   "enabled": false,
   "region": "sa",
-  "checked": "2026-11-11",
-  "website": "https://www.linksladybay.com.au/",
+  "checked": "2026-11-17",
   "note": "Resort guests only. Ask the resort about a round when you book your stay."
  },
  {
@@ -8434,19 +8430,6 @@
   "checked": "2026-11-12",
   "note": "Book by calling the club.",
   "phone": "(03) 6260 2644"
- },
- {
-  "id": "forcett-lakes",
-  "name": "Forcett Lakes Golf Course",
-  "suburb": "Forcett",
-  "lat": -42.8075,
-  "lon": 147.6054,
-  "status": "phone",
-  "platform": "none",
-  "enabled": false,
-  "region": "tas",
-  "checked": "2026-11-12",
-  "note": "Book by calling the club."
  },
  {
   "id": "murraville",
@@ -9340,8 +9323,7 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-13",
-  "website": "http://www.donnybrookcountryclub.myclub.org.au/",
+  "checked": "2026-11-17",
   "phone": "(08) 9731 1268",
   "note": "Call the club to book."
  },
@@ -9526,19 +9508,19 @@
  },
  {
   "id": "bellingen",
-  "name": "Bellingen Golf Club",
+  "name": "Loyal Bellingen Golf Club",
   "suburb": "Bellingen",
   "lat": -30.4519,
   "lon": 152.9054,
-  "status": "online",
+  "status": "phone",
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "website": "https://www.bellingengolfclub.com.au/",
+  "checked": "2026-11-17",
   "book_url": "https://teenet.com.au/teenet?clubId=21501",
   "cta": "Book on TeeNet",
-  "note": "Book online through TeeNet. Its times aren't shown here."
+  "note": "Reopened under new owners after the old club went into administration in 2025. Call the club to book.",
+  "phone": "(02) 6655 1312"
  },
  {
   "id": "dorrigo",
@@ -9550,8 +9532,7 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "website": "https://www.dorrigorslgolf.com.au",
+  "checked": "2026-11-17",
   "phone": "(02) 6657 2294",
   "note": "Call the club to book."
  },
@@ -9599,7 +9580,7 @@
  },
  {
   "id": "woolgoolga-rsl",
-  "name": "Woolgoolga RSL Golf Club",
+  "name": "Safety Beach Golf Club",
   "suburb": "Safety Beach",
   "lat": -30.09,
   "lon": 153.1925,
@@ -9607,8 +9588,7 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "website": "https://www.woolgoolgarslgolfclub.com",
+  "checked": "2026-11-17",
   "phone": "(02) 6654 2111",
   "note": "Call the club to book."
  },
@@ -10078,8 +10058,7 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-13",
-  "website": "http://www.eustondalegolf.com.au",
+  "checked": "2026-11-17",
   "note": "No bookings. Just turn up and pay."
  },
  {
