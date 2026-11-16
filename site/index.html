@@ -148,6 +148,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <section class="filters" aria-label="Filters">
     <label>Players<select id="players"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
     <label>Round<select id="holes"><option value="18" selected>18 holes</option><option value="9">Under 18 holes</option><option value="0">Any length</option></select></label>
+    <label>Courses<select id="kind"><option value="all" selected>All courses</option><option value="champ">Championship only</option></select></label>
     <label>Earliest<select id="from"></select></label>
     <label>Latest<select id="to"></select></label>
     <div class="locbox" role="group" aria-labelledby="locLbl"><span class="lbl" id="locLbl">Location</span>
@@ -171,7 +172,7 @@ a.picked{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent)
   <div id="map" hidden></div>
   <div id="list"></div>
   <button class="more" id="more" hidden>Show more</button>
-  <p class="sub" style="font-size:13px;margin-top:12px">“18 holes” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset, so you can finish. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
+  <p class="sub" style="font-size:13px;margin-top:12px">“Championship only” shows full 18-hole courses of par 70 or more. “18 holes” includes twilight rates, and only shows tee times that leave about 4¼ hours before sunset, so you can finish. Your filter choices are remembered on this device. Suburb list and search from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
   <p class="sub" style="font-size:13px">Want to be first? See <a href="releases.html">when each course puts up its times</a>.</p>
   <section id="dir" aria-label="Courses without online tee times"><h2>Other courses nearby</h2>
     <p class="sub">We can’t show live tee times for these courses yet. Here’s how to play each one within your distance setting, nearest first. Search by name to find a course further away.</p>
@@ -252,7 +253,7 @@ async function pickDate(){const v=$("pick").value;shown=12;if(multi&&v){multi=fa
   const[y,m,d]=v.split("-").map(Number);picked=new Date(y,m-1,d);document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",false));
   if(v>iso(addDays(7))){if(farState=="none"){$("unrel").hidden=false;$("unrel").textContent="Loading later dates…"}await loadFar()}
   render()}
-const SAVED=["players","holes","from","to","dist","price","sort"],KEY="tee-filters",PLACE="tee-where";
+const SAVED=["players","holes","kind","from","to","dist","price","sort"],KEY="tee-filters",PLACE="tee-where";
 // The starting point is only remembered when someone picks a place; otherwise it's their location.
 const MY_PLACE="My location";
 // What the suburb box shows: the chosen place, nothing when "Near me" is on, or the default.
@@ -335,7 +336,7 @@ function placeBox(){const w=$("where"),ul=$("placeList");let items=[],active=-1;
 const FAVK="tee-favs";let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem(FAVK)||"[]"))}catch(e){}
 const toggleFav=id=>{FAVS.has(id)?FAVS.delete(id):FAVS.add(id);try{localStorage.setItem(FAVK,JSON.stringify([...FAVS]))}catch(e){}render()};
 // A link to a search (used by alerts, and still opened if someone has one) carries the days, the area and the filters. "Near me" is shared as the nearest suburb, never as exact coordinates.
-const SHARE_IDS=["players","holes","from","to","dist","price","sort"];
+const SHARE_IDS=["players","holes","kind","from","to","dist","price","sort"];
 const shareLink=()=>{const q=new URLSearchParams(),dts=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i]));
   if(dts.length)q.set("d",dts.join(","));
   let p=START;if(!p&&ME&&SUBURBS.length)p=SUBURBS.reduce((b,x)=>km(ME.la,ME.lo,x.la,x.lo)<km(ME.la,ME.lo,b.la,b.lo)?x:b);
@@ -356,7 +357,7 @@ const alertQuery=()=>{const q=new URL(shareLink()).searchParams;q.delete("view")
   if(!q.get("at")){const p=HOME;q.set("at",[p.n,(+p.la).toFixed(3),(+p.lo).toFixed(3)].join("|"))}return q};
 const alertLabel=q=>{const d=(q.get("d")||"").split(",").map(x=>new Date(x+"T12:00").toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})).join(", "),
   n=+q.get("players"),h=q.get("holes"),pr=+q.get("price"),dist=+q.get("dist");
-  return [d,n+(n==1?" player":" players"),h=="18"?"18 holes":h=="9"?"under 18 holes":"any length",hl(+q.get("from"))+"–"+hl(+q.get("to")),
+  return [d,n+(n==1?" player":" players"),h=="18"?"18 holes":h=="9"?"under 18 holes":"any length",...(q.get("kind")=="champ"?["championship courses"]:[]),hl(+q.get("from"))+"–"+hl(+q.get("to")),
     "within "+(dist>=999?"any distance":dist+" km")+" of "+q.get("at").split("|")[0],...(pr<200?["up to $"+pr+" each"]:[])].join(" · ")};
 const drawAlerts=()=>{const a=lsGet(ALERTSK,[]);$("alertList").innerHTML=a.length?`<p class="as" style="margin:12px 0 0">Your alerts</p>`+a.map(x=>`<div class="al"><span>${x.label.replace(/</g,"&lt;")}</span><button type="button" class="share" data-stop="${x.id}">Stop</button></div>`).join(""):""};
 async function openAlert(){const q=alertQuery(),first=!lsGet(TOPICK+"-ok",false);
@@ -380,6 +381,8 @@ async function alertStop(id){try{await fetch(`${ALERTS_API}/watch/${id}`,{method
   lsSet(ALERTSK,lsGet(ALERTSK,[]).filter(x=>x.id!=id));drawAlerts();$("alertMsg").textContent="Alert stopped."}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...Object.fromEntries(SAVED.map(id=>[id,$(id).value])),v:2}))}catch(e){}};
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(id=="sort"&&s.v!==2)return;if(s[id]!=null&&s[id]!=="me"&&(id=="price"||[...$(id).options].some(o=>o.value==s[id])))$(id).value=s[id]})}catch(e){}};
+// A championship course here means a full 18-hole course of par 70 or more.
+const champ=c=>(c.holes||18)>=18&&c.par>=70;
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
 const SHORT_HOLES=/\b(\d+)H\b/i;
 const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");if(g)return +g[1];
@@ -421,7 +424,7 @@ function drawMap(groups,chip,card,pf,w,dm){
   if(!M){L.Popup.prototype.options.autoPan=false;M=L.map("map",{zoomSnap:.25});M.on("popupopen",e=>fitPopup(e.popup));L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);LY=L.layerGroup().addTo(M)}
   M.invalidateSize();LY.clearLayers();MK={};
   const live=new Set(groups.map(a=>a[0].course)),pts=[[w.lat??w.la,w.lo]];
-  COURSES.filter(c=>!live.has(c.id)).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away${c.par?" · Par "+c.par:""}</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
+  COURSES.filter(c=>!live.has(c.id)&&($("kind").value!="champ"||champ(c))).map(c=>({...c,d:km(w.lat??w.la,w.lo,c.lat,c.lon)})).filter(c=>c.d<=dm).forEach(c=>{pts.push([c.lat,c.lon]);L.circleMarker([c.lat,c.lon],{radius:6,color:"#6B7A6F",fillColor:"#A9B5AB",fillOpacity:.9,weight:1}).bindPopup(c.enabled?`<div class="course">${c.name}</div><div class="meta">${c.suburb} · ${Math.round(c.d)} km away${c.par?" · Par "+c.par:""}</div><p class="dn">No tee times match your filters on this day.</p>`:card(c)).addTo(LY)});
   groups.forEach(a=>{const c=a[0].c,n=distinct(a),ps=a.map(x=>x.each).filter(p=>p!=null);pts.push([c.lat,c.lon]);
     const low=ps.length?Math.min(...ps):null,tag=low!=null?"$"+Math.round(low):n+(n==1?" time":" times");  // cheapest open rate per player, rounded
     MK[c.id]=L.marker([c.lat,c.lon],{icon:L.divIcon({className:"mp",html:`<span>${tag}</span>`,iconSize:[0,0]}),title:c.name,riseOnHover:true})
@@ -484,7 +487,7 @@ function setup(){
     else if(want.length&&want[0]<=iso(addDays(28)))sharedPick=want[0];
     if(sq.get("view")=="map")view="map";
     markDays();history.replaceState(null,"",location.pathname)}
-  ["players","holes","from","to","dist","price","sort","dirq"].forEach(id=>$(id).oninput=()=>{shown=12;save();render()});
+  ["players","holes","kind","from","to","dist","price","sort","dirq"].forEach(id=>$(id).oninput=()=>{shown=12;save();render()});
   placeBox();
   $("nearMe").onclick=nearMe;
   if(!START)locate();
@@ -507,7 +510,7 @@ function render(){
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,w.lat??w.la,w.lo,RG.tz)-ROUND_MINS);
   $("pv").textContent="$"+mx+(mx==200?"+":"");
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
-   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
+   .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&($("kind").value!="champ"||champ(x.c))&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
   $("favWrap").hidden=!FAVS.size;$("favN").textContent=FAVS.size?`(${FAVS.size})`:"";if(!FAVS.size)$("favOnly").checked=false;
   if($("favOnly").checked)r=r.filter(x=>FAVS.has(x.course));
   const s=$("sort").value;r.sort((a,b)=>s=="p"?(a.each??999)-(b.each??999)||a.t-b.t:s=="d"?a.d-b.d||a.t-b.t:a.t-b.t||a.d-b.d);

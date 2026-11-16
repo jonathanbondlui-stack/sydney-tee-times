@@ -58,13 +58,13 @@ export const unpackFeed = j => j.v !== 2 ? (j.times || []) : j.times.map(r => {
   delete x.u; delete x.f; if (x.url == null) delete x.url; return x;
 });
 
-// A saved search is the site's share link query: d (dates), at (name|lat|lon), players, holes, from, to, dist, price.
+// A saved search is the site's share link query: d (dates), at (name|lat|lon), players, holes, kind, from, to, dist, price.
 export function parseSearch(q) {
   const p = new URLSearchParams(q), at = (p.get("at") || "").split("|");
   const s = {
     dates: (p.get("d") || "").split(",").filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)),
     place: at[0] || "", la: +at[1], lo: +at[2],
-    players: +(p.get("players") || 4), holes: p.get("holes") || "18",
+    players: +(p.get("players") || 4), holes: p.get("holes") || "18", champ: p.get("kind") === "champ",
     from: +(p.get("from") || 5), to: +(p.get("to") || 19), dist: +(p.get("dist") || 20), price: +(p.get("price") || 200),
   };
   if (!s.dates.length || s.dates.length > 7 || !s.place || !isFinite(s.la) || !isFinite(s.lo)) return null;
@@ -74,6 +74,8 @@ export function parseSearch(q) {
 
 // The times a search matches, one entry per course and start time (the cheapest matching rate).
 // Rates for one group only ("Juniors only", "Seniors only") are left out, so they never set off an alert.
+// A championship course: a full 18-hole course of par 70 or more, as on the site.
+export const champ = c => (c.holes || 18) >= 18 && c.par >= 70;
 export function matches(s, times, courses, region) {
   const R = REGIONS[region] || REGIONS.nsw, by = {}, late = {}, best = new Map();
   courses.forEach(c => { if ((c.region || "nsw") === region) by[c.id] = c; });
@@ -85,7 +87,7 @@ export function matches(s, times, courses, region) {
     const x = { ...t, c, m: mins(t.time) }, party = partyOf(x), each = x.price == null ? null : x.price / party;
     const d = km(s.la, s.lo, c.lat, c.lon);
     const ok = (party === 1 ? x.spots >= s.players : party === s.players) && x.m >= s.from * 60 && x.m < s.to * 60 &&
-      (s.price >= 200 || each == null || each <= s.price) && d <= s.dist &&
+      (s.price >= 200 || each == null || each <= s.price) && d <= s.dist && (!s.champ || champ(c)) &&
       (s.holes === "0" || (s.holes === "9" ? holesOf(x) && holesOf(x) < 18 : fullRound(x, late[x.date], 18)));
     if (!ok) continue;
     const key = `${t.course}|${t.date}|${t.time}`, prev = best.get(key);
@@ -105,6 +107,7 @@ const hourLabel = h => clock(`${Math.floor(h)}:${h % 1 ? "30" : "00"}`);
 export function describe(s) {
   const bits = [s.dates.map(dayName).join(", "), `${s.players} ${s.players == 1 ? "player" : "players"}`,
     s.holes === "18" ? "18 holes" : s.holes === "9" ? "under 18 holes" : "any length",
+    ...(s.champ ? ["championship courses"] : []),
     `${hourLabel(s.from)}–${hourLabel(s.to)}`, `within ${s.dist >= 999 ? "any distance" : s.dist + " km"} of ${s.place}`];
   if (s.price < 200) bits.push(`up to $${s.price} each`);
   return bits.join(" · ");

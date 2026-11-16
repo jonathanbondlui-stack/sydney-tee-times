@@ -1986,7 +1986,8 @@
   "enabled": true,
   "holes": 18,
   "checked": "2026-11-06",
-  "note": "11 holes. Online bookings are for 9-hole rounds."
+  "note": "11 holes. Online bookings are for 9-hole rounds.",
+  "par": 67
  },
  {
   "id": "tanilba-bay",
@@ -3217,7 +3218,8 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.westgategolfclub.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 64
  },
  {
   "id": "eastwood",
@@ -3941,7 +3943,8 @@
   "enabled": true,
   "region": "vic",
   "website": "https://www.beaconhillsgolf.com.au/",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 71
  },
  {
   "id": "devilbend",
@@ -5546,7 +5549,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.virginiagolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "nudgee",
@@ -5561,7 +5565,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.nudgeegolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "keperra",
@@ -5576,7 +5581,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.keperragolf.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 71
  },
  {
   "id": "royal-queensland",
@@ -5604,7 +5610,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 68
  },
  {
   "id": "bulimba",
@@ -6005,7 +6012,8 @@
   "region": "qld",
   "website": "https://meadowbrookgolfclub.com.au/",
   "checked": "2026-11-09",
-  "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start."
+  "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start.",
+  "par": 72
  },
  {
   "id": "brookwater",
@@ -6180,7 +6188,8 @@
   "facility_id": 16241,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16241-lakeside-country-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 56
  },
  {
   "id": "parkwood",
@@ -6257,7 +6266,8 @@
   "region": "qld",
   "website": "http://www.racv.com.au/wps/wcm/connect/resorts/racv+resorts/racv+royal+pines+resort",
   "checked": "2026-11-09",
-  "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start."
+  "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start.",
+  "par": 72
  },
  {
   "id": "boonah",
@@ -6460,7 +6470,8 @@
   "website": "https://boomeranghills.com.au/",
   "checked": "2026-11-09",
   "host": "boomerangfarm.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 67
  },
  {
   "id": "cliff-douglas-tally-valley",
@@ -6542,7 +6553,8 @@
   "enabled": true,
   "region": "qld",
   "website": "https://www.cooltweedgolf.com.au",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "banora",
@@ -6924,7 +6936,8 @@
   "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start.",
   "region": "wa",
   "website": "https://www.collierparkgolf.com.au/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "seaview",
@@ -7214,7 +7227,8 @@
   "note": "27 holes played as three nines. An 18-hole round uses two of them, so the tee shown tells you where you start.",
   "region": "wa",
   "website": "https://joondalupresort.com.au/golf/",
-  "checked": "2026-11-10"
+  "checked": "2026-11-10",
+  "par": 72
  },
  {
   "id": "carramar",
@@ -8123,7 +8137,8 @@
   "host": "kbgc.miclub.com.au",
   "resource_id": 3000000,
   "website": "https://www.kbgc.com.au/",
-  "phone": "(03) 6229 4298"
+  "phone": "(03) 6229 4298",
+  "par": 71
  },
  {
   "id": "north-west-bay",
@@ -8139,7 +8154,8 @@
   "host": "nwbgc.1golf.com.au",
   "resource_id": 3000000,
   "website": "https://northwestbaygolfclub.com.au/",
-  "phone": "(03) 6267 2166"
+  "phone": "(03) 6267 2166",
+  "par": 72
  },
  {
   "id": "ratho-farm",
@@ -8491,7 +8507,8 @@
   "region": "tas",
   "checked": "2026-11-12",
   "host": "devonport.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "riverside-tas",
@@ -8507,7 +8524,8 @@
   "website": "https://riversidegolf.com.au/",
   "phone": "(03) 6327 4043",
   "host": "riversidetas.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "darwin-golf",
@@ -8523,7 +8541,8 @@
   "website": "https://www.darwingolfclub.com.au",
   "phone": "(08) 8927 1322",
   "host": "darwin.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "palmerston-nt",
@@ -8586,7 +8605,8 @@
   "checked": "2026-11-12",
   "website": "https://www.alicespringsgolfclub.com.au/",
   "host": "alicesprings.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "ballarat",
@@ -8602,7 +8622,8 @@
   "website": "https://www.ballaratgolfclub.com.au/",
   "phone": "(03) 5338 3000",
   "host": "ballarat.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "midlands-ballarat",
@@ -8618,7 +8639,8 @@
   "website": "https://www.midlandsgolfclub.com.au/",
   "phone": "(03) 5331 4400",
   "host": "midlands.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "racv-goldfields",
@@ -8633,7 +8655,8 @@
   "checked": "2026-11-12",
   "website": "https://www.racv.com.au/travel-experiences/resorts/goldfields.html",
   "host": "racvgoldfields.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "buninyong",
@@ -8700,7 +8723,8 @@
   "website": "https://www.bendigogolfclub.com.au/",
   "phone": "(03) 5448 4206",
   "host": "bendigo.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "bunbury",
@@ -8714,7 +8738,8 @@
   "region": "wa",
   "checked": "2026-11-12",
   "host": "bunbury.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "harvey-wa",
@@ -8730,7 +8755,8 @@
   "website": "https://www.harveygolfclub.com.au/",
   "phone": "(08) 9729 1273",
   "host": "harvey.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "busselton",
@@ -8745,7 +8771,8 @@
   "checked": "2026-11-12",
   "website": "https://www.busseltongolf.com.au/",
   "host": "busselton.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "dunsborough-lakes",
@@ -8761,7 +8788,8 @@
   "website": "https://www.dunsboroughlakesgolfclub.com.au/",
   "phone": "(08) 9756 8733",
   "host": "dunsborough.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "margaret-river",
@@ -8775,7 +8803,8 @@
   "region": "wa",
   "checked": "2026-11-12",
   "host": "margaretriver.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "cairns",
@@ -8791,7 +8820,8 @@
   "website": "https://cairnsgolfclub.com.au",
   "phone": "(07) 4037 6700",
   "host": "cairns.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "half-moon-bay",
@@ -8810,7 +8840,8 @@
   "facility_id": 17221,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/17221-half-moon-bay-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow."
+  "note": "Times and prices come from GolfNow.",
+  "par": 70
  },
  {
   "id": "townsville",
@@ -8825,7 +8856,8 @@
   "checked": "2026-11-12",
   "website": "https://www.townsvillegolfclub.com.au/",
   "host": "townsville.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "mackay",
@@ -8841,7 +8873,8 @@
   "website": "https://www.mackaygolf.com.au/",
   "phone": "(07) 4942 1521",
   "host": "mackay.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "toowoomba",
@@ -8857,7 +8890,8 @@
   "website": "https://www.toowoombagolfclub.com.au/",
   "phone": "(07) 4635 1219",
   "host": "toowoomba.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "city-toowoomba",
@@ -8872,7 +8906,8 @@
   "checked": "2026-11-12",
   "website": "https://www.citygolf.com.au/",
   "host": "city.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "mareeba",
@@ -8906,7 +8941,8 @@
   "website": "https://www.coffsharbourgolfclub.com.au/",
   "phone": "(02) 6652 3244",
   "host": "coffsharbour.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "bonville",
@@ -8921,7 +8957,8 @@
   "checked": "2026-11-12",
   "website": "https://www.bonvillegolf.com.au/",
   "host": "bonville.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "port-macquarie",
@@ -8935,7 +8972,8 @@
   "region": "nsw",
   "checked": "2026-11-12",
   "host": "portmacquarie.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "howlong",
@@ -8951,7 +8989,8 @@
   "website": "https://www.howlonggolf.com.au/",
   "phone": "(02) 6026 5588",
   "host": "howlong.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 70
  },
  {
   "id": "albury",
@@ -9077,7 +9116,8 @@
   "facility_id": 16389,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/16389-wodonga-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16389-wodonga-golf-club/search#date={gn_date}",
+  "par": 72
  },
  {
   "id": "yackandandah",
@@ -9259,7 +9299,8 @@
   "website": "https://capelgolfclub.org.au/",
   "phone": "(08) 9795 7033",
   "host": "capel.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72
  },
  {
   "id": "donnybrook",
@@ -9421,7 +9462,8 @@
   "facility_id": 21035,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/21035-mirage-country-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/21035-mirage-country-club/search#date={gn_date}",
+  "par": 72
  },
  {
   "id": "mossman",
@@ -9703,7 +9745,8 @@
   "phone": "(03) 6335 5777",
   "host": "cctasmania.miclub.com.au",
   "resource_id": 3000000,
-  "note": "Its online tee sheet shows no times before 4 December 2026."
+  "note": "Its online tee sheet shows no times before 4 December 2026.",
+  "par": 72
  },
  {
   "id": "deloraine",
