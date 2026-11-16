@@ -383,7 +383,7 @@ async function alertStop(id){try{await fetch(`${ALERTS_API}/watch/${id}`,{method
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...Object.fromEntries(SAVED.map(id=>[id,fv(id)])),v:2}))}catch(e){}};
 const restore=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");SAVED.forEach(id=>{if(id=="sort"&&s.v!==2)return;if(s[id]!=null&&s[id]!=="me")fset(id,s[id])})}catch(e){}};
 // A championship course here means a full 18-hole course of par 70 or more.
-const champ=c=>(c.holes||18)>=18&&c.par>=70;
+const champ=c=>(c.holes||18)>=18&&(c.greens||18)>=18&&c.par>=70; // a 9-hole course played twice off two sets of tees is not a full 18
 const HOLES=/(\d+)\s*-?\s*holes?/i,NO_FINISH=/will not finish/i,ROUND_MINS=255;
 const SHORT_HOLES=/\b(\d+)H\b/i;
 const holesOf=x=>{const m=HOLES.exec((x.label||"").replace(NO_FINISH,""));if(m)return +m[1];if(x.holes!=null)return x.holes;const g=SHORT_HOLES.exec(x.group||"");if(g)return +g[1];

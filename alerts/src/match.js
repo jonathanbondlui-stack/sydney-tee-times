@@ -75,7 +75,7 @@ export function parseSearch(q) {
 // The times a search matches, one entry per course and start time (the cheapest matching rate).
 // Rates for one group only ("Juniors only", "Seniors only") are left out, so they never set off an alert.
 // A championship course: a full 18-hole course of par 70 or more, as on the site.
-export const champ = c => (c.holes || 18) >= 18 && c.par >= 70;
+export const champ = c => (c.holes || 18) >= 18 && (c.greens || 18) >= 18 && c.par >= 70;
 export function matches(s, times, courses, region) {
   const R = REGIONS[region] || REGIONS.nsw, by = {}, late = {}, best = new Map();
   courses.forEach(c => { if ((c.region || "nsw") === region) by[c.id] = c; });

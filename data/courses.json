@@ -1923,7 +1923,8 @@
   "host": "wentworth-falls-country-club.book.teeitup.com",
   "facility_id": 15968,
   "enabled": true,
-  "book_url": "https://wentworth-falls-country-club.book.teeitup.com/"
+  "book_url": "https://wentworth-falls-country-club.book.teeitup.com/",
+  "par": 70
  },
  {
   "id": "mangrove-mountain",
@@ -3250,7 +3251,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "vic",
-  "checked": "2026-11-08"
+  "checked": "2026-11-08",
+  "par": 70
  },
  {
   "id": "sanctuary-lakes",
@@ -5679,7 +5681,8 @@
   "resource_id": 3000000,
   "enabled": true,
   "region": "qld",
-  "checked": "2026-11-09"
+  "checked": "2026-11-09",
+  "par": 72
  },
  {
   "id": "north-stradbroke-island",
@@ -5697,7 +5700,9 @@
   "facility_id": 16228,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16228-north-stradbroke-island-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one."
+  "note": "Times and prices come from GolfNow. The club may have other times, so check with them if you can't find one.",
+  "par": 71,
+  "greens": 9
  },
  {
   "id": "howeston",
@@ -7918,7 +7923,9 @@
   "region": "sa",
   "checked": "2026-11-11",
   "host": "glanvillehall.quick18.com",
-  "phone": "(08) 8249 9921"
+  "phone": "(08) 8249 9921",
+  "par": 27,
+  "greens": 9
  },
  {
   "id": "valley-view",
@@ -7932,7 +7939,8 @@
   "region": "sa",
   "checked": "2026-11-11",
   "host": "valleyview.quick18.com",
-  "phone": "(08) 8263 2189"
+  "phone": "(08) 8263 2189",
+  "par": 54
  },
  {
   "id": "geoff-heath",
@@ -8121,7 +8129,8 @@
   "phone": "(08) 8598 2415",
   "host": "ntwc.miclub.com.au",
   "resource_id": 3000000,
-  "website": "https://newterry.com.au/"
+  "website": "https://newterry.com.au/",
+  "par": 70
  },
  {
   "id": "kingston-beach",
@@ -8174,7 +8183,8 @@
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16466-ratho-farm/search#date={gn_date}",
   "note": "Times and prices come from GolfNow. Ratho Farm also sells tee times on its own website.",
   "website": "https://rathofarm.com/golf/",
-  "holes": 18
+  "holes": 18,
+  "par": 70
  },
  {
   "id": "seven-mile-beach",
@@ -8558,7 +8568,8 @@
   "website": "https://www.palmerstongolfcourse.com.au/",
   "phone": "(08) 8932 2681",
   "host": "palmerston.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "humpty-doo",
@@ -8574,7 +8585,9 @@
   "website": "https://www.humptydoogolfclub.com.au/",
   "phone": "(08) 8988 1118",
   "host": "humptydoo.1golf.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72,
+  "greens": 9
  },
  {
   "id": "katherine-nt",
@@ -8590,7 +8603,9 @@
   "website": "https://www.katherinecountryclub.com.au/",
   "phone": "(08) 8972 1276",
   "host": "katherine.1golf.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 72,
+  "greens": 9
  },
  {
   "id": "alice-springs",
@@ -8675,7 +8690,8 @@
   "facility_id": 16679,
   "cta": "Book on GolfNow",
   "book_url": "https://www.golfnow.com.au/tee-times/facility/16679-buninyong-golf-club/search#date={gn_date}",
-  "note": "Times and prices come from GolfNow."
+  "note": "Times and prices come from GolfNow.",
+  "par": 72
  },
  {
   "id": "axedale",
@@ -8691,7 +8707,8 @@
   "website": "http://www.axedalegc.com.au/",
   "phone": "(03) 5439 7243",
   "host": "axedale.miclub.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 69
  },
  {
   "id": "belvoir-park",
@@ -8707,7 +8724,8 @@
   "website": "https://www.belvoirparkgc.com",
   "phone": "(03) 5435 3370",
   "host": "belvoirpark.1golf.com.au",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "bendigo",
@@ -8925,7 +8943,8 @@
   "cta": "Book online (TeeItUp)",
   "book_url": "https://mareeba-golf-club.book.teeitup.com/",
   "host": "mareeba-golf-club.book.teeitup.com",
-  "facility_id": 20709
+  "facility_id": 20709,
+  "par": 72
  },
  {
   "id": "coffs-harbour",
@@ -9150,7 +9169,8 @@
   "facility_id": 21107,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/21107-clunes-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/21107-clunes-golf-club/search#date={gn_date}",
+  "par": 70
  },
  {
   "id": "mt-xavier",
@@ -9169,7 +9189,8 @@
   "facility_id": 16447,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/16447-mount-xavier-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16447-mount-xavier-golf-club/search#date={gn_date}",
+  "par": 70
  },
  {
   "id": "snake-valley",
@@ -9239,7 +9260,8 @@
   "facility_id": 20768,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/20768-mount-alexander-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/20768-mount-alexander-golf-club/search#date={gn_date}",
+  "par": 69
  },
  {
   "id": "neangar-park",
@@ -9253,7 +9275,8 @@
   "region": "vic",
   "checked": "2026-11-13",
   "host": "www.neangarparkgc.com",
-  "resource_id": 3000000
+  "resource_id": 3000000,
+  "par": 71
  },
  {
   "id": "quarry-hill",
@@ -9283,7 +9306,9 @@
   "facility_id": 20866,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/20866-raywood-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/20866-raywood-golf-club/search#date={gn_date}",
+  "par": 66,
+  "greens": 9
  },
  {
   "id": "capel",
@@ -10055,7 +10080,8 @@
   "facility_id": 16525,
   "cta": "Book on GolfNow",
   "note": "Times and prices come from GolfNow.",
-  "book_url": "https://www.golfnow.com.au/tee-times/facility/16525-gatton-jubilee-golf-club/search#date={gn_date}"
+  "book_url": "https://www.golfnow.com.au/tee-times/facility/16525-gatton-jubilee-golf-club/search#date={gn_date}",
+  "par": 69
  },
  {
   "id": "goombungee",
