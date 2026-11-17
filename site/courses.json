@@ -1390,8 +1390,10 @@
   "enabled": false,
   "source": "directory",
   "note": "Fully private, not open to the public.",
-  "checked": "2026-11-05",
-  "par": 66
+  "checked": "2026-11-17",
+  "par": 66,
+  "website": "https://www.rosevillegolf.com.au/",
+  "phone": "(02) 8467 1800"
  },
  {
   "id": "australian",
@@ -4149,7 +4151,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.yarrayarra.com.au/",
+  "phone": "(03) 9575 0575"
  },
  {
   "id": "woodlands",
@@ -4288,7 +4292,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.heidelberggc.com.au/",
+  "phone": "(03) 9433 5300"
  },
  {
   "id": "rosanna",
@@ -4301,7 +4307,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.rosannagolf.com.au/",
+  "phone": "(03) 9431 1033"
  },
  {
   "id": "green-acres",
@@ -4342,7 +4350,8 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.kooringalgolf.com.au/"
  },
  {
   "id": "spring-valley",
@@ -4355,7 +4364,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.springvalleygolf.com.au/",
+  "phone": "(03) 9562 3811"
  },
  {
   "id": "southern",
@@ -4410,7 +4421,8 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.glenwaverleygolfclub.com.au/"
  },
  {
   "id": "long-island",
@@ -4437,7 +4449,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.sandhurst.com/",
+  "phone": "(03) 8787 7011"
  },
  {
   "id": "yarra-valley",
@@ -4478,20 +4492,8 @@
   "enabled": false,
   "region": "vic",
   "note": "Books through BRS Golf, which needs the club's permission.",
-  "checked": "2026-11-08"
- },
- {
-  "id": "werribee",
-  "name": "Werribee Golf Club",
-  "suburb": "Werribee South",
-  "lat": -37.9386,
-  "lon": 144.668,
-  "status": "members",
-  "platform": "none",
-  "enabled": false,
-  "region": "vic",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.strathallangolf.com.au/"
  },
  {
   "id": "frankston",
@@ -4504,7 +4506,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.frankstongolfclub.com.au/",
+  "phone": "(03) 8461 5385"
  },
  {
   "id": "bellarine-lakes",
@@ -4517,7 +4521,8 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.bellarinelakes.com.au/"
  },
  {
   "id": "heritage",
@@ -4530,7 +4535,9 @@
   "enabled": false,
   "region": "vic",
   "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
-  "checked": "2026-11-08"
+  "checked": "2026-11-17",
+  "website": "https://www.heritagegolfclub.com.au/",
+  "phone": "(03) 9760 3200"
  },
  {
   "id": "albert-park",
@@ -4940,7 +4947,9 @@
   "note": "Par 3 course. No bookings, walk-ins only.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-17",
+  "website": "https://www.geelongcity.vic.gov.au/balyangpar3/",
+  "phone": "(03) 5222 3336"
  },
  {
   "id": "altona-lakes",
@@ -5031,7 +5040,8 @@
   "note": "Mainly a Defence golf club on the RAAF Williams base. Visitors can join club competitions; call the club first, and ask about getting onto the base.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-17"
+  "checked": "2026-11-17",
+  "phone": "(03) 9256 2693"
  },
  {
   "id": "eagle-ridge",
@@ -5114,7 +5124,8 @@
   "note": "No bookings, walk-ins only.",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-09"
+  "checked": "2026-11-17",
+  "phone": "(03) 9792 5064"
  },
  {
   "id": "noosa",
@@ -5317,8 +5328,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
-  "note": "No bookings, walk-ins only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ins only.",
+  "phone": "(07) 5494 5999"
  },
  {
   "id": "caloundra",
@@ -5497,7 +5509,7 @@
  },
  {
   "id": "one-mile",
-  "name": "One Mile Country Club",
+  "name": "North Pine Golf Club",
   "suburb": "Petrie",
   "lat": -27.275,
   "lon": 152.9558,
@@ -5505,9 +5517,11 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
+  "checked": "2026-11-17",
   "note": "Nine-hole course, now called North Pine Golf Club, in Joyner. Walk-ins welcome.",
-  "holes": 9
+  "holes": 9,
+  "website": "https://www.northpinegolfclub.com.au/",
+  "phone": "(07) 3882 5587"
  },
  {
   "id": "sandgate",
@@ -5715,8 +5729,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
-  "note": "No bookings, walk-ins only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ins only.",
+  "phone": "(07) 3207 2452"
  },
  {
   "id": "st-lucia",
@@ -5778,8 +5793,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
+  "checked": "2026-11-17",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
+  "website": "https://www.brisbanegolfclub.com.au/"
  },
  {
   "id": "jindalee",
@@ -6131,8 +6147,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
+  "checked": "2026-11-17",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
+  "website": "https://www.sanctuarycovegolf.com.au/"
  },
  {
   "id": "sanctuary-cove-pines",
@@ -6587,8 +6604,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-09",
-  "note": "No bookings, walk-ins only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ins only.",
+  "phone": "(02) 6674 0420"
  },
  {
   "id": "murwillumbah",
@@ -6724,8 +6742,10 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11",
-  "note": "No bookings, walk-ons only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ons only.",
+  "website": "https://serpentinegolfclub.org/",
+  "phone": "(08) 9525 2265"
  },
  {
   "id": "rockingham",
@@ -7042,8 +7062,9 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
+  "checked": "2026-11-17",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
+  "website": "https://www.cottesloegc.com/"
  },
  {
   "id": "maylands",
@@ -7200,8 +7221,10 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11",
-  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club."
+  "checked": "2026-11-17",
+  "note": "Members and their guests. Some private clubs take visitors at set times, so call the club.",
+  "website": "https://www.lakelandscc.com.au/",
+  "phone": "(08) 9405 4888"
  },
  {
   "id": "the-vines",
@@ -8101,7 +8124,8 @@
   "enabled": false,
   "region": "sa",
   "checked": "2026-11-17",
-  "note": "Resort guests only. Ask the resort about a round when you book your stay."
+  "note": "Resort guests only. Ask the resort about a round when you book your stay.",
+  "phone": "(08) 8558 0600"
  },
  {
   "id": "wirrina",
@@ -8401,8 +8425,9 @@
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "note": "No bookings, walk-ons only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ons only.",
+  "phone": "(03) 6260 4402"
  },
  {
   "id": "richmond-tas",
@@ -8442,8 +8467,9 @@
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-12",
-  "note": "No bookings, walk-ons only."
+  "checked": "2026-11-17",
+  "note": "No bookings, walk-ons only.",
+  "phone": "(03) 6253 5587"
  },
  {
   "id": "dover-tas",
@@ -9016,8 +9042,9 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(02) 6026 7308"
  },
  {
   "id": "beechworth",
@@ -9044,8 +9071,9 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(02) 6026 4489"
  },
  {
   "id": "chiltern",
@@ -9085,8 +9113,9 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(02) 6071 3066"
  },
  {
   "id": "thurgoona",
@@ -9275,8 +9304,9 @@
   "platform": "none",
   "enabled": false,
   "region": "vic",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(03) 5443 8610"
  },
  {
   "id": "raywood",
@@ -9412,8 +9442,9 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(08) 9755 3250"
  },
  {
   "id": "atherton",
@@ -9454,8 +9485,9 @@
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(07) 4097 2117"
  },
  {
   "id": "mirage",
@@ -9547,8 +9579,10 @@
   "platform": "none",
   "enabled": false,
   "region": "nsw",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "website": "https://www.pacificbayresort.com.au/",
+  "phone": "(02) 6659 7000"
  },
  {
   "id": "sawtell",
@@ -9817,8 +9851,10 @@
   "platform": "none",
   "enabled": false,
   "region": "tas",
-  "checked": "2026-11-13",
-  "note": "For guests of the resort only."
+  "checked": "2026-11-17",
+  "note": "For guests of the resort only.",
+  "website": "https://www.tamarvalleyresort.com.au/",
+  "phone": "(03) 6330 0400"
  },
  {
   "id": "launceston",
@@ -10060,7 +10096,8 @@
   "enabled": false,
   "region": "qld",
   "checked": "2026-11-17",
-  "note": "No bookings. Just turn up and pay."
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(07) 4630 2220"
  },
  {
   "id": "gatton-jubilee",
@@ -10128,15 +10165,16 @@
  },
  {
   "id": "the-willows-qld",
-  "name": "The Willows Golf Club",
-  "suburb": "Bohle Plains",
+  "name": "Tropics Golf Club",
+  "suburb": "Kirwan",
   "lat": -19.306,
   "lon": 146.7085,
   "status": "walkup",
   "platform": "none",
   "enabled": false,
   "region": "qld",
-  "checked": "2026-11-13",
-  "note": "No bookings. Just turn up and pay."
+  "checked": "2026-11-17",
+  "note": "No bookings. Just turn up and pay.",
+  "phone": "(07) 4773 4777"
  }
 ]
