@@ -6436,14 +6436,15 @@
   "lat": -28.0766,
   "lon": 153.3705,
   "status": "online",
-  "platform": "none",
-  "enabled": false,
-  "cta": "Book online",
+  "platform": "teeitup",
+  "enabled": true,
+  "cta": "Book online (TeeItUp)",
   "book_url": "https://thegladesgolfclub.book.teeitup.com/",
-  "note": "Books online through TeeItUp. Times aren't shown here yet.",
   "region": "qld",
   "website": "https://www.glades.com.au/",
-  "checked": "2026-11-09"
+  "checked": "2026-11-17",
+  "host": "thegladesgolfclub.book.teeitup.com",
+  "facility_id": 15365
  },
  {
   "id": "palmer-gold-coast",
@@ -7142,7 +7143,7 @@
   "checked": "2026-11-17",
   "cta": "Book online",
   "book_url": "https://www.golf-booking.com/en/club/altone-park-golf-course,nc",
-  "note": "Book online through golf-booking.com. Times aren't shown here yet."
+  "note": "Books online through golf-booking.com. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "hamersley",
@@ -7324,10 +7325,10 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-11",
+  "checked": "2026-11-17",
   "cta": "Book online",
   "book_url": "https://www.golf-booking.com/en/club/sanctuary-golf-resort",
-  "note": "Book online through golf-booking.com. Times aren't shown here yet."
+  "note": "Books online through golf-booking.com. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "embleton",
@@ -9337,10 +9338,10 @@
   "platform": "none",
   "enabled": false,
   "region": "wa",
-  "checked": "2026-11-13",
+  "checked": "2026-11-17",
   "book_url": "https://www.golf-booking.com/en/club/sanctuary-golf-resort",
   "cta": "Book online",
-  "note": "Book online through golf-booking.com. Its times aren't shown here."
+  "note": "Books online through golf-booking.com. Its terms don't allow its times to be shown on other sites, so this opens its booking page."
  },
  {
   "id": "burnie",
