@@ -165,6 +165,14 @@ h1{font-size:clamp(28px,5vw,36px);line-height:1.1;margin:0 0 6px;max-width:none}
 .chip a.rate,.chip span.rate{border:0;background:var(--surface)}.chip a.rate:hover{box-shadow:0 0 0 1px var(--accent)}
 #map{border:0}
 @media (max-width:520px){.brand{font-size:18px}.top nav{font-size:13px}.sub{font-size:14px}.chips{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}.chip{padding:8px 10px}.chip b{font-size:17px}}
+.days .cal{position:relative;flex:none;width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0;padding:8px 0;border-radius:12px;background:var(--surface);color:var(--ink);font-size:12px;font-weight:400;text-align:center;cursor:pointer;scroll-snap-align:start}
+.days .cal span{font-size:12px;color:var(--mute)}.days .cal b{display:flex;align-items:center;justify-content:center;height:22px;font:700 20px/1.1 "Bricolage Grotesque",sans-serif}
+.days .cal.on{background:var(--accent);color:var(--accent-ink)}.days .cal.on span{color:inherit}
+.days .cal input{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;max-width:none}
+.days .cal:focus-within{outline:3px solid var(--sun);outline-offset:2px}
+.dayopts{justify-content:flex-start}
+.dayopts .multi{background:var(--surface);border-radius:999px;padding:7px 14px 7px 10px;font-size:13px;font-weight:500;color:var(--ink)}.dayopts .multi input{width:16px;height:16px}
+@media (max-width:520px){.days .cal{border-radius:9px;padding:6px 0}.days .cal b{font-size:17px}.days .cal span{font-size:11px}}
 </style>
 </head>
 <body>
@@ -177,7 +185,7 @@ h1{font-size:clamp(28px,5vw,36px);line-height:1.1;margin:0 0 6px;max-width:none}
   <div class="days" id="days" role="group" aria-label="Choose a day"></div>
   <div class="dayopts">
   <label class="multi"><input type="checkbox" id="multi"> Search several days at once</label>
-  <label class="pick" title="Up to 4 weeks ahead">Or a later date <input type="date" id="pick"></label>
+  <label class="cal" id="calChip" title="Pick a later date, up to 4 weeks ahead"><span id="pkTop">Later</span><b id="pkMid"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4"/></svg></b><span id="pkBot">date</span><input type="date" id="pick" aria-label="Pick a later date, up to 4 weeks ahead"></label>
   </div>
   <section class="filters" aria-label="Filters">
     <label><span class="vh">Players</span><select id="players"><option value="1">1 player</option><option value="2">2 players</option><option value="3">3 players</option><option value="4" selected>4 players</option></select></label>
@@ -474,6 +482,7 @@ const days=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i
 const mins=t=>{const[a,b]=t.split(":");return +a*60+ +b};
 const km=(a,b,c,d)=>{const r=Math.PI/180,x=(d-b)*r*Math.cos((a+c)/2*r),y=(c-a)*r;return Math.sqrt(x*x+y*y)*6371};
 const fmt=m=>{const h=Math.floor(m/60),mm=m%60;return `${h%12||12}:${String(mm).padStart(2,"0")}<small>${h>=12?"pm":"am"}</small>`};
+const CALSVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4"/></svg>';
 let CH=true,CP=true; // show holes / price on each time tile; off when the whole course shares them
 const hl=h=>{const w=Math.floor(h);return`${w%12||12}:${h>w?"30":"00"} ${w>=12?"pm":"am"}`};
 function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -504,6 +513,7 @@ async function load(){
 function setup(){
   sel=new Set([day]);
   $("days").innerHTML=days.map((d,i)=>`<button class="day" aria-pressed="${i==day}" data-i="${i}"><span>${i==0?"Today":d.toLocaleDateString("en-AU",{weekday:"short"})}</span><b>${d.getDate()}</b><span>${d.toLocaleDateString("en-AU",{month:"short"})}</span></button>`).join("");
+  $("days").appendChild($("calChip"));$("pick").onclick=()=>{try{$("pick").showPicker()}catch(e){}};
   // One day at a time, or with "Search several days" ticked, each tile toggles on and off.
   const markDays=()=>document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",!picked&&sel.has(+x.dataset.i)));
   const show=async()=>{markDays();shown=12;if([...sel].some(i=>i>7)&&farState=="none"){$("unrel").hidden=false;$("unrel").textContent="Loading later dates…";await loadFar()}render()};
@@ -544,8 +554,11 @@ function setup(){
     const first=days.findIndex(d=>TIMES.some(t=>t.date===iso(d)));if(first>0&&!sq.has("d")){day=first;sel=new Set([day]);markDays()}
     if(view=="map"){view="list";setView("map")}
     if(sharedPick){$("pick").value=sharedPick;pickDate()}else if([...sel].some(i=>i>7))show();else render()})}
+function calShow(){const c=$("calChip");if(picked&&!c.classList.contains("on")){const d=$("days");d.scrollLeft=d.scrollWidth}c.classList.toggle("on",!!picked);
+  if(picked){$("pkTop").textContent=picked.toLocaleDateString("en-AU",{weekday:"short"});$("pkMid").textContent=picked.getDate();$("pkBot").textContent=picked.toLocaleDateString("en-AU",{month:"short"})}
+  else{$("pkTop").textContent="Later";$("pkMid").innerHTML=CALSVG;$("pkBot").textContent="date"}}
 function render(){
-  closePick();PICKS.length=0;
+  closePick();PICKS.length=0;calShow();
   const by=Object.fromEntries(COURSES.map(c=>[c.id,c])),w=START||ME||HOME,pl=+$("players").value,hf=$("holes").value,f=+$("from").value*60,to=+$("to").value*60,mx=+$("price").value,dm=+$("dist").value,dates=picked?[iso(picked)]:[...sel].sort((a,b)=>a-b).map(i=>iso(days[i])),dt=dates[0],late={},several=dates.length>1,RG=REGIONS[REG]||REGIONS.nsw;dates.forEach(d=>late[d]=sunset(d,w.lat??w.la,w.lo,RG.tz)-ROUND_MINS);
   let r=TIMES.filter(x=>late[x.date]!=null&&by[x.course]).map(x=>{const party=partyOf(x);const shown=x.price==null?null:x.price/party,m=mins(x.time);return{...x,c:by[x.course],m,t:dates.indexOf(x.date)*1440+m,party,shown,each:x.only?null:shown}}).map(x=>({...x,d:km(w.lat??w.la,w.lo,x.c.lat,x.c.lon)}))
    .filter(x=>(x.party==1?x.spots>=pl:x.party==pl)&&x.m>=f&&x.m<to&&(mx>=200||x.each==null||x.each<=mx)&&x.d<=dm&&(!$("kind").checked||champ(x.c))&&(hf=="0"||(hf=="9"?holesOf(x)&&holesOf(x)<18:fullRound(x,late[x.date],18))));
@@ -559,7 +572,7 @@ function render(){
   if(far&&farState=="ok"&&farAt)msg.push("Times this far ahead update every 6 hours, last at "+new Date(farAt).toLocaleString("en-AU",{dateStyle:"medium",timeStyle:"short"})+".");
   if(notYet.length&&!(far&&farState=="failed"))msg.push(`${notYet.length} nearby ${notYet.length==1?"club doesn’t":"clubs don’t"} show times for ${several?"these dates":"this date"} yet: ${notYet.join(", ")}.`);
   $("unrel").textContent=msg.join(" ");$("unrel").hidden=!msg.length;
-  const nc=new Set(r.map(x=>x.course)).size;$("count").textContent=r.length?`${distinct(r)} tee times at ${nc} ${nc==1?"course":"courses"}`:"";
+  const nc=new Set(r.map(x=>x.course)).size;$("count").textContent=r.length?`${distinct(r)} tee times at ${nc} ${nc==1?"course":"courses"} ${several?"over "+dates.length+" days":dt==iso(days[0])?"today":"on "+new Date(dt+"T12:00").toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})}`:"";
   const pf=p=>p==null?"":"$"+(Number.isInteger(p)?p:p.toFixed(2));
   const G=new Map();r.forEach(x=>{if(!G.has(x.course))G.set(x.course,[]);G.get(x.course).push(x)});
   const groups=[...G.values()].map(a=>a.sort((p,q)=>p.t-q.t||(holesOf(q)||0)-(holesOf(p)||0))).sort((a,b)=>FAVS.has(b[0].course)-FAVS.has(a[0].course)); // favourites first
