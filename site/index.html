@@ -63,7 +63,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .bar .share.icon{width:38px;padding:0;justify-content:center}
 /* Phones: the count and Share on the first line, List/Map, Sort and Alert me on the second. */
 @media (max-width:639px){.bar{display:flex;flex-wrap:wrap;gap:10px 8px}.end{display:contents}
-  .count{order:1;flex:1 1 calc(100% - 60px)}#share{order:2}.view{order:3;flex:none}#sortl{order:4;margin-left:auto}#alertBtn{order:5}
+  .count{order:1;flex:1 1 100%}.count:empty{display:none}.view{order:2;flex:none}#sortl{order:3;margin-left:auto}#share{order:4}#alertBtn{order:5;width:38px;padding:0;justify-content:center}
+  #alertBtn .al-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .view button{padding:8px 13px}#sortl .sw{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);font:600 14px "Hanken Grotesk",sans-serif;padding:10px 16px;border-radius:999px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.25)}
 .row{display:grid;grid-template-columns:104px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
@@ -152,7 +153,8 @@ h1{font-size:clamp(28px,5vw,36px);line-height:1.1;margin:0 0 6px;max-width:none}
 #where{background:none;border:0;padding:6px 12px}#where:focus{outline:none}.locrow:focus-within{box-shadow:0 0 0 2px var(--accent)}
 .filters .champ{min-height:0;background:var(--surface);border-radius:999px;padding:9px 14px;font-weight:500}
 #ftog{display:none}
-@media (max-width:639px){#ftog{display:inline-flex}.filters.open #ftog{order:99}.filters:not(.open)>label{display:none!important}}
+@media (max-width:639px){#ftog{display:inline-flex;order:-2}.filters>.locbox{order:-2;flex:1 1 0;min-width:0}
+  .filters.open::before{content:"";order:-1;flex-basis:100%;margin-top:-8px}.filters:not(.open)>label{display:none!important}}
 .view{border:0;background:var(--surface);border-radius:999px;padding:3px}.view button{background:none;border-radius:999px;padding:6px 15px}.bar .view button{height:32px}
 .bar select{padding:0 30px 0 14px}.share{border:0;background:var(--surface)}
 .cg{border:0;border-radius:16px;padding:18px 20px}
@@ -197,7 +199,7 @@ h1{font-size:clamp(28px,5vw,36px);line-height:1.1;margin:0 0 6px;max-width:none}
   <div class="bar"><span class="count" id="count" aria-live="polite"></span>
     <div class="view" role="group" aria-label="View"><button id="vList" aria-pressed="true">List</button><button id="vMap" aria-pressed="false">Map</button></div>
     <div class="end"><label id="sortl" style="flex-direction:row;align-items:center;gap:6px"><span class="sw">Sort</span><select id="sort"><option value="d" selected>Nearest</option><option value="t">Earliest</option><option value="p">Cheapest</option></select></label>
-    <button type="button" class="share icon" id="share" title="Share this search" aria-label="Share this search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg></button><button type="button" class="share" id="alertBtn" hidden title="Get a message when new times match this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Alert me</button></div></div>
+    <button type="button" class="share icon" id="share" title="Share this search" aria-label="Share this search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg></button><button type="button" class="share" id="alertBtn" hidden title="Get a message when new times match this search"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="al-t">Alert me</span></button></div></div>
   <span class="toast" id="copied" role="status" hidden></span>
   <div class="tools" id="favWrap" hidden><label class="favonly"><input type="checkbox" id="favOnly"> <span aria-hidden="true">★</span> Favourites only <span id="favN"></span></label></div>
   <p class="unrel" id="unrel" hidden></p>
