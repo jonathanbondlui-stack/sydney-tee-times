@@ -9,6 +9,8 @@ site/tee-times-*.json
 site/tee-times-*.json.tmp
 # Private notes, kept out of this public repo
 COMMERCIAL-CHECKLIST.md
+NOTES.md
+CLAUDE.md
 # Local backups and saved debug pages
 data/courses.backup.json
 data/courses.before-patch.json
